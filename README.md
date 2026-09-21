@@ -1,10 +1,10 @@
 # Shell Functions
 
-This repository/directory contains a collection of shell functions originally written by Reed Clanton. For more information regarding the functions, see the [Functions](#functions) section.
+This repository/directory contains a collection of shell functions originally written by Reed Clanton in the `shell_base` repository. For more information regarding the functions, see the [Functions](#functions) section.
 
 ## Usage of Shell Functions
 
-Once you've set the `SHELL_FUNCTIONS` environment variable to the path this file is located in, run `sourceFunctions.sh`. Long term, you'll want to do these things from your user's shell configuration. Note that you should run `sourceFunctions.sh`, not source it.
+In order to add all of the functions in this repository, simply run `eval "$("$HOME/path/to/shellFunctionSetup.sh")"`. To have all functions added to your shell automatically, add the same command to your user's shell configuration.
 
 Once you've done this, all functions should be available for use. For a list of functions, see the [Functions](#functions) section or just call the function and pass in `-h` or `--help` (ex. `<functionName> --help`).
 
