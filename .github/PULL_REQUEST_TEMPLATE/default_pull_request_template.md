@@ -1,4 +1,8 @@
-# The Basics
+# Description of Changes
+
+<!-- Add a description of the changes you made. -->
+
+## The Basics
 
 These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creation**:
 
