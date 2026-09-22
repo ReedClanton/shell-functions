@@ -3,7 +3,7 @@
 These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creation**:
 
 - [ ] The name of the branch is:
-    - `<issueId>-<issue-title-with-dashes-between-and-no-capitalization>`
+    - `<feature/bug>/<issueId>-<issue-title-with-dashes-between-and-no-capitalization>`
 - [ ] The title of this PR is:
     - `<issueId> | <Issue Title>`
 - [ ] Changes are being merged into the correct branch (normally `main`).
