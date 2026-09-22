@@ -7,10 +7,13 @@ These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creatio
 - [ ] The title of this PR is:
     - `<issueId> | <Issue Title>`
 - [ ] Changes are being merged into the correct branch (normally `main`).
+- [ ] PR has been assigned to you.
+- [ ] Labels have been filled out:
+    - Normally, they reflect the labels of the issue the PR is for, but verify this, and if different, update the issue's labels.
 - [ ] @ReedClanton has been added as a reviewer.
-- [ ] PR has been marked as `WIP` when not ready for review.
+- [ ] PR has been marked as `Draft` when not ready for review.
 
-## Check Before Moving Out of `WIP`
+## Check Before Moving Out of `Draft`
 
 The following sections from the issue this work is associated with have been completed/adhered to:
 
@@ -27,6 +30,6 @@ The following sections from the issue this work is associated with have been com
 
 ## Check After Final Push
 
-- [ ] All tests (unit, functional, or otherwise) added are bing run by the pipeline.
+- [ ] All tests (unit, functional, or otherwise) added are being run by the pipeline.
 - [ ] Pipeline runs successfully.
-- [ ] PR is *not* marked as `WIP`.
+- [ ] PR is *not* marked as `Draft`.
