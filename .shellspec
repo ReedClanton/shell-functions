@@ -15,8 +15,9 @@
 --warning-as-failure
 --fail-fast
 
-# Default kcov (coverage) options
-#--kcov-options "--exclude-pattern=<fileName>.<fileExtension>"
+# Default kcov (coverage) option(s).
+# TODO #16: May be removed.
+--kcov-options "--exclude-pattern=main.sh"
 # TODO: Figure out why this option always causes pipeline to fail.
 # --fail-low-coverage
 
