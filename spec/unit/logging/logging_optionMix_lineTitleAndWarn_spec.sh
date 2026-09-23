@@ -17,7 +17,7 @@ readonly DEBUG
 readonly TRACE
 % SHELL_LOG_LEVEL:$WARN
 
-Describe "Log:" logging
+Describe "Logging:" logging
 	Describe "logging():" logging:logging
 		# Track path to file that contains CUT.
 		cutPath=$PWD/logging/logging.sh
@@ -27,8 +27,8 @@ Describe "Log:" logging
 		# Mock out.
 		verifyInputProvided() { :; }
 
-		Describe "Option mix:" loggingLog:optionMix
-			Describe "--line-title and warn:" loggingLogUtilOptionMix:lineTitleAndWarn
+		Describe "Option mix:" loggingLogging:optionMix
+			Describe "--line-title and warn:" loggingLoggingUtilOptionMix:lineTitleAndWarn
 				output() {
 					# Track that required option(s) are provided.
 					lvlGiven=false
@@ -54,14 +54,14 @@ Describe "Log:" logging
 					return 3
 				}
 
-				It "--warn" loggingLogUtilOptionMixLineTitleAndWarn:warn
+				It "--warn" loggingLoggingUtilOptionMixLineTitleAndWarn:warn
 					When run logging -m=m --line-title --warn
 					The stderr should not be present
 					The lines of stdout should equal 1
 					The stdout line 1 should equal "WARN :	# m #"
 					The status should be success
 				End
-				It "-w" loggingLogUtilOptionMixLineTitleAndWarn:w
+				It "-w" loggingLoggingUtilOptionMixLineTitleAndWarn:w
 					When run logging -m=m --line-title -w
 					The stderr should not be present
 					The lines of stdout should equal 1

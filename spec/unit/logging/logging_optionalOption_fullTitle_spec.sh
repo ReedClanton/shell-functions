@@ -11,7 +11,7 @@ readonly TRACE
 % DEFAULT_CHAR:'#'
 readonly DEFAULT_CHAR
 
-Describe "Log:" logging
+Describe "Logging:" logging
 	Describe "logging():" logging:logging
 		# Track path to file that contains CUT.
 		cutPath=$PWD/logging/logging.sh
@@ -21,9 +21,9 @@ Describe "Log:" logging
 		# Mock out.
 		verifyInputProvided() { :; }
 
-		Describe "Optional option:" loggingLog:optionalOption
-			Describe "--full-title:" loggingLogOptionalOption:fullTitle
-				It "Single message line" loggingLogOptionalOptionFullTitleSingleCharacterFormattingCharacter:singleMessageLine
+		Describe "Optional option:" loggingLogging:optionalOption
+			Describe "--full-title:" loggingLoggingOptionalOption:fullTitle
+				It "Single message line" loggingLoggingOptionalOptionFullTitleSingleCharacterFormattingCharacter:singleMessageLine
 					output() {
 						echo " $DEFAULT_CHAR$DEFAULT_CHAR$DEFAULT_CHAR"
 						echo "$DEFAULT_CHAR m $DEFAULT_CHAR"
@@ -38,7 +38,7 @@ Describe "Log:" logging
 					The stdout line 4 should equal " ###"
 					The status should be success
 				End
-				It "Multiline message" loggingLogOptionalOptionFullTitleSingleCharacterFormattingCharacter:multilineMessage
+				It "Multiline message" loggingLoggingOptionalOptionFullTitleSingleCharacterFormattingCharacter:multilineMessage
 					output() {
 						echo " $DEFAULT_CHAR$DEFAULT_CHAR$DEFAULT_CHAR$DEFAULT_CHAR$DEFAULT_CHAR$DEFAULT_CHAR"
 						echo "$DEFAULT_CHAR ms   $DEFAULT_CHAR"

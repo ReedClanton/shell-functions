@@ -7,7 +7,7 @@ readonly WARN
 readonly TRACE
 % SHELL_LOG_LEVEL:$WARN
 
-Describe "Log:" logging
+Describe "Logging:" logging
 	Describe "logging():" logging:logging
 		# Track path to file that contains CUT.
 		cutPath=$PWD/logging/logging.sh
@@ -17,16 +17,16 @@ Describe "Log:" logging
 		# Mock out.
 		verifyInputProvided() { :; }
 
-		Describe "Optional option:" loggingLog:optionalOption
-			Describe "Warn:" loggingLogOptionalOption:warn
-				It "-w" loggingLogOptionalOptionWarn:w
+		Describe "Optional option:" loggingLogging:optionalOption
+			Describe "Warn:" loggingLoggingOptionalOption:warn
+				It "-w" loggingLoggingOptionalOptionWarn:w
 					When run logging -m=m -w
 					The stderr should not be present
 					The lines of stdout should equal 1
 					The stdout line 1 should equal "WARN :	m"
 					The status should be success
 				End
-				It "--warn" loggingLogOptionalOptionWarn:warn
+				It "--warn" loggingLoggingOptionalOptionWarn:warn
 					When run logging -m=m --warn
 					The stderr should not be present
 					The lines of stdout should equal 1

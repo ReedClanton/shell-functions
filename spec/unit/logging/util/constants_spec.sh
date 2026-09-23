@@ -1,11 +1,11 @@
-Describe "Log:" log
-	Describe "Util:" log:util
-		Describe "Constants:" logUtil:constants
+Describe "Logging:" logging
+	Describe "Util:" logging:util
+		Describe "Constants:" loggingUtil:constants
 			# Makes test easier to read and maintain.
-			constants=$PWD/log/util/constants.sh
+			constants=$PWD/logging/util/constants.sh
 
-			Describe "Shell compatibility:" logUtilConstants:shellCompatibility
-				It "Source file" logUtilConstantsShellCompatibility:sourceFile
+			Describe "Shell compatibility:" loggingUtilConstants:shellCompatibility
+				It "Source file" loggingUtilConstantsShellCompatibility:sourceFile
 					When run source $constants
 					The stderr should not be present
 					The stdout should not be present
@@ -13,14 +13,14 @@ Describe "Log:" log
 				End
 			End
 
-			Describe "Environment variable:" logUtilConstants:environmentVariable
-				Describe "NO_TITLE:" logUtilConstantsEnvironmentVariable:noTitle
+			Describe "Environment variable:" loggingUtilConstants:environmentVariable
+				Describe "NO_TITLE:" loggingUtilConstantsEnvironmentVariable:noTitle
 					Describe
 						# Environment setup that works for most tests and shells.
 						sourceCut() { . $constants; }
 						BeforeAll 'sourceCut'
 
-						It "Set" logUtilConstantsEnvironmentVariableNoTitle:set
+						It "Set" loggingUtilConstantsEnvironmentVariableNoTitle:set
 							The variable NO_TITLE should be present
 						End
 					End
@@ -28,24 +28,24 @@ Describe "Log:" log
 						# No idea why, but some shells require `Include` for this test to pass (like zsh)...
 						Include $constants
 
-						It "Readonly" logUtilConstantsEnvironmentVariableNoTitle:readonly
+						It "Readonly" loggingUtilConstantsEnvironmentVariableNoTitle:readonly
 							The variable NO_TITLE should be readonly
 						End
-						It "Exported" logUtilConstantsEnvironmentVariableNoTitle:exported
+						It "Exported" loggingUtilConstantsEnvironmentVariableNoTitle:exported
 							The variable NO_TITLE should be exported
 						End
 					End
 				End
-				Describe "FULL_TITLE:" logUtilConstantsEnvironmentVariable:fullTitle
+				Describe "FULL_TITLE:" loggingUtilConstantsEnvironmentVariable:fullTitle
 					Describe
 						# Environment setup that works for most tests and shells.
 						sourceCut() { . $constants; }
 						BeforeAll 'sourceCut'
 
-						It "Set" logUtilConstantsEnvironmentVariableFullTitle:set
+						It "Set" loggingUtilConstantsEnvironmentVariableFullTitle:set
 							The value "$FULL_TITLE" should be present
 						End
-						It "Is greater than NO_TITLE" logUtilConstantsEnvironmentVariableFullTitle:isGreaterThanNoTitle
+						It "Is greater than NO_TITLE" loggingUtilConstantsEnvironmentVariableFullTitle:isGreaterThanNoTitle
 							The value "$FULL_TITLE" should satisfy isGreaterThan $FULL_TITLE $NO_TITLE
 						End
 					End
@@ -53,24 +53,24 @@ Describe "Log:" log
 						# No idea why, but some shells require `Include` for this test to pass (like zsh)...
 						Include $constants
 
-						It "Readonly" logUtilConstantsEnvironmentVariableFullTitle:readonly
+						It "Readonly" loggingUtilConstantsEnvironmentVariableFullTitle:readonly
 							The variable FULL_TITLE should be readonly
 						End
-						It "Exported" logUtilConstantsEnvironmentVariableFullTitle:exported
+						It "Exported" loggingUtilConstantsEnvironmentVariableFullTitle:exported
 							The variable FULL_TITLE should be exported
 						End
 					End
 				End
-				Describe "LINE_TITLE:" logUtilConstantsEnvironmentVariable:lineTitle
+				Describe "LINE_TITLE:" loggingUtilConstantsEnvironmentVariable:lineTitle
 					Describe
 						# Environment setup that works for most tests and shells.
 						sourceCut() { . $constants; }
 						BeforeAll 'sourceCut'
 
-						It "Set" logUtilConstantsEnvironmentVariableLineTitle:set
+						It "Set" loggingUtilConstantsEnvironmentVariableLineTitle:set
 							The value "$LINE_TITLE" should be present
 						End
-						It "Is greater than FULL_TITLE" logUtilConstantsEnvironmentVariableFullTitle:isGreaterThanFullTitle
+						It "Is greater than FULL_TITLE" loggingUtilConstantsEnvironmentVariableFullTitle:isGreaterThanFullTitle
 							The value "$FULL_TITLE" should satisfy isGreaterThan $LINE_TITLE $FULL_TITLE
 						End
 					End
@@ -78,21 +78,21 @@ Describe "Log:" log
 						# No idea why, but some shells require `Include` for this test to pass (like zsh)...
 						Include $constants
 
-						It "Readonly" logUtilConstantsEnvironmentVariableLineTitle:readonly
+						It "Readonly" loggingUtilConstantsEnvironmentVariableLineTitle:readonly
 							The variable LINE_TITLE should be readonly
 						End
-						It "Exported" logUtilConstantsEnvironmentVariableLineTitle:exported
+						It "Exported" loggingUtilConstantsEnvironmentVariableLineTitle:exported
 							The variable LINE_TITLE should be exported
 						End
 					End
 				End
-				Describe "NONE:" logUtilConstantsEnvironmentVariable:none
+				Describe "NONE:" loggingUtilConstantsEnvironmentVariable:none
 					Describe
 						# Environment setup that works for most tests and shells.
 						sourceCut() { . $constants; }
 						BeforeAll 'sourceCut'
 
-						It "Set" logUtilConstantsEnvironmentVariableNone:set
+						It "Set" loggingUtilConstantsEnvironmentVariableNone:set
 							The value "$NONE" should be present
 						End
 					End
@@ -100,24 +100,24 @@ Describe "Log:" log
 						# No idea why, but some shells require `Include` for this test to pass (like zsh)...
 						Include $constants
 
-						It "Readonly" logUtilConstantsEnvironmentVariableNone:readonly
+						It "Readonly" loggingUtilConstantsEnvironmentVariableNone:readonly
 							The variable NONE should be readonly
 						End
-						It "Exported" logUtilConstantsEnvironmentVariableNone:exported
+						It "Exported" loggingUtilConstantsEnvironmentVariableNone:exported
 							The variable NONE should be exported
 						End
 					End
 				End
-				Describe "ERROR:" logUtilConstantsEnvironmentVariable:error
+				Describe "ERROR:" loggingUtilConstantsEnvironmentVariable:error
 					Describe
 						# Environment setup that works for most tests and shells.
 						sourceCut() { . $constants; }
 						BeforeAll 'sourceCut'
 
-						It "Set" logUtilConstantsEnvironmentVariableError:set
+						It "Set" loggingUtilConstantsEnvironmentVariableError:set
 							The value "$ERROR" should be present
 						End
-						It "Is greater than NONE" logUtilConstantsEnvironmentVariableError:isGreaterThanNone
+						It "Is greater than NONE" loggingUtilConstantsEnvironmentVariableError:isGreaterThanNone
 							The value "$ERROR" should satisfy isGreaterThan $ERROR $NONE
 						End
 					End
@@ -125,24 +125,24 @@ Describe "Log:" log
 						# No idea why, but some shells require `Include` for this test to pass (like zsh)...
 						Include $constants
 
-						It "Readonly" logUtilConstantsEnvironmentVariableError:readonly
+						It "Readonly" loggingUtilConstantsEnvironmentVariableError:readonly
 							The variable ERROR should be readonly
 						End
-						It "Exported" logUtilConstantsEnvironmentVariableError:exported
+						It "Exported" loggingUtilConstantsEnvironmentVariableError:exported
 							The variable ERROR should be exported
 						End
 					End
 				End
-				Describe "WARN:" logUtilConstantsEnvironmentVariable:warn
+				Describe "WARN:" loggingUtilConstantsEnvironmentVariable:warn
 					Describe
 						# Environment setup that works for most tests and shells.
 						sourceCut() { . $constants; }
 						BeforeAll 'sourceCut'
 
-						It "Set" logUtilConstantsEnvironmentVariableWarn:set
+						It "Set" loggingUtilConstantsEnvironmentVariableWarn:set
 							The value "$WARN" should be present
 						End
-						It "Is greater than ERROR" logUtilConstantsEnvironmentVariableWarn:isGreaterThanError
+						It "Is greater than ERROR" loggingUtilConstantsEnvironmentVariableWarn:isGreaterThanError
 							The value "$WARN" should satisfy isGreaterThan $WARN $ERROR
 						End
 					End
@@ -150,24 +150,24 @@ Describe "Log:" log
 						# No idea why, but some shells require `Include` for this test to pass (like zsh)...
 						Include $constants
 
-						It "Readonly" logUtilConstantsEnvironmentVariableWarn:readonly
+						It "Readonly" loggingUtilConstantsEnvironmentVariableWarn:readonly
 							The variable WARN should be readonly
 						End
-						It "Exported" logUtilConstantsEnvironmentVariableWarn:exported
+						It "Exported" loggingUtilConstantsEnvironmentVariableWarn:exported
 							The variable WARN should be exported
 						End
 					End
 				End
-				Describe "INFO:" logUtilConstantsEnvironmentVariable:info
+				Describe "INFO:" loggingUtilConstantsEnvironmentVariable:info
 					Describe
 						# Environment setup that works for most tests and shells.
 						sourceCut() { . $constants; }
 						BeforeAll 'sourceCut'
 
-						It "Set" logUtilConstantsEnvironmentVariableInfo:set
+						It "Set" loggingUtilConstantsEnvironmentVariableInfo:set
 							The value "$INFO" should be present
 						End
-						It "Is greater than WARN" logUtilConstantsEnvironmentVariableInfo:isGreaterThanWarn
+						It "Is greater than WARN" loggingUtilConstantsEnvironmentVariableInfo:isGreaterThanWarn
 							The value "$INFO" should satisfy isGreaterThan $INFO $WARN
 						End
 					End
@@ -175,24 +175,24 @@ Describe "Log:" log
 						# No idea why, but some shells require `Include` for this test to pass (like zsh)...
 						Include $constants
 
-						It "Readonly" logUtilConstantsEnvironmentVariableInfo:readonly
+						It "Readonly" loggingUtilConstantsEnvironmentVariableInfo:readonly
 							The variable INFO should be readonly
 						End
-						It "Exported" logUtilConstantsEnvironmentVariableInfo:exported
+						It "Exported" loggingUtilConstantsEnvironmentVariableInfo:exported
 							The variable INFO should be exported
 						End
 					End
 				End
-				Describe "DEBUG:" logUtilConstantsEnvironmentVariable:debug
+				Describe "DEBUG:" loggingUtilConstantsEnvironmentVariable:debug
 					Describe
 						# Environment setup that works for most tests and shells.
 						sourceCut() { . $constants; }
 						BeforeAll 'sourceCut'
 
-						It "Set" logUtilConstantsEnvironmentVariableDebug:set
+						It "Set" loggingUtilConstantsEnvironmentVariableDebug:set
 							The value "$DEBUG" should be present
 						End
-						It "Is greater than INFO" logUtilConstantsEnvironmentVariableDebug:isGreaterThanInfo
+						It "Is greater than INFO" loggingUtilConstantsEnvironmentVariableDebug:isGreaterThanInfo
 							The value "$DEBUG" should satisfy isGreaterThan $DEBUG $INFO
 						End
 					End
@@ -200,24 +200,24 @@ Describe "Log:" log
 						# No idea why, but some shells require `Include` for this test to pass (like zsh)...
 						Include $constants
 
-						It "Readonly" logUtilConstantsEnvironmentVariableDebug:readonly
+						It "Readonly" loggingUtilConstantsEnvironmentVariableDebug:readonly
 							The variable DEBUG should be readonly
 						End
-						It "Exported" logUtilConstantsEnvironmentVariableDebug:exported
+						It "Exported" loggingUtilConstantsEnvironmentVariableDebug:exported
 							The variable DEBUG should be exported
 						End
 					End
 				End
-				Describe "TRACE:" logUtilConstantsEnvironmentVariable:trace
+				Describe "TRACE:" loggingUtilConstantsEnvironmentVariable:trace
 					Describe
 						# Environment setup that works for most tests and shells.
 						sourceCut() { . $constants; }
 						BeforeAll 'sourceCut'
 
-						It "Set" logUtilConstantsEnvironmentVariableTrace:set
+						It "Set" loggingUtilConstantsEnvironmentVariableTrace:set
 							The value "$TRACE" should be present
 						End
-						It "Is greater than DEBUG" logUtilConstantsEnvironmentVariableTrace:isGreaterThanDebug
+						It "Is greater than DEBUG" loggingUtilConstantsEnvironmentVariableTrace:isGreaterThanDebug
 							The value "$TRACE" should satisfy isGreaterThan $TRACE $DEBUG
 						End
 					End
@@ -225,24 +225,24 @@ Describe "Log:" log
 						# No idea why, but some shells require `Include` for this test to pass (like zsh)...
 						Include $constants
 
-						It "Readonly" logUtilConstantsEnvironmentVariableTrace:readonly
+						It "Readonly" loggingUtilConstantsEnvironmentVariableTrace:readonly
 							The variable TRACE should be readonly
 						End
-						It "Exported" logUtilConstantsEnvironmentVariableTrace:exported
+						It "Exported" loggingUtilConstantsEnvironmentVariableTrace:exported
 							The variable TRACE should be exported
 						End
 					End
 				End
-				Describe "ALL:" logUtilConstantsEnvironmentVariable:all
+				Describe "ALL:" loggingUtilConstantsEnvironmentVariable:all
 					Describe
 						# Environment setup that works for most tests and shells.
 						sourceCut() { . $constants; }
 						BeforeAll 'sourceCut'
 
-						It "Set" logUtilConstantsEnvironmentVariableAll:set
+						It "Set" loggingUtilConstantsEnvironmentVariableAll:set
 							The value "$ALL" should be present
 						End
-						It "Is greater than TRACE" logUtilConstantsEnvironmentVariableAll:isGreaterThanTrace
+						It "Is greater than TRACE" loggingUtilConstantsEnvironmentVariableAll:isGreaterThanTrace
 							The value "$ALL" should satisfy isGreaterThan $ALL $TRACE
 						End
 					End
@@ -250,24 +250,24 @@ Describe "Log:" log
 						# No idea why, but some shells require `Include` for this test to pass (like zsh)...
 						Include $constants
 
-						It "Readonly" logUtilConstantsEnvironmentVariableAll:readonly
+						It "Readonly" loggingUtilConstantsEnvironmentVariableAll:readonly
 							The variable ALL should be readonly
 						End
-						It "Exported" logUtilConstantsEnvironmentVariableAll:exported
+						It "Exported" loggingUtilConstantsEnvironmentVariableAll:exported
 							The variable ALL should be exported
 						End
 					End
 				End
-				Describe "SHELL_LOG_LEVEL:" logUtilConstantsEnvironmentVariable:shellLogLevel
+				Describe "SHELL_LOG_LEVEL:" loggingUtilConstantsEnvironmentVariable:shellLogLevel
 					Describe
 						# Environment setup that works for most tests and shells.
 						sourceCut() { . $constants; }
 						BeforeAll 'sourceCut'
 
-						It "Set" logUtilConstantsEnvironmentVariableShellLogLevel:set
+						It "Set" loggingUtilConstantsEnvironmentVariableShellLogLevel:set
 							The value "$SHELL_LOG_LEVEL" should be present
 						End
-						It "Is inclusively between NONE and ALL" logUtilConstantsEnvironmentVariableShellLogLevel:isInclusivelyBetweenNoneAndAll
+						It "Is inclusively between NONE and ALL" loggingUtilConstantsEnvironmentVariableShellLogLevel:isInclusivelyBetweenNoneAndAll
 							The value "$SHELL_LOG_LEVEL" should satisfy isInclusivelyBetween $NONE $SHELL_LOG_LEVEL $ALL
 						End
 					End
@@ -275,10 +275,10 @@ Describe "Log:" log
 						# No idea why, but some shells require `Include` for this test to pass (like zsh)...
 						Include $constants
 
-						It "Not readonly" logUtilConstantsEnvironmentVariableShellLogLevel:notReadonly
+						It "Not readonly" loggingUtilConstantsEnvironmentVariableShellLogLevel:notReadonly
 							The variable SHELL_LOG_LEVEL should not be readonly
 						End
-						It "Exported" logUtilConstantsEnvironmentVariableShellLogLevel:exported
+						It "Exported" loggingUtilConstantsEnvironmentVariableShellLogLevel:exported
 							The variable SHELL_LOG_LEVEL should be exported
 						End
 					End

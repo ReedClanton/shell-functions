@@ -7,7 +7,7 @@ readonly INFO
 readonly TRACE
 % SHELL_LOG_LEVEL:$INFO
 
-Describe "Log:" logging
+Describe "Logging:" logging
 	Describe "logging():" logging:logging
 		# Track path to file that contains CUT.
 		cutPath=$PWD/logging/logging.sh
@@ -17,30 +17,30 @@ Describe "Log:" logging
 		# Mock out.
 		verifyInputProvided() { :; }
 
-		Describe "Option mix:" loggingLog:optionMix
-			Describe "Caller and info:" loggingLogOptionMix:callerAndInfo
-				It "--caller and --info:" loggingLogOptionMixCallerAndInfo:callerAndInfo
+		Describe "Option mix:" loggingLogging:optionMix
+			Describe "Caller and info:" loggingLoggingOptionMix:callerAndInfo
+				It "--caller and --info:" loggingLoggingOptionMixCallerAndInfo:callerAndInfo
 					When run logging -m=m --caller="functionName()" --info
 					The stderr should not be present
 					The lines of stdout should equal 1
 					The stdout line 1 should equal "INFO  functionName():	m"
 					The status should be success
 				End
-				It "-c and --info:" loggingLogOptionMixCallerAndInfo:cAndInfo
+				It "-c and --info:" loggingLoggingOptionMixCallerAndInfo:cAndInfo
 					When run logging -m=m -c="functionName()" --info
 					The stderr should not be present
 					The lines of stdout should equal 1
 					The stdout line 1 should equal "INFO  functionName():	m"
 					The status should be success
 				End
-				It "--caller and -i:" loggingLogOptionMixCallerAndInfo:callerAndI
+				It "--caller and -i:" loggingLoggingOptionMixCallerAndInfo:callerAndI
 					When run logging -m=m --caller="functionName()" -i
 					The stderr should not be present
 					The lines of stdout should equal 1
 					The stdout line 1 should equal "INFO  functionName():	m"
 					The status should be success
 				End
-				It "-c and -i:" loggingLogOptionMixCallerAndDebug:cAndI
+				It "-c and -i:" loggingLoggingOptionMixCallerAndDebug:cAndI
 					When run logging -m=m -c="functionName()" -i
 					The stderr should not be present
 					The lines of stdout should equal 1

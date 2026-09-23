@@ -9,7 +9,7 @@ readonly LINE_TITLE
 readonly TRACE
 % SHELL_LOG_LEVEL:$TRACE
 
-Describe "Log:" logging
+Describe "Logging:" logging
 	Describe "logging():" logging:logging
 		# Track path to file that contains CUT.
 		cutPath=$PWD/logging/logging.sh
@@ -19,9 +19,9 @@ Describe "Log:" logging
 		# Mock out.
 		verifyInputProvided() { :; }
 
-		Describe "Optional option:" loggingLog:optionalOption
-			Describe "--line-title:" loggingLogOptionalOption:lineTitle
-				It "Single character formatting character" loggingLogOptionalOptionLineTitle:singleCharacterFormattingCharacter
+		Describe "Optional option:" loggingLogging:optionalOption
+			Describe "--line-title:" loggingLoggingOptionalOption:lineTitle
+				It "Single character formatting character" loggingLoggingOptionalOptionLineTitle:singleCharacterFormattingCharacter
 					TRACE_CHAR='#'
 					output() { echo "$TRACE_CHAR m $TRACE_CHAR"; }
 					When run logging -m=m --line-title
@@ -30,7 +30,7 @@ Describe "Log:" logging
 					The stdout line 1 should equal "TRACE:	$TRACE_CHAR m $TRACE_CHAR"
 					The status should be success
 				End
-				It "Two character formatting character" loggingLogOptionalOptionLineTitle:twoCharacterFormattingCharacter
+				It "Two character formatting character" loggingLoggingOptionalOptionLineTitle:twoCharacterFormattingCharacter
 					TRACE_CHAR='&!'
 					output() { echo "$TRACE_CHAR m $TRACE_CHAR"; }
 					When run logging -m=m --line-title
@@ -39,7 +39,7 @@ Describe "Log:" logging
 					The stdout line 1 should equal "TRACE:	$TRACE_CHAR m $TRACE_CHAR"
 					The status should be success
 				End
-				It "Many character formatting character" loggingLogOptionalOptionLineTitle:manyCharacterFormattingCharacter
+				It "Many character formatting character" loggingLoggingOptionalOptionLineTitle:manyCharacterFormattingCharacter
 					TRACE_CHAR='!#*@'
 					output() { echo "$TRACE_CHAR m $TRACE_CHAR"; }
 					When run logging -m=m --line-title
@@ -48,7 +48,7 @@ Describe "Log:" logging
 					The stdout line 1 should equal "TRACE:	$TRACE_CHAR m $TRACE_CHAR"
 					The status should be success
 				End
-				It "Many character formatting character, message broken up" loggingLogOptionalOptionLineTitle:manyCharacterFormattingCharacterMessageBrokenUp
+				It "Many character formatting character, message broken up" loggingLoggingOptionalOptionLineTitle:manyCharacterFormattingCharacterMessageBrokenUp
 					TRACE_CHAR='!#*@'
 					output() { echo "$TRACE_CHAR msg1 $TRACE_CHAR"; echo "$TRACE_CHAR msg2 $TRACE_CHAR"; }
 					When run logging -m=msg1 --msg=msg2 --line-title

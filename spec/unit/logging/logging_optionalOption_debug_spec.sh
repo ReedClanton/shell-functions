@@ -7,7 +7,7 @@ readonly DEBUG
 readonly TRACE
 % SHELL_LOG_LEVEL:$DEBUG
 
-Describe "Log:" logging
+Describe "Logging:" logging
 	Describe "logging():" logging:logging
 		# Track path to file that contains CUT.
 		cutPath=$PWD/logging/logging.sh
@@ -17,16 +17,16 @@ Describe "Log:" logging
 		# Mock out.
 		verifyInputProvided() { :; }
 
-		Describe "Optional option:" loggingLog:optionalOption
-			Describe "Debug:" loggingLogOptionalOption:debug
-				It "-d" loggingLogOptionalOptionDebug:d
+		Describe "Optional option:" loggingLogging:optionalOption
+			Describe "Debug:" loggingLoggingOptionalOption:debug
+				It "-d" loggingLoggingOptionalOptionDebug:d
 					When run logging -m=m -d
 					The stderr should not be present
 					The lines of stdout should equal 1
 					The stdout line 1 should equal "DEBUG:	m"
 					The status should be success
 				End
-				It "--debug" loggingLogOptionalOptionDebug:debug
+				It "--debug" loggingLoggingOptionalOptionDebug:debug
 					When run logging -m=m --debug
 					The stderr should not be present
 					The lines of stdout should equal 1

@@ -17,7 +17,7 @@ readonly DEBUG
 readonly TRACE
 % SHELL_LOG_LEVEL:$INFO
 
-Describe "Log:" logging
+Describe "Logging:" logging
 	Describe "logging():" logging:logging
 		# Track path to file that contains CUT.
 		cutPath=$PWD/logging/logging.sh
@@ -27,8 +27,8 @@ Describe "Log:" logging
 		# Mock out.
 		verifyInputProvided() { :; }
 
-		Describe "Option mix:" loggingLog:optionMix
-			Describe "--line-title and info:" loggingLogUtilOptionMix:lineTitleAndInfo
+		Describe "Option mix:" loggingLogging:optionMix
+			Describe "--line-title and info:" loggingLoggingUtilOptionMix:lineTitleAndInfo
 				output() {
 					# Track that required option(s) are provided.
 					lvlGiven=false
@@ -54,14 +54,14 @@ Describe "Log:" logging
 					return 3
 				}
 
-				It "--info" loggingLogUtilOptionMixLineTitleAndInfo:info
+				It "--info" loggingLoggingUtilOptionMixLineTitleAndInfo:info
 					When run logging -m=m --line-title --info
 					The stderr should not be present
 					The lines of stdout should equal 1
 					The stdout line 1 should equal "INFO :	# m #"
 					The status should be success
 				End
-				It "-i" loggingLogUtilOptionMixLineTitleAndInfo:i
+				It "-i" loggingLoggingUtilOptionMixLineTitleAndInfo:i
 					When run logging -m=m --line-title -i
 					The stderr should not be present
 					The lines of stdout should equal 1

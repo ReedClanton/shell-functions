@@ -15,7 +15,7 @@ readonly DEBUG
 readonly TRACE
 % SHELL_LOG_LEVEL:$DEBUG
 
-Describe "Log:" logging
+Describe "Logging:" logging
 	Describe "logging():" logging:logging
 		# Track path to file that contains CUT.
 		cutPath=$PWD/logging/logging.sh
@@ -25,8 +25,8 @@ Describe "Log:" logging
 		# Mock out.
 		verifyInputProvided() { :; }
 
-		Describe "Option mix:" loggingLog:optionMix
-			Describe "--full-title and debug:" loggingLogUtilOptionMix:fullTitleAndDebug
+		Describe "Option mix:" loggingLogging:optionMix
+			Describe "--full-title and debug:" loggingLoggingUtilOptionMix:fullTitleAndDebug
 				output() {
 					# Track that required option(s) are provided.
 					lvlGiven=false
@@ -61,7 +61,7 @@ Describe "Log:" logging
 					return 3
 				}
 
-				It "--debug" loggingLogUtilOptionMixFullTitleAndDebug:debug
+				It "--debug" loggingLoggingUtilOptionMixFullTitleAndDebug:debug
 					When run logging -m=m --full-title --debug
 					The stderr should not be present
 					The lines of stdout should equal 4
@@ -71,7 +71,7 @@ Describe "Log:" logging
 					The stdout line 4 should equal " ###"
 					The status should be success
 				End
-				It "-d" loggingLogUtilOptionMixFullTitleAndDebug:d
+				It "-d" loggingLoggingUtilOptionMixFullTitleAndDebug:d
 					When run logging -m=m --full-title -d
 					The stderr should not be present
 					The lines of stdout should equal 4

@@ -16,7 +16,7 @@ readonly TRACE
 % ALL:6
 readonly ALL
 
-Describe "Log:" logging
+Describe "Logging:" logging
 	Describe "logging():" logging:logging
 		# Track path to file that contains CUT.
 		cutPath=$PWD/logging/logging.sh
@@ -26,221 +26,221 @@ Describe "Log:" logging
 		# Mock out.
 		verifyInputProvided() { :; }
 
-		Describe "Util:" loggingLog:util
-			Describe "Constants:" loggingLogUtil:constants
-				Describe "SHELL_LOG_LEVEL:" loggingLogUtilConstants:shellLogLevel
-					Describe "NONE:" loggingLogUtilConstantsShellLogLevel:none
+		Describe "Util:" loggingLogging:util
+			Describe "Constants:" loggingLoggingUtil:constants
+				Describe "SHELL_LOG_LEVEL:" loggingLoggingUtilConstants:shellLogLevel
+					Describe "NONE:" loggingLoggingUtilConstantsShellLogLevel:none
 						SHELL_LOG_LEVEL=$NONE
 
-						It "Error" loggingLogUtilConstantsShellLogLevelNone:error
+						It "Error" loggingLoggingUtilConstantsShellLogLevelNone:error
 							When run logging -m=m -e
 							The stderr should not be present
 							The stdout should not be present
 							The status should be success
 						End
-						It "Warn" loggingLogUtilConstantsShellLogLevelNone:warn
+						It "Warn" loggingLoggingUtilConstantsShellLogLevelNone:warn
 							When run logging -m=m -w
 							The stderr should not be present
 							The stdout should not be present
 							The status should be success
 						End
-						It "Info" loggingLogUtilConstantsShellLogLevelNone:info
+						It "Info" loggingLoggingUtilConstantsShellLogLevelNone:info
 							When run logging -m=m -i
 							The stderr should not be present
 							The stdout should not be present
 							The status should be success
 						End
-						It "Debug" loggingLogUtilConstantsShellLogLevelNone:debug
+						It "Debug" loggingLoggingUtilConstantsShellLogLevelNone:debug
 							When run logging -m=m -d
 							The stderr should not be present
 							The stdout should not be present
 							The status should be success
 						End
-						It "Trace" loggingLogUtilConstantsShellLogLevelNone:trace
+						It "Trace" loggingLoggingUtilConstantsShellLogLevelNone:trace
 							When run logging -m=m -t
 							The stderr should not be present
 							The stdout should not be present
 							The status should be success
 						End
 					End
-					Describe "ERROR:" loggingLogUtilConstantsShellLogLevel:error
+					Describe "ERROR:" loggingLoggingUtilConstantsShellLogLevel:error
 						SHELL_LOG_LEVEL=$ERROR
 
-						It "Error" loggingLogUtilConstantsShellLogLevelError:error
+						It "Error" loggingLoggingUtilConstantsShellLogLevelError:error
 							When run logging -m=m -e
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "ERROR:	m"
 							The status should be success
 						End
-						It "Warn" loggingLogUtilConstantsShellLogLevelError:warn
+						It "Warn" loggingLoggingUtilConstantsShellLogLevelError:warn
 							When run logging -m=m -w
 							The stderr should not be present
 							The stdout should not be present
 							The status should be success
 						End
-						It "Info" loggingLogUtilConstantsShellLogLevelError:info
+						It "Info" loggingLoggingUtilConstantsShellLogLevelError:info
 							When run logging -m=m -i
 							The stderr should not be present
 							The stdout should not be present
 							The status should be success
 						End
-						It "Debug" loggingLogUtilConstantsShellLogLevelError:debug
+						It "Debug" loggingLoggingUtilConstantsShellLogLevelError:debug
 							When run logging -m=m -d
 							The stderr should not be present
 							The stdout should not be present
 							The status should be success
 						End
-						It "Trace" loggingLogUtilConstantsShellLogLevelError:trace
+						It "Trace" loggingLoggingUtilConstantsShellLogLevelError:trace
 							When run logging -m=m -t
 							The stderr should not be present
 							The stdout should not be present
 							The status should be success
 						End
 					End
-					Describe "WARN:" loggingLogUtilConstantsShellLogLevel:warn
+					Describe "WARN:" loggingLoggingUtilConstantsShellLogLevel:warn
 						SHELL_LOG_LEVEL=$WARN
 
-						It "Error" loggingLogUtilConstantsShellLogLevelWarn:error
+						It "Error" loggingLoggingUtilConstantsShellLogLevelWarn:error
 							When run logging -m=m -e
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "ERROR:	m"
 							The status should be success
 						End
-						It "Warn" loggingLogUtilConstantsShellLogLevelWarn:warn
+						It "Warn" loggingLoggingUtilConstantsShellLogLevelWarn:warn
 							When run logging -m=m -w
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "WARN :	m"
 							The status should be success
 						End
-						It "Info" loggingLogUtilConstantsShellLogLevelWarn:info
+						It "Info" loggingLoggingUtilConstantsShellLogLevelWarn:info
 							When run logging -m=m -i
 							The stderr should not be present
 							The stdout should not be present
 							The status should be success
 						End
-						It "Debug" loggingLogUtilConstantsShellLogLevelWarn:debug
+						It "Debug" loggingLoggingUtilConstantsShellLogLevelWarn:debug
 							When run logging -m=m -d
 							The stderr should not be present
 							The stdout should not be present
 							The status should be success
 						End
-						It "Trace" loggingLogUtilConstantsShellLogLevelWarn:trace
+						It "Trace" loggingLoggingUtilConstantsShellLogLevelWarn:trace
 							When run logging -m=m -t
 							The stderr should not be present
 							The stdout should not be present
 							The status should be success
 						End
 					End
-					Describe "INFO:" loggingLogUtilConstantsShellLogLevel:info
+					Describe "INFO:" loggingLoggingUtilConstantsShellLogLevel:info
 						SHELL_LOG_LEVEL=$INFO
 
-						It "Error" loggingLogUtilConstantsShellLogLevelInfo:error
+						It "Error" loggingLoggingUtilConstantsShellLogLevelInfo:error
 							When run logging -m=m -e
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "ERROR:	m"
 							The status should be success
 						End
-						It "Warn" loggingLogUtilConstantsShellLogLevelInfo:warn
+						It "Warn" loggingLoggingUtilConstantsShellLogLevelInfo:warn
 							When run logging -m=m -w
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "WARN :	m"
 							The status should be success
 						End
-						It "Info" loggingLogUtilConstantsShellLogLevelInfo:info
+						It "Info" loggingLoggingUtilConstantsShellLogLevelInfo:info
 							When run logging -m=m -i
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "INFO :	m"
 							The status should be success
 						End
-						It "Debug" loggingLogUtilConstantsShellLogLevelInfo:debug
+						It "Debug" loggingLoggingUtilConstantsShellLogLevelInfo:debug
 							When run logging -m=m -d
 							The stderr should not be present
 							The stdout should not be present
 							The status should be success
 						End
-						It "Trace" loggingLogUtilConstantsShellLogLevelInfo:trace
+						It "Trace" loggingLoggingUtilConstantsShellLogLevelInfo:trace
 							When run logging -m=m -t
 							The stderr should not be present
 							The stdout should not be present
 							The status should be success
 						End
 					End
-					Describe "DEBUG:" loggingLogUtilConstantsShellLogLevel:debug
+					Describe "DEBUG:" loggingLoggingUtilConstantsShellLogLevel:debug
 						SHELL_LOG_LEVEL=$DEBUG
 
-						It "Error" loggingLogUtilConstantsShellLogLevelDebug:error
+						It "Error" loggingLoggingUtilConstantsShellLogLevelDebug:error
 							When run logging -m=m -e
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "ERROR:	m"
 							The status should be success
 						End
-						It "Warn" loggingLogUtilConstantsShellLogLevelDebug:warn
+						It "Warn" loggingLoggingUtilConstantsShellLogLevelDebug:warn
 							When run logging -m=m -w
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "WARN :	m"
 							The status should be success
 						End
-						It "Info" loggingLogUtilConstantsShellLogLevelDebug:info
+						It "Info" loggingLoggingUtilConstantsShellLogLevelDebug:info
 							When run logging -m=m -i
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "INFO :	m"
 							The status should be success
 						End
-						It "Debug" loggingLogUtilConstantsShellLogLevelDebug:debug
+						It "Debug" loggingLoggingUtilConstantsShellLogLevelDebug:debug
 							When run logging -m=m -d
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "DEBUG:	m"
 							The status should be success
 						End
-						It "Trace" loggingLogUtilConstantsShellLogLevelDebug:trace
+						It "Trace" loggingLoggingUtilConstantsShellLogLevelDebug:trace
 							When run logging -m=m -t
 							The stderr should not be present
 							The stdout should not be present
 							The status should be success
 						End
 					End
-					Describe "TRACE:" loggingLogUtilConstantsShellLogLevel:trace
+					Describe "TRACE:" loggingLoggingUtilConstantsShellLogLevel:trace
 						SHELL_LOG_LEVEL=$TRACE
 
-						It "Error" loggingLogUtilConstantsShellLogLevelTrace:error
+						It "Error" loggingLoggingUtilConstantsShellLogLevelTrace:error
 							When run logging -m=m -e
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "ERROR:	m"
 							The status should be success
 						End
-						It "Warn" loggingLogUtilConstantsShellLogLevelTrace:warn
+						It "Warn" loggingLoggingUtilConstantsShellLogLevelTrace:warn
 							When run logging -m=m -w
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "WARN :	m"
 							The status should be success
 						End
-						It "Info" loggingLogUtilConstantsShellLogLevelTrace:info
+						It "Info" loggingLoggingUtilConstantsShellLogLevelTrace:info
 							When run logging -m=m -i
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "INFO :	m"
 							The status should be success
 						End
-						It "Debug" loggingLogUtilConstantsShellLogLevelTrace:debug
+						It "Debug" loggingLoggingUtilConstantsShellLogLevelTrace:debug
 							When run logging -m=m -d
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "DEBUG:	m"
 							The status should be success
 						End
-						It "Trace" loggingLogUtilConstantsShellLogLevelTrace:trace
+						It "Trace" loggingLoggingUtilConstantsShellLogLevelTrace:trace
 							When run logging -m=m -t
 							The stderr should not be present
 							The lines of stdout should equal 1
@@ -248,38 +248,38 @@ Describe "Log:" logging
 							The status should be success
 						End
 					End
-					Describe "ALL:" loggingLogUtilConstantsShellLogLevel:all
+					Describe "ALL:" loggingLoggingUtilConstantsShellLogLevel:all
 						SHELL_LOG_LEVEL=$ALL
 
-						It "Error" loggingLogUtilConstantsShellLogLevelAll:error
+						It "Error" loggingLoggingUtilConstantsShellLogLevelAll:error
 							When run logging -m=m -e
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "ERROR:	m"
 							The status should be success
 						End
-						It "Warn" loggingLogUtilConstantsShellLogLevelAll:warn
+						It "Warn" loggingLoggingUtilConstantsShellLogLevelAll:warn
 							When run logging -m=m -w
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "WARN :	m"
 							The status should be success
 						End
-						It "Info" loggingLogUtilConstantsShellLogLevelAll:info
+						It "Info" loggingLoggingUtilConstantsShellLogLevelAll:info
 							When run logging -m=m -i
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "INFO :	m"
 							The status should be success
 						End
-						It "Debug" loggingLogUtilConstantsShellLogLevelAll:debug
+						It "Debug" loggingLoggingUtilConstantsShellLogLevelAll:debug
 							When run logging -m=m -d
 							The stderr should not be present
 							The lines of stdout should equal 1
 							The stdout line 1 should equal "DEBUG:	m"
 							The status should be success
 						End
-						It "Trace" loggingLogUtilConstantsShellLogLevelAll:trace
+						It "Trace" loggingLoggingUtilConstantsShellLogLevelAll:trace
 							When run logging -m=m -t
 							The stderr should not be present
 							The lines of stdout should equal 1
