@@ -48,9 +48,10 @@ For example, `output_optionalOption_help_spec.sh` would contain unit tests of th
 - Each level of the test should reflect how the CUT is organized, thus:
     - The top level `Describe` (see: [shellspec basic structure for more info](https://github.com/shellspec/shellspec#basic-structure)) must be named the same as the user facing function the test is most closely related to:
     - For example:
-        - If the test if of a util function called `utilFunc()`, and `utilFunc()` is used by the `output()` function, then the top level `Describe` should have the title `output():`.
-        - The next level would be named `Util:`.
-        - The next would be named `utilFunc():`.
+        - If the test of of a function utalized by the `output` function and resides within `./output/util/utilFunc', then:
+            - The top level `Describe` should have the title `Output:`.
+            - The next level would be named `Util:`.
+            - The next would be named `UtilFunc:`.
 - The bottom level (`It`) must *always* have a unique tag.
 - Each piece of functionality that can be tested separately from any other functionality, even if only partially, *must* be placed in its own file:
     - Splitting tests up into different files allows `shellspec` to run them in parallel.
@@ -63,7 +64,7 @@ For example, `output_optionalOption_help_spec.sh` would contain unit tests of th
 A test of `output()`'s `--help` option would look like this:
 
 ```
-Describe "output():" output:output
+Describe "Output:" output
 	Describe "Optional option:" outputOutput:optionalOption
 		Describe "Help:" outputOutputOptionalOption:help
 			It "-h" outputOutputOptionalOptionsHelp:h
