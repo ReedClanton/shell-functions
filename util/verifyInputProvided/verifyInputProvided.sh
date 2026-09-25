@@ -68,13 +68,13 @@ EOF
 
 verifyInputProvided() {
 	################################
-    ## Reset/Set Local Variable(s) ##
-    ################################
-    # Error prefix added to error logs.
-    _verifyInputProvidedLogPrefix="ERROR verifyInputProvided():"
-    if command -v date >/dev/null; then
-        _verifyInputProvidedLogPrefix="$($(command -v date) +'%Y/%m/%d %H:%M:%S %Z') $_verifyInputProvidedLogPrefix"
-    fi
+	## Reset/Set Local Variable(s) ##
+	################################
+	# Error prefix added to error logs.
+	_verifyInputProvidedLogPrefix="ERROR verifyInputProvided():"
+	if command -v date >/dev/null; then
+		_verifyInputProvidedLogPrefix="$($(command -v date) +'%Y/%m/%d %H:%M:%S %Z') $_verifyInputProvidedLogPrefix"
+	fi
 	# Used when processing the argument(s)/option(s) pass in.
 	local _fullArg
 	# Tracks number of input(s) provided.
