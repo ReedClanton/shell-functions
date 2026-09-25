@@ -202,7 +202,7 @@ output() {
 	# Used when processing provided argument(s)/option(s).
 	local _fullArg
 	# Tracks output of external calls.
-    local _stdOut _stdErr _rtVal _cmd
+	local _stdOut _stdErr _rtVal _cmd
 
 	######################
 	## Process Option(s) ##
