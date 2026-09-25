@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} has triggered style guide check of output()'s cons
 on: [push, workflow_dispatch]
 jobs:
   style-guide-output-util-constants:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3

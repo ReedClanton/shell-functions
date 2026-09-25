@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} has triggered the running of unit tests of logging
 on: [push, workflow_dispatch]
 jobs:
   unit-test-ubuntu-bash-logging:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
@@ -14,7 +14,7 @@ jobs:
         # TODO #53: Pipeline doesn't process --fail-low-coverage correctly.
 ##        run:  shellspec --no-fail-fast -p -s /bin/bash --kcov --kcov-options "--include-pattern=logging/logging.sh --limits=78,100" --fail-low-coverage ./spec/unit/logging/logging_*
   unit-test-ubuntu-dash-logging:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
@@ -23,7 +23,7 @@ jobs:
       - name: Running unit tests from a 'dash' shell...
         run:  shellspec --no-fail-fast -s /bin/dash ./spec/unit/logging/logging_*
   unit-test-ubuntu-zsh-logging:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
@@ -34,7 +34,7 @@ jobs:
       - name: Running unit tests from a 'zsh' shell...
         run:  shellspec --no-fail-fast -s /bin/zsh ./spec/unit/logging/logging_*
   unit-test-ubuntu-ksh-logging:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
