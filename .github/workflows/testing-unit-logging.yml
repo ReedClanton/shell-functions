@@ -34,7 +34,7 @@ jobs:
       - name: Installing 'zsh' (shell)...
         uses: ./.github/actions/install-zsh-shell-via-apt
       - name: Running unit tests from a 'zsh' shell...
-        run:  shellspec --no-fail-fast -s /bin/zsh ./spec/unit/logging/logging_*
+        run:  shellspec --xtrace --no-fail-fast -s /bin/zsh ./spec/unit/logging/logging_*
   unit-test-ubuntu-ksh-logging:
     runs-on: ubuntu-latest
     steps:
