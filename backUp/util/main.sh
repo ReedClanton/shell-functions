@@ -18,7 +18,7 @@ funcName="$BACK_UP_SHELL_FUNCTION_HOME/util/main.sh"
 # NoOp
 ## Constant(s) ##
 if [ -f $BACK_UP_SHELL_FUNCTION_HOME/util/constants.sh ]; then
-	source $BACK_UP_SHELL_FUNCTION_HOME/util/constants.sh
+	. $BACK_UP_SHELL_FUNCTION_HOME/util/constants.sh
 else
 	echo "ERROR $funcName(): Couldn't find constants file from BACK_UP_SHELL_FUNCTION_HOME/util: '$BACK_UP_SHELL_FUNCTION_HOME/util'." >&2
 	exit 202
@@ -34,12 +34,8 @@ if [ "$(command -v logging)" != logging ]; then
 			exit 202
 		fi
 	fi
-	source "$LOGGING_SHELL_FUNCTION_HOME/logging.sh"
+	. "$LOGGING_SHELL_FUNCTION_HOME/logging.sh"
 fi
-#if [ "$(command -v logging)" != logging ]; then
-#	echo "ERROR $funcName(): logging() is required by backUp() and wasn't already defined." >&2
-#	exit 202
-#fi
 
 ######################
 ## Local Variable(s) ##
