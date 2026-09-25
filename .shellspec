@@ -16,7 +16,7 @@
 --fail-fast
 
 # Default kcov (coverage) option(s).
-# TODO #16: May be removed.
+# See unit test `README.md` file for why `main.sh` files are excluded.
 --kcov-options "--exclude-pattern=main.sh"
 # TODO: Figure out why this option always causes pipeline to fail.
 # --fail-low-coverage

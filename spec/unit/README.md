@@ -1,20 +1,6 @@
 # Unit Testing
 
-This directory and its child directories contain all unit tests of this repository's code. For generic info regarding testing, see the top level [test readme](../README.md).
-
-## Unit Testing Goals
-
-Unit tests should:
-
-- Test the *smallest* possible unit of code in a *single* way.
-- Test the *smallest* possible unit of code in *every* way.
-- *All* code *must* have *100%* coverage:
-    - This includes things like files that define constants.
-- Ensure *no code outside* of the CUT (Code Under Test) is executed.
-- Environment changes should *never break* tests:
-    - For example, changing the value of a value in a constants file should only cause tests to fail when the new value is invalid.
-- Functionality changes *shale _always_* break tests.
-- Implementation changes should *not* break tests... ideally.
+This directory and its child directories contain all unit tests of this repository's code. For information regarding this project's goals of unit testing, see the top level [test `README.md` file](../README.md).
 
 ## Directory Structure
 
@@ -48,9 +34,10 @@ For example, `output_optionalOption_help_spec.sh` would contain unit tests of th
 - Each level of the test should reflect how the CUT is organized, thus:
     - The top level `Describe` (see: [shellspec basic structure for more info](https://github.com/shellspec/shellspec#basic-structure)) must be named the same as the user facing function the test is most closely related to:
     - For example:
-        - If the test if of a util function called `utilFunc()`, and `utilFunc()` is used by the `output()` function, then the top level `Describe` should have the title `output():`.
-        - The next level would be named `Util:`.
-        - The next would be named `utilFunc():`.
+        - If the test of of a function utalized by the `output` function and resides within `./output/util/utilFunc', then:
+            - The top level `Describe` should have the title `Output:`.
+            - The next level would be named `Util:`.
+            - The next would be named `UtilFunc:`.
 - The bottom level (`It`) must *always* have a unique tag.
 - Each piece of functionality that can be tested separately from any other functionality, even if only partially, *must* be placed in its own file:
     - Splitting tests up into different files allows `shellspec` to run them in parallel.
@@ -58,12 +45,24 @@ For example, `output_optionalOption_help_spec.sh` would contain unit tests of th
 
 **Note:** If an existing test file doesn't follow any of these rules, then the one who is modifying the file must update the entire file to follow all rules.
 
+## Exceptions to Coverage
+
+It has been deamed that unit test coverage of `main.sh` files is not necessary.
+
+### Justification
+
+- `main.sh` files primarily represent the import section at the top of most programming language files.
+- The imports must exist for the code to function, but rigorously testing the import list:
+    - Represents a suprising amount of work.
+    - Provides little value.
+    - Bugs it would prevent are easly found and quick to fix.
+
 ## Test Structure Example
 
 A test of `output()`'s `--help` option would look like this:
 
 ```
-Describe "output():" output:output
+Describe "Output:" output
 	Describe "Optional option:" outputOutput:optionalOption
 		Describe "Help:" outputOutputOptionalOption:help
 			It "-h" outputOutputOptionalOptionsHelp:h

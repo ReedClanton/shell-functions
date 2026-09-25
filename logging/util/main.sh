@@ -1,3 +1,11 @@
+###################
+## Initialization ##
+###################
+if [ ! -d "$LOGGING_SHELL_FUNCTION_HOME" ]; then
+	echo "ERROR logging/util/main.sh: LOGGING_SHELL_FUNCTION_HOME must be set to the directory containing the logging() function." >&2
+	exit 200
+fi
+
 ##########
 ## Local ##
 ##########
@@ -10,9 +18,9 @@ funcName="$LOGGING_SHELL_FUNCTION_HOME/util/main.sh"
 # NoOp
 ## Constant(s) ##
 if [ -f $LOGGING_SHELL_FUNCTION_HOME/util/constants.sh ]; then
-	source $LOGGING_SHELL_FUNCTION_HOME/util/constants.sh
+	. $LOGGING_SHELL_FUNCTION_HOME/util/constants.sh
 else
-	echo "ERROR $funcName(): Couldn't find constants file from LOGGING_SHELL_FUNCTION_HOME/util: '$LOGGING_SHELL_FUNCTION_HOME/util'." >&2
+	echo "ERROR $funcName(): Couldn't find 'constants.sh' file from LOGGING_SHELL_FUNCTION_HOME/util: '$LOGGING_SHELL_FUNCTION_HOME/util'." >&2
 	exit 202
 fi
 ## Code ##
@@ -26,12 +34,8 @@ if [ "$(command -v output)" != output ]; then
             exit 202
         fi
     fi
-    source "$OUTPUT_SHELL_FUNCTION_HOME/output.sh"
+    . "$OUTPUT_SHELL_FUNCTION_HOME/output.sh"
 fi
-#if [ ! "$(command -v output)" = output ]; then
-#	echo "ERROR $funcName(): output() is required and wasn't already defined." >&2
-#	exit 202
-#fi
 # Import only what's used.
 if [ "$(command -v verifyInputProvided)" != verifyInputProvided ]; then
     if [ ! -n "${VERIFY_INPUT_PROVIDED_SHELL_FUNCTION_HOME:-}" ] || [ ! -d "$VERIFY_INPUT_PROVIDED_SHELL_FUNCTION_HOME" ]; then
@@ -42,12 +46,8 @@ if [ "$(command -v verifyInputProvided)" != verifyInputProvided ]; then
             exit 202
         fi
     fi
-	source "$VERIFY_INPUT_PROVIDED_SHELL_FUNCTION_HOME/verifyInputProvided.sh"
+	. "$VERIFY_INPUT_PROVIDED_SHELL_FUNCTION_HOME/verifyInputProvided.sh"
 fi
-#if [ ! "$(command -v verifyInputProvided)" = verifyInputProvided ]; then
-#	echo "ERROR $funcName(): verifyInputProvided() is required and wasn't already defined." >&2
-#	exit 202
-#fi
 
 ######################
 ## Local Variable(s) ##
