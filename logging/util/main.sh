@@ -2,7 +2,7 @@
 ## Initialization ##
 ###################
 if [ ! -d "$LOGGING_SHELL_FUNCTION_HOME" ]; then
-	echo "ERROR logging/util/main.sh: LOGGING_SHELL_FUNCTION_HOME must be set to the directory containing the 'logging' function." >&2
+	echo "ERROR logging/util/main.sh: LOGGING_SHELL_FUNCTION_HOME must be set to the directory containing the logging() function." >&2
 	exit 200
 fi
 

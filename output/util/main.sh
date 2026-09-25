@@ -1,3 +1,11 @@
+###################
+## Initialization ##
+###################
+if [ ! -d "$OUTPUT_SHELL_FUNCTION_HOME" ]; then
+    echo "ERROR output/util/main.sh: OUTPUT_SHELL_FUNCTION_HOME must be set to the directory containing the output() function." >&2
+    exit 200
+fi
+
 ##########
 ## Local ##
 ##########
