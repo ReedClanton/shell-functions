@@ -1,12 +1,53 @@
 # Shell Functions
 
-This repository/directory contains a collection of shell functions originally written by Reed Clanton in the `shell_base` repository. For more information regarding the functions, see the [Functions](#functions) section.
+This repository contains a number of shell functions that add functionality to your shell environment. Checkout the [Functions](#functions) section for more details! To use them, see the [Setup](#setup) section.
 
-## Usage of Shell Functions
+## Functions
 
-In order to add all of the functions in this repository, simply run `eval "$("$HOME/path/to/shellFunctionSetup.sh")"`. To have all functions added to your shell automatically, add the same command to your user's shell configuration.
+Section titles match the name of each function. Click on the section title to be taken
+to the document for that function.
 
-Once you've done this, all functions should be available for use. For a list of functions, see the [Functions](#functions) section or just call the function and pass in `-h` or `--help` (ex. `<functionName> --help`).
+### [`backUp`](backUp/README.md)
+
+Script that copies files and directories from user's home directory to another location.
+
+### [`logging`](logging/README.md)
+
+Produces formatted logs to stdout.
+
+#### `logging` Example Usage
+
+```sh
+infoLvl="-i -c=example_script"
+readonly infoLvl
+
+logging $infoLvl -m="Requesting input from user..."
+printf "Enter number you'd like to count to: "
+read userVar
+logging $infoLvl -m="User entered: '$userVar'"
+
+for (( i=1; i<=$userVar; i++)); do
+	logging $infoLvl -m="$i"
+done
+```
+
+### [`output`](output/README.md)
+
+Used to add pre-fix, post-fix, headers, and/or footers to message text. Used by log()'s title
+options.
+
+### `shellName`
+
+Returns the name of the shell that called the script to `stdout`.
+
+### `verifyInputProvided`
+
+Used by other scripts to ensure that all option(s) passed into it are valid (contain something).
+If that's not the case, then the calling scripts doc is produced to std out.
+
+## Setup
+
+Clone this repository, then run `eval "$("$HOME/path/to/shellFunctionSetup.sh")"`. To add this repositories functionality permanently, add that same command to your user's shell configuration.
 
 ## Return Codes
 
@@ -64,45 +105,26 @@ Alternatively, enter `<funcationName> --help` for a document that describes how 
 | `209` | Any other environment issue.                                                  |                            |                                                |
 | `255` | POSIX Standard: `Exit status out of range`                                    | `exit -1`                  | https://tldp.org/LDP/abs/html/exitcodes.html   |
 
-## Functions
+## Terminology
 
-Section titles match the name of each function. Click on the section title to be taken
-to the document for that function.
+| Term                           | Meaning                                                         | Reference                               |
+|:------------------------------ |:--------------------------------------------------------------  |:--------------------------------------- |
+| CUT                            | **C**ode **U**nder **T**est                                     |                                         |
+| `Describe`/`ExampleGroup`/`Context` |                                                            | [shellspec-Basic structure](https://github.com/shellspec/shellspec#basic-structure) |
+| DOD                            | **D**efinition **O**f **D**one                                  |                                         |
+| function readme                | The `README.md` file of the function named. Stored in the same directory as the function is. | Ex: [logging/README.md](logging/README.md) |
+| project readme                 | This `README.md`.                                               | [project readme](README.md)             |
+| `stderr`                       | Output stream that error data is published to.                  | Google it.                              |
+| `stdout`                       | Output stream that most return values are published to.         | Google it.                              |
 
-### [`backUp`](backUp/README.md)
+## Unit Testing
 
-Script that copies files and directories from user's home directory to another location.
+There is an extensive suite of unit tests that utilizes the [ShellSpec](https://shellspec.info/) framework. For more, see the [unit testing `README.md` file](spec/README.md).
 
-### `verifyInputProvided`
+## GitHub Actions (Pipeline)
 
-Used by other scripts to ensure that all option(s) passed into it are valid (contain something).
-If that's not the case, then the calling scripts doc is produced to std out.
+Tests of this repository are run by actions (what GitHub calls a pipeline). For more information, see the [`README.md` in the `.github` directory](.github/README.md).
 
-### [`logging`](logging/README.md)
+## History
 
-Produces formatted logs to stdout.
-
-#### `logging` Example Usage
-
-```sh
-infoLvl="-i -c=example_script"
-readonly infoLvl
-
-logging $infoLvl -m="Requesting input from user..."
-printf "Enter number you'd like to count to: "
-read userVar
-logging $infoLvl -m="User entered: '$userVar'"
-
-for (( i=1; i<=$userVar; i++)); do
-	logging $infoLvl -m="$i"
-done
-```
-
-### [`output`](output/README.md)
-
-Used to add pre-fix, post-fix, headers, and/or footers to message text. Used by log()'s title
-options.
-
-### `shellName`
-
-Returns the name of the shell that called the script to `stdout`.
+While this repository is relatively young, most of the code was written in 2023 in an old repository of mine called `shell_base`.
