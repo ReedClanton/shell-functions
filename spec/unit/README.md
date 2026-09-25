@@ -1,20 +1,6 @@
 # Unit Testing
 
-This directory and its child directories contain all unit tests of this repository's code. For generic info regarding testing, see the top level [test readme](../README.md).
-
-## Unit Testing Goals
-
-Unit tests should:
-
-- Test the *smallest* possible unit of code in a *single* way.
-- Test the *smallest* possible unit of code in *every* way.
-- *All* code *must* have *100%* coverage:
-    - This includes things like files that define constants.
-- Ensure *no code outside* of the CUT (Code Under Test) is executed.
-- Environment changes should *never break* tests:
-    - For example, changing the value of a value in a constants file should only cause tests to fail when the new value is invalid.
-- Functionality changes *shale _always_* break tests.
-- Implementation changes should *not* break tests... ideally.
+This directory and its child directories contain all unit tests of this repository's code. For information regarding this project's goals of unit testing, see the top level [test `README.md` file](../README.md).
 
 ## Directory Structure
 
@@ -58,6 +44,18 @@ For example, `output_optionalOption_help_spec.sh` would contain unit tests of th
     - Additional tests needed to get full coverage should be placed in a different file.
 
 **Note:** If an existing test file doesn't follow any of these rules, then the one who is modifying the file must update the entire file to follow all rules.
+
+## Exceptions to Coverage
+
+It has been deamed that unit test coverage of `main.sh` files is not necessary.
+
+### Justification
+
+- `main.sh` files primarily represent the import section at the top of most programming language files.
+- The imports must exist for the code to function, but rigorously testing the import list:
+    - Represents a suprising amount of work.
+    - Provides little value.
+    - Bugs it would prevent are easly found and quick to fix.
 
 ## Test Structure Example
 
