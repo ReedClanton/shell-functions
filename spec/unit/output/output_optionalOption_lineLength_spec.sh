@@ -1,4 +1,5 @@
 # Setup required environment variable(s).
+% OUTPUT_SHELL_FUNCTION_HOME:"./output"
 % OUTPUT_DOC:"#/ DESCRIPTION:"
 % DEFAULT_LINE_LENGTH:10
 readonly DEFAULT_LINE_LENGTH

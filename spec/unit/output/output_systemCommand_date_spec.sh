@@ -1,3 +1,9 @@
+# Setup required environment variable(s).
+% OUTPUT_SHELL_FUNCTION_HOME:"./output"
+# Unset unused environment variable(s).
+unsetEnvVars() { unset OUTPUT_DOC; }
+BeforeAll 'unsetEnvVars'
+
 Describe "Output:" output
 	Describe "output():" output:output
 		# Track path to file that contains CUT.

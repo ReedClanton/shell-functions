@@ -1,4 +1,5 @@
 # Setup required environment variable(s).
+% OUTPUT_SHELL_FUNCTION_HOME:"./output"
 % OUTPUT_DOC:"#/ DESCRIPTION:"
 
 Describe "Output:" output

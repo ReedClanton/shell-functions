@@ -1,8 +1,12 @@
 # Setup required environment variable(s).
+% OUTPUT_SHELL_FUNCTION_HOME:"./output"
 % DEFAULT_LINE_LENGTH:60
 readonly DEFAULT_LINE_LENGTH
 % DEFAULT_INDENT:0
 readonly DEFAULT_INDENT
+# Unset unused environment variable(s).
+unsetEnvVars() { unset OUTPUT_DOC; }
+BeforeAll 'unsetEnvVars'
 
 Describe "Output:" output
 	Describe "output():" output:output
