@@ -2,7 +2,7 @@
 ## Local ##
 ##########
 funcName="$OUTPUT_SHELL_FUNCTION_HOME/util/main.sh"
-echo "############################################"
+
 ##############
 ## Import(s) ##
 ##############
