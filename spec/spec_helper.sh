@@ -1,6 +1,32 @@
 # shellcheck shell=sh
 
-# For more information regarding shellspec's spec_helper file, see: https://github.com/shellspec/shellspec#spec_helper
+# For more information regarding ShellSpec's spec_helper file, see: https://github.com/shellspec/shellspec#spec_helper
+
+###############################
+## Pre-Test Environment Setup ##
+###############################
+# This callback function will be invoked once before loading specfiles.
+spec_helper_precheck() {
+	# Available functions: info, warn, error, abort, setenv, unsetenv
+	# Available variables: VERSION, SHELL_TYPE, SHELL_VERSION
+
+	info "If you've added environment variable(s), update 'spec/spec_helper.sh' to unset them."
+	# Drop variables inherited from the caller's shell so tests only see
+	# values defined within the unit tests or ShellSpec configuration.
+	for name in $(env | sed -n 's/^\([A-Za-z_][A-Za-z0-9_]*\)=.*/\1/p'); do
+		# When a new environment variable is added to any file that's covered
+		# by tests, add it here (if not already covered).
+		case $name in
+			*SHELL_FUNCTION* | DEFAULT_* | *_TITLE | NONE | \
+			ERROR* | WARN* | INFO* | DEBUG* | TRACE* | ALL | \
+			*LOG_LEVEL* | *_DOC | *_CHAR)
+				unsetenv "$name"
+				;;
+		esac
+	done
+
+	: minimum_version "0.28.1"
+}
 
 #######################################
 ## Global (Across All specfiles) Data ##
@@ -74,13 +100,6 @@ cat() { input=""; read input; echo $input; }
 inScriptSource() { return 0; }
 ## Alias(es) ##
 # NoOp
-
-# This callback function will be invoked only once before loading specfiles.
-spec_helper_precheck() {
-  # Available functions: info, warn, error, abort, setenv, unsetenv
-  # Available variables: VERSION, SHELL_TYPE, SHELL_VERSION
-  : minimum_version "0.28.1"
-}
 
 # This callback function will be invoked after a specfile has been loaded.
 spec_helper_loaded() {
