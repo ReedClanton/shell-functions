@@ -39,6 +39,9 @@ OUTPUT_DOC=$(
 #/		differently. Thus if this doc contains any special characters that have
 #/		two backslashes, know that only one is intended.
 #/	- Method may not use the logging() function because this is used by that method.
+#/	- For more information on setting the formatting characters used in the default
+#/		case, as well as by each log level, see `FORMATTING_CHARACTER_DOC` by
+#/		printing the variable with that name.
 #/
 #/ SPECIAL OPTION(S):
 #/	-h, --help
@@ -78,8 +81,8 @@ OUTPUT_DOC=$(
 #/	-f=<formattingCharacter>, --formatting-character=<formattingCharacter>
 #/		Sets character used by header, footer, prefix, and postfix.
 #/			- Note: Default value: $DEFAULT_CHAR.
-#/			- Note: Some special characters may require two to be given (ex. -f="%%").
-#/			- Note: Some *other* special characters may not work at all (ex. back slash).
+#/			- Note: For more information on what values can and can't be used,
+#/				see FORMATTING_CHARACTER_DOC by printing the variable with that name.
 #/		(OPTIONAL)
 #/	--indent=<numSpacesToIndent>
 #/		Sets number of spaces formatted message, including
@@ -222,8 +225,8 @@ output() {
 				# Ensure a valid value was provided.
 				case "$_arg" in
 					*\\* | "" | %)
-						echo "$_outputLogPrefix Formatting character may not be blank, a special character (ex. new line, tab), or '%', was '$_arg'. See doc:" >&2
-						echo "$OUTPUT_DOC" >&2
+						echo "$_outputLogPrefix Invalid formatting character used. See the formatting character doc:" >&2
+						echo "$FORMATTING_CHARACTER_DOC" >&2
 						return 141
 						;;
 					*)
