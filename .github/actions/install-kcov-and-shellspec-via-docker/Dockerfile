@@ -1,11 +1,12 @@
-ARG KCOV_IMAGE=kcov/kcov:latest
-FROM ${KCOV_IMAGE}
+# Use the Kcov image.
+FROM kcov/kcov:latest
 
 ARG SHELLSPEC_VERSION=0.28.1
 
+# Set UTF-8 so bash doesn't fall back to POSIX behavior.
+
 # Build runs as root, so no sudo. Refresh package lists, then install what
-# shellspec needs: bash (the -s /bin/bash test shell) and curl + CA certs
-# (to download shellspec).
+# ShellSpec needs.
 RUN apt-get update \
  && apt-get install -y --no-install-recommends bash ca-certificates curl \
  && rm -rf /var/lib/apt/lists/*
@@ -17,6 +18,6 @@ RUN curl -fsSL \
  && shellspec --version \
  && kcov --version
 
-# The kcov image's entrypoint is kcov; replace it so the wrapper's arguments
-# go straight to shellspec.
+# The Kcov image's entrypoint is kcov; replace it so the wrapper's arguments
+# go straight to ShellSpec.
 ENTRYPOINT ["shellspec"]

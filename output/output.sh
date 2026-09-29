@@ -299,6 +299,7 @@ output() {
 					line=${_arg%%"$_delm"*}
 					_arg=${_arg#*"$_delm"}
 					# Track length of longest given line.
+					# TODO #27: Should move away from usage of `${#var}`.
 					if [ ${#line} -gt $_maxGvnLineLen ]; then
 						_maxGvnLineLen=${#line}
 					fi
@@ -326,9 +327,6 @@ output() {
 	############################
 	# Used to track max number of message character(s) that be exist on each line (accounts for pre/post fix).
 	_maxAlwMsgLen=$_maxAlwLineLen
-	echo "_maxAlwMsgLen: '$_maxAlwMsgLen'"
-	echo "#_fChar: '${#_fChar}'"
-	echo "_fChar: '${_fChar}'"
 
 	## Ensure Message Text Option was Provided ##
 	if $_msgGiven; then
@@ -339,13 +337,12 @@ output() {
 
 		# Remove prefix & postfix length from max message character(s) per line.
 		if $_prePostFix; then
+			# TODO #27: Should move away from usage of `${#var}`.
 			_maxAlwMsgLen=$(($_maxAlwMsgLen - $(($((${#_fChar} + 1)) * 2))))
-			echo "_maxAlwMsgLen: '$_maxAlwMsgLen'"
 		fi
 
 		## Verify Max Message Character(s) Per Line is Valid ##
 		if [ $_maxAlwMsgLen -lt 1 ]; then
-			echo "_maxAlwMsgLen: '$_maxAlwMsgLen'"
 			# Build helpful error message(s).
 			errMsg="$_outputLogPrefix Max line length ($_maxAlwLineLen) is too short to contain any characters. Try:"
 			echo $errMsg >&2
@@ -378,9 +375,11 @@ output() {
 			if $_prePostFix; then
 				errMsg="$_outputLogPrefix - Not using a pre-fix and post-fix by not passing in: '-p', '--pretty', '--pp', or '--pre-post-fix'"
 				echo $errMsg >&2
+				# TODO #27: Should move away from usage of `${#var}`.
 				if [ "$_fChar" != "$DEFAULT_CHAR" ] && [ ${#_fChar} -gt ${#DEFAULT_CHAR} ]; then
 					errMsg="$_outputLogPrefix - Using the default formatting character (DEFAULT_CHAR: '$DEFAULT_CHAR') by not passing in any formatting character"
 					echo $errMsg >&2
+				# TODO #27: Should move away from usage of `${#var}`.
 				elif [ "$_fChar" = "$DEFAULT_CHAR" ] && [ ${#DEFAULT_CHAR} -gt 1 ]; then
 					errMsg="$_outputLogPrefix - Decrease length of default formatting character (DEFAULT_CHAR: '$DEFAULT_CHAR')"
 					echo $errMsg >&2
@@ -435,13 +434,16 @@ output() {
 			local _line=${_msg%%"$_delm"*}
 			_msg=${_msg#*"$_delm"}
 			# Break line up if needed.
+			# TODO #27: Should move away from usage of `${#var}`.
 			while [ ${#_line} -gt $_maxAlwMsgLen ]; do
 				# Append portion of current line that's within line length limit.
 				_tmpMsg=$_tmpMsg$(echo "$_line" | cut -c 1-$_maxAlwMsgLen)$_delm
 				# Remove portion of line that's already been appended.
+				# TODO #27: Should move away from usage of `${#var}`.
 				_line=$(echo "$_line" | cut -c $(($_maxAlwMsgLen + 1))-${#_line})
 			done
 			# Append remaining portion of line.
+			# TODO #27: Should move away from usage of `${#var}`.
 			if [ ${#_line} -gt 0 ]; then
 				_tmpMsg=$_tmpMsg$_line$_newLine
 			fi
@@ -511,6 +513,7 @@ output() {
 		# Determine if postfix is needed.
 		if $_prePostFix; then
 			# Add lines after message so postfix characters line up.
+			# TODO #27: Should move away from usage of `${#var}`.
 			local _j=${#_line}
 			while [ $_j -lt $_maxGvnLineLen ]; do
 				_j=$((_j + 1))
