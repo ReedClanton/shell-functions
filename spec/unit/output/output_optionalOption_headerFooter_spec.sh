@@ -1,12 +1,22 @@
 # Setup required environment variable(s).
+% FORMATTING_CHARACTER_DOC:"#/  FORMATTING_CHARACTER_DOC"
 % OUTPUT_SHELL_FUNCTION_HOME:"./output"
+% OUTPUT_DOC:"#/ DESCRIPTION:"
 % DEFAULT_LINE_LENGTH:10
 readonly DEFAULT_LINE_LENGTH
 % DEFAULT_INDENT:0
 readonly DEFAULT_INDENT
-# Unset unused environment variable(s).
-unsetEnvVars() { unset OUTPUT_DOC; }
-BeforeAll 'unsetEnvVars'
+# DEFAULT_CHAR set by tests.
+% TRACE_CHAR:"."
+readonly TRACE_CHAR
+% INFO_CHAR:"#"
+readonly INFO_CHAR
+% DEBUG_CHAR:"+"
+readonly DEBUG_CHAR
+% WARN_CHAR:"*"
+readonly WANR_CHAR
+% ERROR_CHAR:"!"
+readonly ERROR_CHAR
 
 Describe "Output:" output
 	Describe "output():" output:output
@@ -20,7 +30,8 @@ Describe "Output:" output
 			Describe "--header-footer:" outputOutputOptionalOption:headerFooter
 				Describe "No prefix:" outputOutputOptionalOptionHeaderFooter:noPrefix
 					Describe "Single character formatting character:" outputOutputOptionalOptionHeaderFooterNoPrefix:singleCharacterFormattingCharacter
-						DEFAULT_CHAR='#'
+						setDefaultChar() { DEFAULT_CHAR='%'; }
+						BeforeEach 'setDefaultChar'
 
 						It "Message length one" outputOutputOptionalOptionHeaderFooterNoPrefixSingleCharacterFormattingCharacter:messageLengthOne
 							createHeaderFooter() { echo "#"; }
@@ -46,7 +57,8 @@ Describe "Output:" output
 						End
 					End
 					Describe "Two character formatting character:" outputOutputOptionalOptionHeaderFooterNoPrefix:twoCharacterFormattingCharacter
-						DEFAULT_CHAR='&!'
+						setDefaultChar() { DEFAULT_CHAR='&!'; }
+						BeforeEach 'setDefaultChar'
 
 						It "Message length one" outputOutputOptionalOptionHeaderFooterNoPrefixTwoCharacterFormattingCharacter:messageLengthOne
 							createHeaderFooter() { echo "&"; }
@@ -83,7 +95,8 @@ Describe "Output:" output
 						End
 					End
 					Describe "Many character formatting character:" outputOutputOptionalOptionHeaderFooterNoPrefix:manyCharacterFormattingCharacter
-						DEFAULT_CHAR='!#*@'
+						setDefaultChar() { DEFAULT_CHAR='!#*@'; }
+						BeforeEach 'setDefaultChar'
 
 						It "Message length one" outputOutputOptionalOptionHeaderFooterNoPrefixManyCharacterFormattingCharacter:messageLengthOne
 							createHeaderFooter() { echo "!"; }
