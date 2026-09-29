@@ -1,4 +1,5 @@
 # Setup required environment variable(s).
+% CREATE_HEADER_FOOTER_DOC:"#/ DESCRIPTION:"
 % DEFAULT_CHAR:'#'
 readonly DEFAULT_CHAR
 
