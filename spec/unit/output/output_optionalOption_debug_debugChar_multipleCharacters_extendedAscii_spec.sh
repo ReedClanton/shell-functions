@@ -19,6 +19,7 @@ readonly WANR_CHAR
 readonly ERROR_CHAR
 
 
+Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 Describe "Output:" output
 	Describe "output():" output:output
 		# Track path to file that contains CUT.
@@ -41,7 +42,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Euro:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:euro
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiEuro:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -63,7 +63,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Single low-9 quotation mark:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:singleLow9QuotationMark
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiSingleLow9QuotationMark:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -85,7 +84,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Latin small letter f with hook:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:latinSmallLetterFWithHook
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiLatinSmallLetterFWithHook:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -107,7 +105,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Double low-9 quotation mark:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:doubleLow9QuotationMark
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiDoubleLow9QuotationMark:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -129,7 +126,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Horizontal ellipsis:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:horizontalEllipsis
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiHorizontalEllipsis:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -151,7 +147,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Dagger:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:dagger
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiDagger:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -173,7 +168,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Double dagger:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:doubleDagger
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiDoubleDagger:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -195,7 +189,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Modifier letter circumflex accent:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:modifierLetterCircumflexAccent
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiModifierLetterCircumflexAccent:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -217,7 +210,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Per mille sign:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:perMilleSign
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiPerMilleSign:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -239,7 +231,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Latin capital letter s with caron:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:latinCapitalLetterSWithCaron
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiLatinCapitalLetterSWithCaron:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -261,7 +252,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Single left-pointing angle quotation:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:singleLeftPointingAngleQuotation
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiSingleLeftPointingAngleQuotation:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -283,7 +273,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Latin capital ligature oe:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:latinCapitalLigatureOe
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiLatinCapitalLigatureOe:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -305,7 +294,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Latin capital letter z with caron:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:latinCapitalLetterZWithCaron
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiLatinCapitalLetterZWithCaron:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -327,7 +315,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Left single quotation mark:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:leftSingleQuotationMark
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiLeftSingleQuotationMark:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -349,7 +336,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Right single quotation mark:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:rightSingleQuotationMark
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiRightSingleQuotationMark:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -371,7 +357,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Left double quotation mark:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:leftDoubleQuotationMark
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiLeftDoubleQuotationMark:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -393,7 +378,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Right double quotation mark:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:rightDoubleQuotationMark
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiRightDoubleQuotationMark:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -415,7 +399,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Bullet:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:bullet
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiBullet:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -437,7 +420,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "En dash:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:enDash
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiEnDash:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -459,7 +441,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Em dash:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:emDash
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiEmDash:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -481,7 +462,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Small tilde:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:smallTilde
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiSmallTilde:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -503,7 +483,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Trade mark sign:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:tradeMarkSign
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiTradeMarkSign:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -525,7 +504,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Latin small letter s with caron:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:latinSmallLetterSWithCaron
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiLatinSmallLetterSWithCaron:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -547,7 +525,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Single right-pointing angle quotation mark:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:singleRightPointingAngleQuotationMark
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiSingleRightPointingAngleQuotationMark:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -569,7 +546,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Latin small ligature oe:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:latinSmallLigatureOe
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiLatinSmallLigatureOe:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -591,7 +567,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Latin small letter z with caron:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:latinSmallLetterZWithCaron
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiLatinSmallLetterZWithCaron:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -1390,7 +1365,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Latin capital letter a with diaeresis:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:latinCapitalLetterAWithDiaeresis
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiLatinCapitalLetterAWithDiaeresis:d
 									When run output -m=m --pp -d
 									The stderr should not be present
@@ -2609,7 +2583,6 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Latin small letter thorn:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:latinSmallLetterThorn
-                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiLatinSmallLetterThorn:d
 									When run output -m=m --pp -d
 									The stderr should not be present
