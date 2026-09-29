@@ -48,6 +48,9 @@ Describe "Output:" output
 									The stdout line 1 should equal "$debugChar m $debugChar"
 									The stdout line 2 should equal "bla"
 									The stdout line 3 should equal "bla"
+									The stdout line 4 should equal "bla"
+									The stdout line 5 should equal "bla"
+									The stdout line 6 should equal "bla"
 									The status should be success
 								End
 								It "--debug" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiEuro:debug

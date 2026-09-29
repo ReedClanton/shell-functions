@@ -337,6 +337,9 @@ output() {
 
 		# Remove prefix & postfix length from max message character(s) per line.
 		if $_prePostFix; then
+			echo $(($((${#_fChar} + 1)) * 2))
+			echo $((${#_fChar} + 1))
+			echo ${#_fChar}
 			_maxAlwMsgLen=$(($_maxAlwMsgLen - $(($((${#_fChar} + 1)) * 2))))
 			echo "_maxAlwMsgLen: '$_maxAlwMsgLen'"
 		fi
