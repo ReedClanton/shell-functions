@@ -1,15 +1,30 @@
 # Setup required environment variable(s).
+% LOGGING_SHELL_FUNCTION_HOME:"./logging"
+% LOGGING_DOC:"#/ DESCRIPTION:"
 % NO_TITLE:0
 readonly NO_TITLE
 % FULL_TITLE:1
 readonly FULL_TITLE
 % LINE_TITLE:2
 readonly LINE_TITLE
+% NONE:0
+readonly NONE
+% ERROR:1
+readonly ERROR
+% WARN:2
+readonly WARN
+% INFO:3
+readonly INFO
+% DEBUG:4
+readonly DEBUG
 % TRACE:5
 readonly TRACE
+% ALL:6
+readonly ALL
 % SHELL_LOG_LEVEL:$TRACE
+
+# Used when mocking out the `output()` function.
 % DEFAULT_CHAR:'#'
-readonly DEFAULT_CHAR
 
 Describe "Logging:" logging
 	Describe "logging():" logging:logging
@@ -24,6 +39,7 @@ Describe "Logging:" logging
 		Describe "Optional option:" loggingLogging:optionalOption
 			Describe "--full-title:" loggingLoggingOptionalOption:fullTitle
 				It "Single message line" loggingLoggingOptionalOptionFullTitleSingleCharacterFormattingCharacter:singleMessageLine
+					# Mock out the `output()` function.
 					output() {
 						echo " $DEFAULT_CHAR$DEFAULT_CHAR$DEFAULT_CHAR"
 						echo "$DEFAULT_CHAR m $DEFAULT_CHAR"
@@ -39,6 +55,7 @@ Describe "Logging:" logging
 					The status should be success
 				End
 				It "Multiline message" loggingLoggingOptionalOptionFullTitleSingleCharacterFormattingCharacter:multilineMessage
+					# Mock out the `output()` function.
 					output() {
 						echo " $DEFAULT_CHAR$DEFAULT_CHAR$DEFAULT_CHAR$DEFAULT_CHAR$DEFAULT_CHAR$DEFAULT_CHAR"
 						echo "$DEFAULT_CHAR ms   $DEFAULT_CHAR"

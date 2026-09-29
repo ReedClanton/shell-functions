@@ -1,3 +1,19 @@
+# Unset unused environment variable(s).
+unsetEnvVars() {
+	unset NO_TITLE
+	unset FULL_TITLE
+	unset LINE_TITLE
+	unset NONE
+	unset ERROR
+	unset WARN
+	unset INFO
+	unset DEBUG
+	unset TRACE
+	unset ALL
+	unset SHELL_LOG_LEVEL
+}
+BeforeAll 'unsetEnvVars'
+
 Describe "Logging:" logging
 	Describe "Util:" logging:util
 		Describe "Constants:" loggingUtil:constants

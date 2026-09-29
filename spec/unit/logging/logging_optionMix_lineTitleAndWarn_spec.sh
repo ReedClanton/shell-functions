@@ -1,10 +1,14 @@
 # Setup required environment variable(s).
+% LOGGING_SHELL_FUNCTION_HOME:"./logging"
+% LOGGING_DOC:"#/ DESCRIPTION:"
 % NO_TITLE:0
 readonly NO_TITLE
 % FULL_TITLE:1
 readonly FULL_TITLE
 % LINE_TITLE:2
 readonly LINE_TITLE
+% NONE:0
+readonly NONE
 % ERROR:1
 readonly ERROR
 % WARN:2
@@ -15,6 +19,8 @@ readonly INFO
 readonly DEBUG
 % TRACE:5
 readonly TRACE
+% ALL:6
+readonly ALL
 % SHELL_LOG_LEVEL:$WARN
 
 Describe "Logging:" logging
