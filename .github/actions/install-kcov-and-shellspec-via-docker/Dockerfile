@@ -4,6 +4,7 @@ FROM kcov/kcov:latest
 ARG SHELLSPEC_VERSION=0.28.1
 
 # Set UTF-8 so bash doesn't fall back to POSIX behavior.
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
 # Build runs as root, so no sudo. Refresh package lists, then install what
 # ShellSpec needs.
