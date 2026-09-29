@@ -18,7 +18,6 @@ readonly WANR_CHAR
 % ERROR_CHAR:"!"
 readonly ERROR_CHAR
 
-
 Describe "Output:" output
 	Describe "output():" output:output
 		# Track path to file that contains CUT.

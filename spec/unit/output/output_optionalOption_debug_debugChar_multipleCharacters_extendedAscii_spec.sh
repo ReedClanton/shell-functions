@@ -18,7 +18,6 @@ readonly WANR_CHAR
 % ERROR_CHAR:"!"
 readonly ERROR_CHAR
 
-
 Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 Describe "Output:" output
 	Describe "output():" output:output
