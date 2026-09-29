@@ -1,3 +1,17 @@
+# Unset unused environment variable(s).
+unsetEnvVars() {
+	unset FORMATTING_CHARACTER_DOC
+	unset DEFAULT_LINE_LENGTH
+	unset DEFAULT_INDENT
+	unset DEFAULT_CHAR
+	unset TRACE_CHAR
+	unset INFO_CHAR
+	unset DEBUG_CHAR
+	unset WANT_CHAR
+	unset ERROR_CHAR
+}
+BeforeAll 'unsetEnvVars'
+
 Describe "Output:" output
 	Describe "Util:" output:util
 		Describe "Constants:" outputUtil:constants
@@ -13,6 +27,15 @@ Describe "Output:" output
 				End
 			End
 			Describe "Environment variable:" outputUtilConstants:environmentVariable
+				Describe "FORMATTING_CHARACTER_DOC:" outputUtilConstantsEnvironmentVariable:formattingCharacterDoc
+					# Environment setup that works for most test shells.
+					sourceCut() { . $constants; }
+					BeforeAll 'sourceCut'
+
+					It "Set" outputUtilConstantsEnvironmentVariableFormattingCharacterDoc:set
+						The variable FORMATTING_CHARACTER_DOC should be present
+					End
+				End
 				Describe "DEFAULT_LINE_LENGTH:" outputUtilConstantsEnvironmentVariable:defaultLineLength
 					Describe
 						# Environment setup that works for most tests and shells.
