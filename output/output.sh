@@ -329,7 +329,7 @@ output() {
 	echo "_maxAlwMsgLen: '$_maxAlwMsgLen'"
 	fChar=$_fChar
 	echo "#_fChar: '${#_fChar}'"
-	echo "#fChar: '$(#fChar}'"
+	echo "#fChar: '${#fChar}'"
 
 	## Ensure Message Text Option was Provided ##
 	if $_msgGiven; then
