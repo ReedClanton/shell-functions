@@ -91,6 +91,12 @@ containsEscapeSequence() {
 	fi
 	return 3
 }
+# Succeeds when the running shell's ${#var} counts bytes rather than
+# characters (old dash, or any shell outside a UTF-8 locale).
+lacksMultibyteLength() {
+	_mbTest='€'
+	[ "${#_mbTest}" -ne 1 ]
+}
 # Shell Checking Function(s) #
 # NoOp
 # Mocking System Commands #

@@ -43,7 +43,7 @@ Describe "Output:" output
 							Describe "Euro:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:euro
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiEuro:d
 									When run output -m=m --pp -d
-									Skip "Works on most shells, but not all, #27 will resolve."
+									Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 									The stderr should not be present
 									The lines of stdout should equal 1
 									The stdout line 1 should equal "$debugChar m $debugChar"
