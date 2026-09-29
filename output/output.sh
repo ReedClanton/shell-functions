@@ -327,6 +327,9 @@ output() {
 	# Used to track max number of message character(s) that be exist on each line (accounts for pre/post fix).
 	_maxAlwMsgLen=$_maxAlwLineLen
 	echo "_maxAlwMsgLen: '$_maxAlwMsgLen'"
+	fChar=$_fChar
+	echo "#_fChar: '${#_fChar}'"
+	echo "#fChar: '$(#fChar}'"
 
 	## Ensure Message Text Option was Provided ##
 	if $_msgGiven; then
