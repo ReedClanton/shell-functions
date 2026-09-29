@@ -2609,6 +2609,7 @@ Describe "Output:" output
 							BeforeEach "setDebugChar"
 
 							Describe "Latin small letter thorn:" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAscii:latinSmallLetterThorn
+                                Skip if "shell's \${#var} counts bytes, not characters. Will be resolved by #27" lacksMultibyteLength
 								It "-d" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiLatinSmallLetterThorn:d
 									When run output -m=m --pp -d
 									The stderr should not be present
