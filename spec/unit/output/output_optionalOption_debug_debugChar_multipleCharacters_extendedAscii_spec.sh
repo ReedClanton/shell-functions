@@ -46,6 +46,8 @@ Describe "Output:" output
 									The stderr should not be present
 									The lines of stdout should equal 1
 									The stdout line 1 should equal "$debugChar m $debugChar"
+									The stdout line 2 should equal "bla"
+									The stdout line 3 should equal "bla"
 									The status should be success
 								End
 								It "--debug" outputOutputOptionalOptionDebugDebugCharMultipleCharactersExtendedAsciiEuro:debug

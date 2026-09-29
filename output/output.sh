@@ -326,6 +326,7 @@ output() {
 	############################
 	# Used to track max number of message character(s) that be exist on each line (accounts for pre/post fix).
 	_maxAlwMsgLen=$_maxAlwLineLen
+	echo "_maxAlwMsgLen: '$_maxAlwMsgLen'"
 
 	## Ensure Message Text Option was Provided ##
 	if $_msgGiven; then
@@ -337,10 +338,12 @@ output() {
 		# Remove prefix & postfix length from max message character(s) per line.
 		if $_prePostFix; then
 			_maxAlwMsgLen=$(($_maxAlwMsgLen - $(($((${#_fChar} + 1)) * 2))))
+			echo "_maxAlwMsgLen: '$_maxAlwMsgLen'"
 		fi
 
 		## Verify Max Message Character(s) Per Line is Valid ##
 		if [ $_maxAlwMsgLen -lt 1 ]; then
+			echo "_maxAlwMsgLen: '$_maxAlwMsgLen'"
 			# Build helpful error message(s).
 			errMsg="$_outputLogPrefix Max line length ($_maxAlwLineLen) is too short to contain any characters. Try:"
 			echo $errMsg >&2
