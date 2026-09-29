@@ -327,9 +327,8 @@ output() {
 	# Used to track max number of message character(s) that be exist on each line (accounts for pre/post fix).
 	_maxAlwMsgLen=$_maxAlwLineLen
 	echo "_maxAlwMsgLen: '$_maxAlwMsgLen'"
-	fChar=$_fChar
 	echo "#_fChar: '${#_fChar}'"
-	echo "#fChar: '${#fChar}'"
+	echo "_fChar: '${_fChar}'"
 
 	## Ensure Message Text Option was Provided ##
 	if $_msgGiven; then
@@ -340,9 +339,6 @@ output() {
 
 		# Remove prefix & postfix length from max message character(s) per line.
 		if $_prePostFix; then
-			echo $(($((${#_fChar} + 1)) * 2))
-			echo $((${#_fChar} + 1))
-			echo ${#_fChar}
 			_maxAlwMsgLen=$(($_maxAlwMsgLen - $(($((${#_fChar} + 1)) * 2))))
 			echo "_maxAlwMsgLen: '$_maxAlwMsgLen'"
 		fi
