@@ -117,6 +117,131 @@ Alternatively, enter `<funcationName> --help` for a document that describes how 
 | `stderr`                       | Output stream that error data is published to.                  | Google it.                              |
 | `stdout`                       | Output stream that most return values are published to.         | Google it.                              |
 
+## Shell Style Guide
+
+### Directory Structure
+
+```text
+<PROJECT-ROOT> directory
+├─ .github                       				Contains files used by GitHub. This could include
+|	|											GitHub issue or peer review templates, or pipeline
+|	|											related items among others. Note that only
+|	|											contents from the `main` branch will be used
+|	|											by GitHub.
+|	|
+│	├─ ISSUE_TEMPLATE							Contains project's GitHub issue templates.
+|	|	├─ issueTemplate.md
+|	|		:
+|	|
+|	├─ PULL_REQUEST_TEMPLATE					Contains project's GitHub pull request templates.
+|	|	├─ pullRequestTemplate.md
+|	|		:
+|	|
+|	├─ actions									Contains all actions that can be called/performed
+|	|	|										by a GitHub workflow (pipeline). Actions are
+|	|	|										mainly used to define actions that are taken by
+|	|	|										multiple workflows.
+|	|	|
+|	|	├─ description-of-what-action-does/		Directory title identifies what the action does,
+|	|	|	|									contain no spaces or capital letters, and use `-`
+|	|	|	|									to separate words.
+|	|	|	|
+|	|	|	├─ action.yml						Tells GitHub runner what should be done.
+|	|	|	|
+|	|	|	├─ otherSupportFiles				One example would be a `Dockerfile` used by the
+|	|	|	|	:								`action.yml` file.
+|	|	|	:
+|	├─ workflows/								Contains `.yml` file that tells GitHub what should
+|	|	|										be done by the runner (pipeline) and when. For
+|	|	|										example, what unit tests should be run and when
+|	|	|										should they be triggered. These files use the
+|	|	|										contents of the actions directory to allow for
+|	|	|										re-use of actions across workflows.
+|	|	|
+|	|	├─ description-of-what-workflow-does.yml	Title identifies what the action does,
+|	|	|										contains no spaces or capital letters, and use `-`
+|	|	:										to separate words.
+|	|
+├─ docs/										Contains resources, like photos, used by the
+│	:											`README.md` file in this directory.
+│
+|─ someFunctionName/							Contains a shell function of the same name.
+|	|
+|	|─ util										Contains code used by the function, but not by
+|	|											external functions. The code within the directory
+|	|											isn't necessarily callable by the user.
+|	|
+|	|─ README.md								Contains documentation for the shell function,
+|	|											including architectural diagrams.
+|	|
+|	|─ someFunctionName.sh						File contains a shell function named
+|												`someFunctionName()`.
+|
+├─ util/										Contains simple functions that are used across
+|	|											multiple other functions.
+|	|
+│	├─ someUtilFunctionName/					Directory name must match function name.
+|	|	|
+|	|	├─ docs/								Contains resources, like photos, used by the
+|	|	|										`README.md` in this directory.
+|	|	|
+|	|	├─ util/								Same as other util directories.
+|	|	|										Not normally needed.
+|	|	|
+|	|	├─ README.md							Document that covers this function.
+|	|	|
+│	│	├─ someUtilFunctionName.sh				File name must match function name.
+|	:
+│
+├─ spec/ 										Contains ShellSpec tests and configuration.
+│	├─ support/
+|	|	|─ bin									Contains files that allow for shell calls that
+|	|		:									wouldn't normally be passed through to the CUT
+|	|											to be made available.
+│	│
+│	├─ unit/									Contains one directory for each shell function
+|	|	|										that tests exist for and is named the same as the
+|	|	|										function. Contains all tests of the shell function
+|	|	|										and the code that supports it.
+|	|	|
+│	│	├─ someFunctionName/					Contains all tests of the shell function and the
+|	|	|	|									code that supports it. The directory name must
+|	|	|	|									match the name of the function being tested.
+|	|	|	|
+|	|	|	├─ util/							If the CUT has a util directory, then this
+|	|	|	|									directory will contain tests of that code.
+|	|	|	|
+│	│	|	├─ outerDescribeTitle_innerDescribeTitle_spec.sh	If you look at the contents of
+|	|	|	|									each test file, you'll see a pattern. The top
+|	|	|	|									level `Describe` will always have the title of the
+|	|	|	|									function being tested. The `Describe` at the next
+|	|	|	|									level down will have a description that specifies
+|	|	|	|									what type of functionality is being tested. For
+|	|	|	|									example, if the function under test has a option
+|	|	|	|									that must be provided, the the title of this
+|	|	|	|									`Describe` would be `requiredOption`. As the
+|	|	|	|									`Describe` levels get deeper, the descriptions get
+|	|	|	|									more specific. The title of the test file should
+|	|	|	|									match the description of each `Describe` within the
+|	|	|	|									file. Once the file name is unique and descriptive,
+|	|	|	|									you've gone far enough.
+|	|	|	|
+|	|	|	├─ README.md						Contains testing implementation details, including
+|	|	:										the unit testing style guide.
+|	|
+│	├─ README.md								Describes goals and general approach to testing.
+│	│
+|	|─ spec_helper.sh							Contains helper functions used to setup for tests.
+```
+
+### Function Names
+
+Function names must start with a lowercase letter, then each word after should start with an uppercase letter.
+
+### Function Doc
+
+The function doc also serves as the help doc and is printed when you call the function with `--help`/`-h`.
+
 ## Unit Testing
 
 There is an extensive suite of unit tests that utilizes the [ShellSpec](https://shellspec.info/) framework. For more, see the [unit testing `README.md` file](spec/README.md).
