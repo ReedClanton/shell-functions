@@ -28,8 +28,8 @@ These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creatio
     - [ ] Verified *existing* GitHub issue comments have been addressed.
 - *All* code changes, *including* unit tests:
     - [ ] Adhere to the style guide:
-        - Code style guide is located in the [`README.md` at the root of the repository](https://github.com/ReedClanton/shell-functions/blob/main/README.md#shell-style-guide).
-        - Test style guide is located in the [`README.md` at the root of the unit testing directory](https://github.com/ReedClanton/shell-functions/blob/main/spec/unit/README.md).
+        - Code style guide is located in the Shell Style Guide section of [`README.md`](https://github.com/ReedClanton/shell-functions/blob/main/README.md) at the root of the project.
+        - Test style guide is located in the [`README.md`](https://github.com/ReedClanton/shell-functions/blob/main/spec/unit/README.md) at the root of the unit testing directory.
     - [ ] Executes successfully locally.
     - [ ] Style checker executes successfully by the GitHub runner (pipeline).
 - Documentation:
