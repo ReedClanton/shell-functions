@@ -180,6 +180,9 @@ output() {
 	local _headerFooterTxt=""
 	# Determines if message prefix and postfix should be used.
 	local _prePostFix=false
+	# Used to pass prefix option to `output()` when needed.
+	local _prefixArg
+	unset _prefixArg
 	# Tracks message indent.
 	local _indent=$DEFAULT_INDENT
 	# Tracks max allowed line length.
@@ -205,7 +208,7 @@ output() {
 	# Used when processing provided argument(s)/option(s).
 	local _fullArg
 	# Tracks output of external calls.
-	local _stdOut _stdErr _rtVal _cmd
+	local _stdOut _rtVal _cmd
 
 	######################
 	## Process Option(s) ##
@@ -459,18 +462,13 @@ output() {
 	# Determine if header/footer is needed.
 	if $_headerFooter; then
 		# Call function that creates header/footer.
-		unset _cmd
 		if $_prePostFix; then
-			_cmd="createHeaderFooter --prefix -l=$_maxGvnLineLen -f='$_fChar'"
-		else
-			_cmd="createHeaderFooter -l=$_maxGvnLineLen -f='$_fChar'"
+			_preFixArg=--prefix
 		fi
-		unset _stdOut _stdErr _rtVal
-		_stdOut=$(eval "$_cmd" 2>|.stdErr.out)
+		unset _stdOut _rtVal
+		# Calling this way doesn't allow the capturing of stdErr, however, it's time efferent.
+		_stdOut=$(createHeaderFooter ${_prefixArg:+"$_prefixArg"} -l="$_maxGvnLineLen" -f="$_fChar")
 		_rtVal=$?
-		# Save off stdErr and remove temporary file used to store it.
-		_stdErr=$(cat .stdErr.out)
-		rm ./.stdErr.out
 
 		# Ensure header/footer was generated successfully.
 		if [ $_rtVal -eq 0 ]; then
@@ -481,8 +479,7 @@ output() {
 				_headerFooterTxt="$_stdOut$_newLine"
 			fi
 		else
-			echo "$_outputLogPrefix createHeaderFooter() failed to create header/footer text. stdErr bellow:" >&2
-			echo "$_stdErr" >&2
+			echo "$_outputLogPrefix createHeaderFooter() failed to create header/footer text. See stdErr above." >&2
 			return 3
 		fi
 	fi
