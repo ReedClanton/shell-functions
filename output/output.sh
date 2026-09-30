@@ -35,10 +35,13 @@ OUTPUT_DOC=$(
 #/ USAGE: output [SPECIAL_OPTION] [OPTIONS...] -m="message text"... [OPTIONS...]
 #/
 #/ NOTE(S):
-#/	- Different shells render special characters, like tab and new line,
-#/		differently. Thus if this doc contains any special characters that have
-#/		two backslashes, know that only one is intended.
+#/	- Different shells render control characters new line, tab, etc.) differently.
+#/		Thus if this doc contains any special characters that have two slashes,
+#/		know that only one is intended.
 #/	- Method may not use the logging() function because this is used by that method.
+#/	- For more information on setting the formatting characters used in the default
+#/		case, as well as by each log level, see `FORMATTING_CHARACTER_DOC` by
+#/		printing the variable with that name.
 #/
 #/ SPECIAL OPTION(S):
 #/	-h, --help
@@ -78,8 +81,8 @@ OUTPUT_DOC=$(
 #/	-f=<formattingCharacter>, --formatting-character=<formattingCharacter>
 #/		Sets character used by header, footer, prefix, and postfix.
 #/			- Note: Default value: $DEFAULT_CHAR.
-#/			- Note: Some special characters may require two to be given (ex. -f="%%").
-#/			- Note: Some *other* special characters may not work at all (ex. back slash).
+#/			- Note: For more information on what values can and can't be used,
+#/				see FORMATTING_CHARACTER_DOC by printing the variable with that name.
 #/		(OPTIONAL)
 #/	--indent=<numSpacesToIndent>
 #/		Sets number of spaces formatted message, including
@@ -157,7 +160,6 @@ OUTPUT_DOC=$(
 #/		split up, if a '-' is needed.
 #/	- Implement: Ability to append end of line that was too long to fit on one
 #/		row to the start of the next line.
-#/	- Implement: Support for '%' as a formatting character.
 EOF
 )
 
@@ -177,6 +179,9 @@ output() {
 	local _headerFooterTxt=""
 	# Determines if message prefix and postfix should be used.
 	local _prePostFix=false
+	# Used to pass prefix option to `output()` when needed.
+	local _prefixArg
+	unset _prefixArg
 	# Tracks message indent.
 	local _indent=$DEFAULT_INDENT
 	# Tracks max allowed line length.
@@ -202,7 +207,7 @@ output() {
 	# Used when processing provided argument(s)/option(s).
 	local _fullArg
 	# Tracks output of external calls.
-    local _stdOut _stdErr _rtVal _cmd
+	local _stdOut _rtVal _cmd
 
 	######################
 	## Process Option(s) ##
@@ -222,8 +227,8 @@ output() {
 				# Ensure a valid value was provided.
 				case "$_arg" in
 					*\\* | "" | %)
-						echo "$_outputLogPrefix Formatting character may not be blank, a special character (ex. new line, tab), or '%', was '$_arg'. See doc:" >&2
-						echo "$OUTPUT_DOC" >&2
+						echo "$_outputLogPrefix Invalid formatting character used. See the formatting character doc:" >&2
+						echo "$FORMATTING_CHARACTER_DOC" >&2
 						return 141
 						;;
 					*)
@@ -296,6 +301,7 @@ output() {
 					line=${_arg%%"$_delm"*}
 					_arg=${_arg#*"$_delm"}
 					# Track length of longest given line.
+					# TODO #27: Should move away from usage of `${#var}`.
 					if [ ${#line} -gt $_maxGvnLineLen ]; then
 						_maxGvnLineLen=${#line}
 					fi
@@ -333,6 +339,7 @@ output() {
 
 		# Remove prefix & postfix length from max message character(s) per line.
 		if $_prePostFix; then
+			# TODO #27: Should move away from usage of `${#var}`.
 			_maxAlwMsgLen=$(($_maxAlwMsgLen - $(($((${#_fChar} + 1)) * 2))))
 		fi
 
@@ -370,9 +377,11 @@ output() {
 			if $_prePostFix; then
 				errMsg="$_outputLogPrefix - Not using a pre-fix and post-fix by not passing in: '-p', '--pretty', '--pp', or '--pre-post-fix'"
 				echo $errMsg >&2
+				# TODO #27: Should move away from usage of `${#var}`.
 				if [ "$_fChar" != "$DEFAULT_CHAR" ] && [ ${#_fChar} -gt ${#DEFAULT_CHAR} ]; then
 					errMsg="$_outputLogPrefix - Using the default formatting character (DEFAULT_CHAR: '$DEFAULT_CHAR') by not passing in any formatting character"
 					echo $errMsg >&2
+				# TODO #27: Should move away from usage of `${#var}`.
 				elif [ "$_fChar" = "$DEFAULT_CHAR" ] && [ ${#DEFAULT_CHAR} -gt 1 ]; then
 					errMsg="$_outputLogPrefix - Decrease length of default formatting character (DEFAULT_CHAR: '$DEFAULT_CHAR')"
 					echo $errMsg >&2
@@ -427,13 +436,16 @@ output() {
 			local _line=${_msg%%"$_delm"*}
 			_msg=${_msg#*"$_delm"}
 			# Break line up if needed.
+			# TODO #27: Should move away from usage of `${#var}`.
 			while [ ${#_line} -gt $_maxAlwMsgLen ]; do
 				# Append portion of current line that's within line length limit.
 				_tmpMsg=$_tmpMsg$(echo "$_line" | cut -c 1-$_maxAlwMsgLen)$_delm
 				# Remove portion of line that's already been appended.
+				# TODO #27: Should move away from usage of `${#var}`.
 				_line=$(echo "$_line" | cut -c $(($_maxAlwMsgLen + 1))-${#_line})
 			done
 			# Append remaining portion of line.
+			# TODO #27: Should move away from usage of `${#var}`.
 			if [ ${#_line} -gt 0 ]; then
 				_tmpMsg=$_tmpMsg$_line$_newLine
 			fi
@@ -449,18 +461,13 @@ output() {
 	# Determine if header/footer is needed.
 	if $_headerFooter; then
 		# Call function that creates header/footer.
-		unset _cmd
 		if $_prePostFix; then
-			_cmd="createHeaderFooter --prefix -l=$_maxGvnLineLen -f='$_fChar'"
-		else
-			_cmd="createHeaderFooter -l=$_maxGvnLineLen -f='$_fChar'"
+			_preFixArg=--prefix
 		fi
-		unset _stdOut _stdErr _rtVal
-		_stdOut=$(eval "$_cmd" 2>|.stdErr.out)
+		unset _stdOut _rtVal
+		# Calling this way doesn't allow the capturing of stdErr, however, it's time efferent.
+		_stdOut=$(createHeaderFooter ${_prefixArg:+"$_prefixArg"} -l="$_maxGvnLineLen" -f="$_fChar")
 		_rtVal=$?
-		# Save off stdErr and remove temporary file used to store it.
-		_stdErr=$(cat .stdErr.out)
-		rm ./.stdErr.out
 
 		# Ensure header/footer was generated successfully.
 		if [ $_rtVal -eq 0 ]; then
@@ -471,8 +478,7 @@ output() {
 				_headerFooterTxt="$_stdOut$_newLine"
 			fi
 		else
-			echo "$_outputLogPrefix createHeaderFooter() failed to create header/footer text. stdErr bellow:" >&2
-			echo "$_stdErr" >&2
+			echo "$_outputLogPrefix createHeaderFooter() failed to create header/footer text. See stdErr above." >&2
 			return 3
 		fi
 	fi
@@ -503,6 +509,7 @@ output() {
 		# Determine if postfix is needed.
 		if $_prePostFix; then
 			# Add lines after message so postfix characters line up.
+			# TODO #27: Should move away from usage of `${#var}`.
 			local _j=${#_line}
 			while [ $_j -lt $_maxGvnLineLen ]; do
 				_j=$((_j + 1))

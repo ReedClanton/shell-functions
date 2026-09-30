@@ -1,0 +1,69 @@
+name: Install Kcov and ShellSpec via Docker
+description: >-
+  Builds a Docker image containing Kcov (test coverage tool) and
+  ShellSpec (testing framework), then puts a `shellspec` wrapper on
+  PATH that runs inside it. This allows for Kcov and ShellSpec to be
+  used as if they were directly installed on the system.
+
+inputs:
+  shellspec-version:
+    description: ShellSpec release to install into the Docker image.
+    required: false
+    default: '0.28.1'
+  kcov-image:
+    description: Base image that provides Kcov.
+    required: false
+    default: 'kcov/kcov:latest'
+
+runs:
+  using: 'composite'
+  steps:
+    - name:  Building Docker image...
+      shell: sh
+      env:
+        ACTION_PATH:       ${{ github.action_path }}
+        KCOV_IMAGE:        ${{ inputs.kcov-image }}
+        SHELLSPEC_VERSION: ${{ inputs.shellspec-version }}
+      run: |
+        attempt=1
+        while [ "$attempt" -le 2 ]; do
+          if docker build \
+              --build-arg "KCOV_IMAGE=$KCOV_IMAGE" \
+              --build-arg "SHELLSPEC_VERSION=$SHELLSPEC_VERSION" \
+              --tag shellspec-kcov:local \
+              "$ACTION_PATH"; then
+            exit 0
+          fi
+          echo "::warning::Image build attempt $attempt failed."
+          attempt=$((attempt + 1))
+          sleep 1
+        done
+        echo "::error::Unable to build the Kcov & ShellSpec Docker image."
+        exit 1
+
+    - name:  Installing 'shellspec' wrapper...
+      shell: sh
+      run: |
+        bin_dir="${RUNNER_TEMP}/shellspec-kcov/bin"
+        mkdir -p "$bin_dir"
+        cat > "$bin_dir/shellspec" <<'EOF'
+        #!/bin/sh
+        # Runs ShellSpec & Kcov inside the `shellspec-kcov:local` image.
+        # The current directory is mounted at the same path inside the
+        # container so relative paths used by Kcov include patterns and
+        # the generated coverage report paths line up with the host.
+        exec docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "$PWD:$PWD" \
+            --workdir "$PWD" \
+            shellspec-kcov:local "$@"
+        EOF
+        chmod +x "$bin_dir/shellspec"
+        echo "$bin_dir" >> "$GITHUB_PATH"
+
+    - name:  Verifying install...
+      shell: sh
+      run: |
+        "${RUNNER_TEMP}/shellspec-kcov/bin/shellspec" --version
+        docker run --rm --entrypoint kcov shellspec-kcov:local --version

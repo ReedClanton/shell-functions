@@ -1,3 +1,6 @@
+# Setup required environment variable(s).
+% VERIFY_INPUT_PROVIDED_DOC:"#/ DESCRIPTION:"
+
 # Example doc used for testing bellow. It's generated in the same way as real function docs.
 TEST_DOC=$(
 	cat <<"EOF"

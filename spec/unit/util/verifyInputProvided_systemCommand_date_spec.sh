@@ -1,3 +1,6 @@
+# Setup required environment variable(s).
+% VERIFY_INPUT_PROVIDED_DOC:"#/ DESCRIPTION:"
+
 Describe "Util:" util
 	Describe "verifyInputProvided():" util:verifyInputProvided
 		# Track path to file that contains CUT.

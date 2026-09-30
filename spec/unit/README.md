@@ -28,6 +28,10 @@ For example, `output_optionalOption_help_spec.sh` would contain unit tests of th
 
 ## Unit Test Structure Requirement(s)
 
+- All environment variable(s) used by CUT must be set, or unset, before any test is run:
+    - Not doing so can lead to tests failing in one environment while succeeding in another.
+    - This must be done *both* in each unit test, as well as by the `spec_helper_precheck()` function in [spec/spec_helper.sh](spec/spec_helper.sh):
+        - Technically, they only need to be unset in the unit tests, but doing so in both makes ensures it happens.
 - All levels (`It`, `Describe`, etc) *must* be named.
 - All levels, other than the bottom one, *must* have `:` as the last character in the name:
     - This is done so the test output is easier to read.
@@ -62,6 +66,8 @@ It has been deamed that unit test coverage of `main.sh` files is not necessary.
 A test of `output()`'s `--help` option would look like this:
 
 ```
+# Set or unset each environment variable(s) used by CUT.
+
 Describe "Output:" output
 	Describe "Optional option:" outputOutput:optionalOption
 		Describe "Help:" outputOutputOptionalOption:help
