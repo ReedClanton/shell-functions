@@ -14,6 +14,7 @@ These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creatio
 - [ ] PR has been assigned to you.
 - [ ] Labels have been filled out:
     - Normally, they reflect the labels of the issue the PR is for, but verify this, and if different, update the issue's labels.
+- [ ] [Description of Changes](#description-of-changes) section has been filled out.
 - [ ] @ReedClanton has been added as a reviewer.
 - [ ] PR has been marked as `Draft` when not ready for review.
 
