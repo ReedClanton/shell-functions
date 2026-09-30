@@ -13,17 +13,22 @@ FORMATTING_CHARACTER_DOC=$(
 #/		- Some functions allow you to pass in a formatting character directly.
 #/			The contents of SPECIAL CASE(S) still applies.
 #/
+#/	NOTE(S):
+#/		- Different shells render control characters (new line, tab, etc.) differently.
+#/			Thus if this doc contains any control characters that have two slashing,
+#/			know that only one is intended.
+#/
 #/	SPECIAL CASE(S):
 #/		- Control characters may not be used:
-#/			- \0
-#/			- \a
-#/			- \b
-#/			- \e
-#/			- \t
-#/			- \n
-#/			- \v
-#/			- \f
-#/			- \r
+#/			- `\\0`
+#/			- `\\a`
+#/			- `\\b`
+#/			- `\\e`
+#/			- `\\t`
+#/			- `\\n`
+#/			- `\\v`
+#/			- `\\f`
+#/			- `\\r`
 #/		- For a single instance of the following characters to show up, two must
 #/			be provided  (`%%` rather than just `%`):
 #/			- `%`

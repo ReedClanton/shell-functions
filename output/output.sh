@@ -35,9 +35,9 @@ OUTPUT_DOC=$(
 #/ USAGE: output [SPECIAL_OPTION] [OPTIONS...] -m="message text"... [OPTIONS...]
 #/
 #/ NOTE(S):
-#/	- Different shells render special characters, like tab and new line,
-#/		differently. Thus if this doc contains any special characters that have
-#/		two backslashes, know that only one is intended.
+#/	- Different shells render control characters new line, tab, etc.) differently.
+#/		Thus if this doc contains any special characters that have two slashes,
+#/		know that only one is intended.
 #/	- Method may not use the logging() function because this is used by that method.
 #/	- For more information on setting the formatting characters used in the default
 #/		case, as well as by each log level, see `FORMATTING_CHARACTER_DOC` by
@@ -160,7 +160,6 @@ OUTPUT_DOC=$(
 #/		split up, if a '-' is needed.
 #/	- Implement: Ability to append end of line that was too long to fit on one
 #/		row to the start of the next line.
-#/	- Implement: Support for '%' as a formatting character.
 EOF
 )
 
