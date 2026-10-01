@@ -36,7 +36,7 @@ runs:
         KCOV_INCLUDE_PATTERN: ${{ inputs.kcov-include-pattern }}
         KCOV_LIMIT:           ${{ inputs.kcov-limit }}
       run: |
-        echo "KCOV_INCLUDE_PATTERN: '$KCOV_INCLUDE'"
+        echo "KCOV_INCLUDE_PATTERN: '$KCOV_INCLUDE_PATTERN'"
         set -- --no-fail-fast -s "$SPEC_SHELL"
         if [ -n "$KCOV_INCLUDE_PATTERN" ]; then
           set -- "$@" --profile --kcov --kcov-options "--include-pattern=$KCOV_INCLUDE_PATTERN --limits=$KCOV_LIMIT,100" --fail-low-coverage
@@ -44,4 +44,5 @@ runs:
           set -- "$@" --jobs "20"
         fi
         # `TEST_PATH` is intentionally unquoted so wild cards expand.
+        echo "@: '$@'"
         shellspec "$@" $TEST_PATH
