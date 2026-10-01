@@ -19,4 +19,4 @@ jobs:
           test-path:            spec/unit/output/output_*
           shell:                /bin/zsh
           kcov-include-pattern: output/output.sh
-          kcov-limits:          91
+          kcov-limit:          95

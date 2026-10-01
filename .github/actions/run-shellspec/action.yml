@@ -21,7 +21,7 @@ inputs:
         - Prevents multiple jobs from being used (disables parallel testing).
     required: false
     default: ''
-  kcov-limits:
+  kcov-limit:
     description: Number representing the code coverage percentage threshold bellow which testing should be marked as failing.
     required: false
     default: '90'
@@ -34,14 +34,11 @@ runs:
         TEST_PATH:            ${{ inputs.test-path }}
         SPEC_SHELL:                ${{ inputs.shell }}
         KCOV_INCLUDE_PATTERN: ${{ inputs.kcov-include-pattern }}
-        KCOV_LIMITS:          ${{ inputs.kcov-limits }}
+        KCOV_LIMIT:          ${{ inputs.kcov-limit }}
       run: |
         set -- --no-fail-fast -s "$SPEC_SHELL"
         if [ -n "$KCOV_INCLUDE" ]; then
-          set -- "$@" --profile --kcov --kcov-options "--include-pattern=$KCOV_INCLUDE --limits=$KCOV_LIMITS" --fail-low-coverage
-          if [ "$FAIL_LOW" = true ]; then
-            set -- "$@" --fail-low-coverage
-          fi
+          set -- "$@" --profile --kcov --kcov-options "--include-pattern=$KCOV_INCLUDE --limits=$KCOV_LIMIT,100" --fail-low-coverage
         else
           set -- --jobs "20"
         fi
