@@ -1,0 +1,77 @@
+name: Unit Test output()
+run-name: ${{ github.actor }} has triggered testing of output() without code coverage for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
+on: [push, workflow_dispatch]
+jobs:
+  unit-test-output-bash-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v3
+      - name: Installing ShellSpec
+        uses: ./.github/actions/install-shellspec
+      - name: Running tests of output() from a 'bash' shell, with out code coverage, from ${{ github.workspace }}...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:    ./spec/unit/output/output_*
+          shell:        /bin/bash
+  unit-test-output-dash-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v3
+      - name: Installing ShellSpec
+        uses: ./.github/actions/install-shellspec
+      - name: Running tests of output() from a 'dash' shell, with out code coverage, from ${{ github.workspace }}...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:    ./spec/unit/output/output_*
+          shell:        /bin/dash
+  unit-test-output-zsh-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v3
+      - name: Installing ShellSpec
+        uses: ./.github/actions/install-shellspec
+      - name: Running tests of output() from a 'zsh' shell, with out code coverage, from ${{ github.workspace }}...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:    ./spec/unit/output/output_*
+          shell:        /bin/zsh
+  unit-test-output-bash-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v3
+      - name: Installing ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Running tests of output() from a 'bash' shell, with out code coverage, from ${{ github.workspace }}...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:    ./spec/unit/output/output_*
+          shell:        /bin/bash
+  unit-test-output-dash-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v3
+      - name: Installing ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Running tests of output() from a 'dash' shell, with out code coverage, from ${{ github.workspace }}...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:    ./spec/unit/output/output_*
+          shell:        /bin/dash
+  unit-test-output-zsh-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v3
+      - name: Installing ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Running tests of output() from a 'zsh' shell, with out code coverage, from ${{ github.workspace }}...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:    ./spec/unit/output/output_*
+          shell:        /bin/zsh
+

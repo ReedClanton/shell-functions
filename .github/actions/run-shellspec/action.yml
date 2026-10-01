@@ -1,0 +1,49 @@
+name: Run ShellSpec
+description: Runs ShellSpec (testing framework) based on provided input(s).
+
+inputs:
+  # Required Input(s)
+  test-path:
+    description: >-
+      Path that ShellSpec spec files should be run at. If the path ends in a wild card (*),
+      then it will be expanded to run all files that match (ex. `./some/path/func_*`).
+    required: true
+  shell:
+    description: Fully qualified path of shell ShellSpec should use to run tests.
+    required: true
+  # Optional Input(s)
+  kcov-include-pattern:
+    description: >-
+      Value should be the same one passed to Kcov's `--include-pattern` argument.
+      When this is provided:
+        - Code coverage will be calculated by Kcov.
+        - ShellSpec will also profile the tests (time them and list the slowest ones).
+        - Prevents multiple jobs from being used (disables parallel testing).
+    required: false
+    default: ''
+  kcov-limits:
+    description: Number representing the code coverage percentage threshold bellow which testing should be marked as failing.
+    required: false
+    default: '90'
+runs:
+  using: 'composite'
+  steps:
+    - name: Running ShellSpec...
+      shell: sh
+      env:
+        TEST_PATH:            ${{ inputs.test-path }}
+        SPEC_SHELL:                ${{ inputs.shell }}
+        KCOV_INCLUDE_PATTERN: ${{ inputs.kcov-include-pattern }}
+        KCOV_LIMITS:          ${{ inputs.kcov-limits }}
+      run: |
+        set -- --no-fail-fast -s "$SPEC_SHELL"
+        if [ -n "$KCOV_INCLUDE" ]; then
+          set -- "$@" --profile --kcov --kcov-options "--include-pattern=$KCOV_INCLUDE --limits=$KCOV_LIMITS" --fail-low-coverage
+          if [ "$FAIL_LOW" = true ]; then
+            set -- "$@" --fail-low-coverage
+          fi
+        else
+          set -- --jobs "20"
+        fi
+        # `TEST_PATH` is intentionally unquoted so wild cards expand.
+        shellspec "$@" $TEST_PATH
