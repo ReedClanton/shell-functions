@@ -1,4 +1,4 @@
-name: Unit Test output() w/ Code Coverage
+name: Test output() w/ Code Coverage
 run-name: ${{ github.actor }} has triggered testing of output() with code coverage of output() for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
 on:
   pull_request:
@@ -13,6 +13,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Install `kcov` and `shellspec` via Docker
         uses: ./.github/actions/install-kcov-and-shellspec-via-docker
+      # TODO: Sort out they `github.workspace` is blank.
       - name: Running tests of output() from a 'zsh' shell, with code coverage, from ${{ github.workspace }}...
         uses: ./.github/actions/run-shellspec
         with:
