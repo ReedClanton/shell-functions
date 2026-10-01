@@ -1,4 +1,4 @@
-name: Unit Test output()
+name: Unit Test output() w/ Code Coverage
 run-name: ${{ github.actor }} has triggered testing of output() with code coverage of output() for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
 on:
   pull_request:
