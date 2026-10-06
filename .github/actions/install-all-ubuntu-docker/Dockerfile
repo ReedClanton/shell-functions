@@ -20,8 +20,8 @@ RUN curl -fsSL \
       "https://github.com/shellspec/shellspec/releases/download/${SHELLSPEC_VERSION}/shellspec-dist.tar.gz" \
     | tar -xz -C /opt \
  && ln -s /opt/shellspec/shellspec /usr/local/bin/shellspec \
- && shellspec --version \	# Print versions of everything that's installed.
- && kcov --version \		# This ensures that it was installed and can be called.
+ && shellspec --version \
+ && kcov --version \
  && zsh --version \
  && dash --version \
  && bash --version \
