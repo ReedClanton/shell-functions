@@ -1,5 +1,5 @@
 name: Test output()'s createHeaderFooter() util Function
-run-name: ${{ github.actor }} has triggered testing of output()'s createHeaderFooter() util function without code coverage for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
+run-name: ${{ github.actor }} triggered testing of output()'s createHeaderFooter() util function without code coverage for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
 on: [push, workflow_dispatch]
 jobs:
   unit-test-output-util-createHeaderFooter-bash-ubuntu:
