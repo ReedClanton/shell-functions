@@ -38,7 +38,9 @@ runs:
       run: |
         set -- --no-fail-fast -s "$SPEC_SHELL"
         if [ -n "$KCOV_INCLUDE_PATTERN" ]; then
-          set -- "$@" --profile --kcov --kcov-options "--include-pattern=$KCOV_INCLUDE_PATTERN --limits=$KCOV_LIMIT,100" --fail-low-coverage
+          # TODO #20: --fail-low-coverage fails 100% of the time, even when coverage is good.
+          #set -- "$@" --profile --kcov --kcov-options "--include-pattern=$KCOV_INCLUDE_PATTERN --limits=$KCOV_LIMIT,100" --fail-low-coverage
+          set -- "$@" --profile --kcov --kcov-options "--include-pattern=$KCOV_INCLUDE_PATTERN --limits=$KCOV_LIMIT,100"
         else
           set -- "$@" --jobs "20"
         fi
