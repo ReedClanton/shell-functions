@@ -1,0 +1,29 @@
+name: Test verifyInputProvided() w/ Code Coverage
+run-name: ${{ github.actor }} triggered testing of verifyInputProvided() w/ code coverage for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, ready_for_review, reopened, synchronize]
+  workflow_dispatch:
+jobs:
+  unit-test-verifyInputProvided-zsh-ubuntu-code-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v3
+      - name: Install ShellSpec (testing framework)
+        uses: ./.github/actions/install-shellspec
+      - name: Install Kcov (code coverage tool)
+        uses: ./.github/actions/install-kcov-from-source
+      - name: Install zsh (shell)
+        uses: ./.github/actions/install-shell-via-apt
+        with:
+          shell: zsh
+      # TODO: Sort out they `github.workspace` is blank.
+      - name: Running tests of verifyInputProvided() from a 'zsh' shell, with code coverage, from ${{ github.workspace }}...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:            spec/unit/util/verifyInputProvided/verifyInputProvided_*
+          shell:                /bin/zsh
+          kcov-include-pattern: util/verifyInputProvided/verifyInputProvided.sh
+          kcov-limit:           91
