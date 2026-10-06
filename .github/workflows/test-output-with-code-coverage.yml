@@ -12,7 +12,8 @@ jobs:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install `kcov` and `shellspec` via Docker
-        uses: ./.github/actions/install-kcov-and-shellspec-via-docker
+        uses: ./.github/actions/install-all-ubuntu-docker
+        #uses: ./.github/actions/install-kcov-and-shellspec-via-docker
       # TODO: Sort out they `github.workspace` is blank.
       - name: Running tests of output() from a 'zsh' shell, with code coverage, from ${{ github.workspace }}...
         uses: ./.github/actions/run-shellspec
