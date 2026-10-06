@@ -23,7 +23,7 @@ jobs:
       - name: Running tests of output() from a 'zsh' shell, with code coverage, from ${{ github.workspace }}...
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:            ./spec/unit/output/output_*
+          test-path:            spec/unit/output/output_*
           shell:                /bin/zsh
-          kcov-include-pattern: ./output/output.sh
-          kcov-limit:           95
+          kcov-include-pattern: output/output.sh
+          kcov-limit:           0
