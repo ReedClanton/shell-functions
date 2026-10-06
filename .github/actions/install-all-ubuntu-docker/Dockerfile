@@ -23,7 +23,7 @@ RUN curl -fsSL \
  && shellspec --version \
  && kcov --version \
  && zsh --version \
- && dash --version \
+ && dash -c : \
  && bash --version \
  && busybox ash --version \
  && yash --version \
