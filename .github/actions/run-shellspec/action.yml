@@ -25,10 +25,19 @@ inputs:
     description: Number representing the code coverage percentage threshold bellow which testing should be marked as failing.
     required: false
     default: '90'
+
+outputs:
+  skipped:
+    description: >-
+      Non-zero when at least one example was skipped, '0' when none were,
+      and empty when ShellSpec didn't produce a report (e.g. it crashed).
+    value: ${{ steps.run.outputs.skipped }}
+
 runs:
   using: 'composite'
   steps:
     - name: Running ShellSpec...
+      id:   run
       shell: sh
       env:
         TEST_PATH:            ${{ inputs.test-path }}
@@ -36,7 +45,10 @@ runs:
         KCOV_INCLUDE_PATTERN: ${{ inputs.kcov-include-pattern }}
         KCOV_LIMIT:           ${{ inputs.kcov-limit }}
       run: |
-        set -- --no-fail-fast -s "$SPEC_SHELL"
+        # A JUnit report is written alongside the normal output so skipped
+        # examples can be counted after the run.
+        report_dir="$RUNNER_TEMP/shellspec-report"
+        set -- --no-fail-fast -s "$SPEC_SHELL" --output junit --reportdir "$report_dir"
         if [ -n "$KCOV_INCLUDE_PATTERN" ]; then
           # TODO #20: --fail-low-coverage fails 100% of the time, even when coverage is good.
           #set -- "$@" --profile --kcov --kcov-options "--include-pattern=$KCOV_INCLUDE_PATTERN --limits=$KCOV_LIMIT,100" --fail-low-coverage
@@ -44,5 +56,21 @@ runs:
         else
           set -- "$@" --jobs "20"
         fi
+
+        # Capture the exit status so the skip count can be reported.
+        rc=0
         # `TEST_PATH` is intentionally unquoted so wild cards expand.
-        shellspec "$@" $TEST_PATH
+        shellspec "$@" $TEST_PATH || rc=$?
+
+        # Each skipped example gets a <skipped> element in the JUnit report.
+        # Only zero vs. non-zero matters to callers.
+        report="$report_dir/results_junit.xml"
+        if [ -f "$report" ]; then
+          skipped=$(grep -c '<skipped' "$report" || true)
+        else
+          echo "::warning::ShellSpec didn't write $report, so skips couldn't be counted."
+          skipped=''
+        fi
+        echo "skipped=$skipped" >> "$GITHUB_OUTPUT"
+
+        exit "$rc"

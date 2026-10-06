@@ -40,6 +40,8 @@ jobs:
           shell:        ${{ steps.dash.outputs.path }}
   unit-test-output-util-constants-zsh-ubuntu:
     runs-on: ubuntu-latest
+    outputs:
+      skipped: ${{ steps.tests.outputs.skipped }}
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
@@ -52,6 +54,7 @@ jobs:
           shell: zsh
       # TODO: Sort out they `github.workspace` is blank.
       - name: Running tests of output()'s constants from a 'zsh' shell on ${{ github.workspace }}...
+        id:   tests
         uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/output/util/constants_*
@@ -110,4 +113,41 @@ jobs:
         with:
           test-path:    ./spec/unit/output/util/constants_*
           shell:        ${{ steps.zsh.outputs.path }}
-
+  badge-output-util-constants-zsh:
+    needs:
+      - unit-test-output-util-constants-zsh-ubuntu
+    # Run whether the tests passed or failed, but not if the run was
+    # cancelled, so a cancelled run doesn't overwrite the last real result.
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      # Needed so the local publish-badge action is available.
+      - name: Checking out ${{ github.ref_name }}...
+        uses: actions/checkout@v3
+      - name: Determining zsh badge status...
+        id:   status
+        shell: sh
+        env:
+          UBUNTU_RESULT:  ${{ needs.unit-test-output-util-constants-zsh-ubuntu.result }}
+          UBUNTU_SKIPPED: ${{ needs.unit-test-output-util-constants-zsh-ubuntu.outputs.skipped }}
+        run: |
+          if [ "$UBUNTU_RESULT" != success ]; then
+            message=failed  color=red
+          elif [ -z "$UBUNTU_SKIPPED" ]; then
+            message=unknown color=lightgrey
+          elif [ "$UBUNTU_SKIPPED" -gt 0 ]; then
+            message=partial color=orange
+          else
+            message=passed  color=brightgreen
+          fi
+          echo "message=$message" >> "$GITHUB_OUTPUT"
+          echo "color=$color"     >> "$GITHUB_OUTPUT"
+      - name: Publishing zsh badge...
+        uses: ./.github/actions/publish-badge
+        with:
+          file:    output/util/constants-zsh.json
+          label:   zsh
+          message: ${{ steps.status.outputs.message }}
+          color:   ${{ steps.status.outputs.color }}

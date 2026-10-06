@@ -1,0 +1,87 @@
+name: Publish Badge
+description: >-
+  Writes a Shields.io endpoint JSON file to a dedicated branch (default
+  'badges'), under a directory named after the branch being tested. A
+  README can then render it with https://img.shields.io/endpoint?url=...
+  The calling job needs `permissions: contents: write`.
+
+inputs:
+  file:
+    description: >-
+      Path of the JSON file, relative to the tested branch's directory
+      (e.g. 'output/util/constants-zsh.json').
+    required: true
+  label:
+    description: Text on the left side of the badge (e.g. 'zsh').
+    required: true
+  message:
+    description: Text on the right side of the badge (e.g. 'passed').
+    required: true
+  color:
+    description: Badge color (e.g. 'brightgreen', 'orange', 'red').
+    required: true
+  badge-branch:
+    description: Branch the JSON files are stored on.
+    required: false
+    default: 'badges'
+  token:
+    description: Token used to push to the badge branch.
+    required: false
+    default: ${{ github.token }}
+
+runs:
+  using: composite
+  steps:
+    - name:  Publishing ${{ inputs.label }} badge (${{ inputs.message }})...
+      shell: sh
+      env:
+        TOKEN:        ${{ inputs.token }}
+        REPO:         ${{ github.repository }}
+        BADGE_BRANCH: ${{ inputs.badge-branch }}
+        FILE:         ${{ github.ref_name }}/${{ inputs.file }}
+        LABEL:        ${{ inputs.label }}
+        MESSAGE:      ${{ inputs.message }}
+        COLOR:        ${{ inputs.color }}
+      run: |
+        dir="$RUNNER_TEMP/badges"
+        git init -q "$dir"
+        cd "$dir"
+        git remote add origin "https://x-access-token:$TOKEN@github.com/$REPO.git"
+        git config user.name  'github-actions[bot]'
+        git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+        # Other workflows may push to the badge branch at the same time, so
+        # retry on a rejected push, starting again from the latest commit.
+        attempt=1
+        while :; do
+          if git fetch -q --depth 1 origin "$BADGE_BRANCH"; then
+            git checkout -q -B "$BADGE_BRANCH" FETCH_HEAD
+          else
+            # First run: the badge branch doesn't exist yet, so start it with
+            # no history. If it does exist, the push below is rejected (it
+            # isn't forced) and the next attempt fetches it.
+            git symbolic-ref HEAD "refs/heads/$BADGE_BRANCH"
+          fi
+
+          mkdir -p "$(dirname "$FILE")"
+          printf '{"schemaVersion":1,"label":"%s","message":"%s","color":"%s"}\n' \
+            "$LABEL" "$MESSAGE" "$COLOR" > "$FILE"
+          git add "$FILE"
+
+          if git diff --cached --quiet; then
+            echo "Badge is unchanged."
+            exit 0
+          fi
+
+          git commit -q -m "Update $FILE: $MESSAGE"
+          if git push -q origin "HEAD:refs/heads/$BADGE_BRANCH"; then
+            exit 0
+          fi
+
+          if [ "$attempt" -ge 5 ]; then
+            echo "::error::Unable to push $FILE to $BADGE_BRANCH."
+            exit 1
+          fi
+          attempt=$((attempt + 1))
+          sleep "$attempt"
+        done
