@@ -9,7 +9,7 @@ ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 # Build runs as root so `sudo` isn't needed.
 # Refresh package lists, then install ShellSpec along with other required tooling.
 RUN apt-get update \
- && apt-get install -y --no-install-recommends bash zsh dash busybox loksh yash posh \
+ && apt-get install -y --no-install-recommends bash zsh dash busybox yash posh \
  ca-certificates curl \
  && rm -rf /var/lib/apt/lists/*
 
@@ -26,7 +26,6 @@ RUN curl -fsSL \
  && dash --version \
  && bash --version \
  && busybox ash --version \
- && loksh --version \
  && yash --version \
  && posh --version
 
