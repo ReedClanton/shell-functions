@@ -1,5 +1,5 @@
 name: Style Guide Check of verifyInputProvided()
-run-name: ${{ github.actor }} has triggered style guide check of verifyInputProvided() for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
+run-name: ${{ github.actor }} triggered style guide check of verifyInputProvided() for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
 on: [push, workflow_dispatch]
 jobs:
   style-guide-verifyInputProvided:
@@ -8,7 +8,7 @@ jobs:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install Style Guide Checking Tool...
-        uses: ./.github/actions/install-shfmt-via-snap
+        uses: ./.github/actions/install-shfmt-linux
       - name: Running style guide check...
         run:  shfmt --diff --case-indent --posix ./util/verifyInputProvided/verifyInputProvided.sh
 

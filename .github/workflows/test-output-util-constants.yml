@@ -1,8 +1,8 @@
-name: Test output()
-run-name: ${{ github.actor }} has triggered testing of output() without code coverage for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
+name: Test output()'s constants
+run-name: ${{ github.actor }} has triggered testing of output()'s constants without code coverage for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
 on: [push, workflow_dispatch]
 jobs:
-  unit-test-output-bash-ubuntu:
+  unit-test-output-util-constants-bash-ubuntu:
     runs-on: ubuntu-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
@@ -15,12 +15,12 @@ jobs:
         with:
           shell: bash
       # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output() from a 'bash' shell on ${{ github.workspace }}...
+      - name: Running tests of output()'s constants from a 'bash' shell on ${{ github.workspace }}...
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:    ./spec/unit/output/output_*
+          test-path:    ./spec/unit/output/util/constants_*
           shell:        ${{ steps.bash.outputs.path }}
-  unit-test-output-dash-ubuntu:
+  unit-test-output-util-constants-dash-ubuntu:
     runs-on: ubuntu-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
@@ -33,12 +33,12 @@ jobs:
         with:
           shell: dash
       # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output() from a 'dash' shell on ${{ github.workspace }}...
+      - name: Running tests of output()'s constants from a 'dash' shell on ${{ github.workspace }}...
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:    ./spec/unit/output/output_*
+          test-path:    ./spec/unit/output/util/constants_*
           shell:        ${{ steps.dash.outputs.path }}
-  unit-test-output-zsh-ubuntu:
+  unit-test-output-util-constants-zsh-ubuntu:
     runs-on: ubuntu-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
@@ -51,12 +51,12 @@ jobs:
         with:
           shell: zsh
       # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output() from a 'zsh' shell on ${{ github.workspace }}...
+      - name: Running tests of output()'s constants from a 'zsh' shell on ${{ github.workspace }}...
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:    ./spec/unit/output/output_*
+          test-path:    ./spec/unit/output/util/constants_*
           shell:        ${{ steps.zsh.outputs.path }}
-  unit-test-output-bash-macos:
+  unit-test-output-util-constants-bash-macos:
     runs-on: macos-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
@@ -69,12 +69,12 @@ jobs:
         with:
           shell: bash
       # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output() from a 'bash' shell, with out code coverage, from ${{ github.workspace }}...
+      - name: Running tests of output()'s constants from a 'bash' shell, with out code coverage, from ${{ github.workspace }}...
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:    ./spec/unit/output/output_*
+          test-path:    ./spec/unit/output/util/constants_*
           shell:        ${{ steps.bash.outputs.path }}
-  unit-test-output-dash-macos:
+  unit-test-output-util-constants-dash-macos:
     runs-on: macos-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
@@ -87,12 +87,12 @@ jobs:
         with:
           shell: dash
       # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output() from a 'dash' shell, with out code coverage, from ${{ github.workspace }}...
+      - name: Running tests of output()'s constants from a 'dash' shell, with out code coverage, from ${{ github.workspace }}...
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:    ./spec/unit/output/output_*
+          test-path:    ./spec/unit/output/util/constants_*
           shell:        ${{ steps.dash.outputs.path }}
-  unit-test-output-zsh-macos:
+  unit-test-output-util-constants-zsh-macos:
     runs-on: macos-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
@@ -105,9 +105,9 @@ jobs:
         with:
           shell: zsh
       # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output() from a 'zsh' shell, with out code coverage, from ${{ github.workspace }}...
+      - name: Running tests of output()'s constants from a 'zsh' shell, with out code coverage, from ${{ github.workspace }}...
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:    ./spec/unit/output/output_*
+          test-path:    ./spec/unit/output/util/constants_*
           shell:        ${{ steps.zsh.outputs.path }}
 

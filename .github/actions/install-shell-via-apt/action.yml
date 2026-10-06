@@ -1,0 +1,56 @@
+name: Install a Shell via Apt
+description: >-
+  Installs a shell with apt-get, unless it's already on PATH, then
+  verifies it runs and reports its absolute path.
+
+inputs:
+  shell:
+    description: Command name of the shell (e.g. 'zsh', 'yash', 'ash').
+    required: true
+  package:
+    description: >-
+      apt package that provides the shell. Defaults to the shell's name.
+      Use 'busybox' for BusyBox ash.
+    required: false
+    default: ''
+
+outputs:
+  path:
+    description: Absolute path to the shell, for passing to `shellspec --shell`.
+    value: ${{ steps.install.outputs.path }}
+
+runs:
+  using: composite
+  steps:
+    - name:  Installing ${{ inputs.shell }}...
+      id:    install
+      shell: sh
+      env:
+        SHELL_NAME: ${{ inputs.shell }}
+        PACKAGE:    ${{ inputs.package || inputs.shell }}
+      run: |
+        if path=$(command -v "$SHELL_NAME"); then
+          echo "$SHELL_NAME is already installed at $path."
+        else
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive \
+            apt-get install -y --no-install-recommends "$PACKAGE"
+
+          # BusyBox doesn't install applet links, so create one. BusyBox
+          # picks the applet to run from the name it's invoked as.
+          if [ "$PACKAGE" = busybox ] && ! command -v "$SHELL_NAME" >/dev/null; then
+            sudo ln -s "$(command -v busybox)" "/usr/local/bin/$SHELL_NAME"
+          fi
+
+          if ! path=$(command -v "$SHELL_NAME"); then
+            echo "::error::Installed '$PACKAGE', but '$SHELL_NAME' still isn't on PATH."
+            exit 1
+          fi
+        fi
+
+        if ! "$path" -c :; then
+          echo "::error::$path is installed but failed to run."
+          exit 1
+        fi
+
+        echo "path=$path" >> "$GITHUB_OUTPUT"

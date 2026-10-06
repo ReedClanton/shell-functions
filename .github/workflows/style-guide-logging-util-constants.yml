@@ -1,5 +1,5 @@
-name: Style Guide Check of logging()'s constants file
-run-name: ${{ github.actor }} has triggered style guide check of logging()'s constants file for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
+name: Style Guide Check of logging()'s Constants File
+run-name: ${{ github.actor }} triggered style guide check of logging()'s constants file for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
 on: [push, workflow_dispatch]
 jobs:
   style-guide-logging-util-constants:
@@ -8,7 +8,7 @@ jobs:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install Style Guide Checking Tool...
-        uses: ./.github/actions/install-shfmt-via-snap
+        uses: ./.github/actions/install-shfmt-linux
       - name: Running style guide check...
         run:  shfmt --diff --case-indent --posix ./logging/util/constants.sh
 
