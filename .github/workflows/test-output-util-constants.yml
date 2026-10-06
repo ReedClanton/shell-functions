@@ -148,6 +148,6 @@ jobs:
         uses: ./.github/actions/publish-badge
         with:
           file:    output/util/constants-zsh.json
-          label:   zsh
+          label:   constants.sh-zsh
           message: ${{ steps.status.outputs.message }}
           color:   ${{ steps.status.outputs.color }}

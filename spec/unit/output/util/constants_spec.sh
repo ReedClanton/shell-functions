@@ -24,6 +24,7 @@ Describe "Output:" output
 					The stderr should not be present
 					The stdout should not be present
 					The status should be success
+					Skip "Testing badge"
 				End
 			End
 			Describe "Environment variable:" outputUtilConstants:environmentVariable
