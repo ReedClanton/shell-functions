@@ -143,8 +143,8 @@ logging $infoLvl -m="Running back up..."
 cmd="rsync $options $backUpSourcePath $backUpDestPath"
 unset stdOut errOut rtOut
 eval "$( (eval $cmd) \
-	2> >(errOut=$(cat); typeset -p errOut) \
-	 > >(stdOut=$(cat); typeset -p stdOut); rtOut=$?; typeset -p rtOut )"
+	2>>(errOut=$(cat); typeset -p errOut) \
+	 >>(stdOut=$(cat); typeset -p stdOut); rtOut=$?; typeset -p rtOut )"
 
 if [[ $rtOut -ne 0 ]]; then
 	logging $errLvl -m="rsync error output:" -m="$errOut"
