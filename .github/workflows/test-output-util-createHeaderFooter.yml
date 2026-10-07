@@ -20,6 +20,14 @@ jobs:
         with:
           test-path:    ./spec/unit/output/util/createHeaderFooter_*
           shell:        ${{ steps.bash.outputs.path }}
+      - name: Recording bash result for badge...
+        if:   ${{ !cancelled() }}
+        uses: ./.github/actions/record-badge-result
+        with:
+          badge:    output/util/createHeaderFooter-bash.json
+          label:    "createHeaderFooter.sh: bash"
+          status:   ${{ job.status }}
+          skipped:  ${{ steps.tests.output.skipped }}
   unit-test-output-util-createHeaderFooter-dash-ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -38,6 +46,14 @@ jobs:
         with:
           test-path:    ./spec/unit/output/util/createHeaderFooter_*
           shell:        ${{ steps.dash.outputs.path }}
+      - name: Recording dash result for badge...
+        if:   ${{ !cancelled() }}
+        uses: ./.github/actions/record-badge-result
+        with:
+          badge:    output/util/createHeaderFooter-dash.json
+          label:    "createHeaderFooter.sh: dash"
+          status:   ${{ job.status }}
+          skipped:  ${{ steps.tests.output.skipped }}
   unit-test-output-util-createHeaderFooter-zsh-ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -56,6 +72,14 @@ jobs:
         with:
           test-path:    ./spec/unit/output/util/createHeaderFooter_*
           shell:        ${{ steps.zsh.outputs.path }}
+      - name: Recording zsh result for badge...
+        if:   ${{ !cancelled() }}
+        uses: ./.github/actions/record-badge-result
+        with:
+          badge:    output/util/createHeaderFooter-zsh.json
+          label:    "createHeaderFooter.sh: zsh"
+          status:   ${{ job.status }}
+          skipped:  ${{ steps.tests.output.skipped }}
   unit-test-output-util-createHeaderFooter-bash-macos:
     runs-on: macos-latest
     steps:
@@ -110,4 +134,19 @@ jobs:
         with:
           test-path:    ./spec/unit/output/util/createHeaderFooter_*
           shell:        ${{ steps.zsh.outputs.path }}
+  publish-badges:
+    needs:
+      - unit-test-output-util-createHeaderFooter-bash-ubuntu
+      - unit-test-output-util-createHeaderFooter-dash-ubuntu
+      - unit-test-output-util-createHeaderFooter-zsh-ubuntu
+    # Run whether the tests passed or failed, but not if the run was
+    # cancelled, so a cancelled run doesn't overwrite the last real result.
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      # Needed so the local publish-badges action is available.
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/publish-badges
 

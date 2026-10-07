@@ -26,7 +26,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:   output/util/constants-bash.json
-          label:   'constants.sh: bash'
+          label:   "constants.sh: bash"
           status:  ${{ job.status }}
           skipped: ${{ steps.tests.outputs.skipped }}
   unit-test-output-util-constants-dash-ubuntu:
@@ -53,7 +53,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:   output/util/constants-dash.json
-          label:   'constants.sh: dash'
+          label:   "constants.sh: dash"
           status:  ${{ job.status }}
           skipped: ${{ steps.tests.outputs.skipped }}
   unit-test-output-util-constants-zsh-ubuntu:
@@ -80,7 +80,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:   output/util/constants-zsh.json
-          label:   'constants.sh: zsh'
+          label:   "constants.sh: zsh"
           status:  ${{ job.status }}
           skipped: ${{ steps.tests.outputs.skipped }}
   unit-test-output-util-constants-bash-macos:
