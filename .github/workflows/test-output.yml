@@ -37,6 +37,34 @@ jobs:
           label:   "output(): bash"
           status:  ${{ job.status }}
           skipped: ${{ steps.tests.outputs.skipped }}
+  unit-test-output-busybox-ash-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v3
+      - name: Installing ShellSpec
+        uses: ./.github/actions/install-shellspec
+      - name: Install BusyBox ash (shell)
+        id:   ash
+        uses: ./.github/actions/install-shell-via-apt
+        with:
+          shell:    ash
+          package:  busybox
+      # TODO: Sort out they `github.workspace` is blank.
+      - name: Running tests of output() from a 'ash' shell on ${{ github.workspace }}...
+        id:   tests
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:    ./spec/unit/output/output_*
+          shell:        ${{ steps.ash.outputs.path }}
+      - name: Recording ash result for badge...
+        if:   ${{ !cancelled() }}
+        uses: ./.github/actions/record-badge-result
+        with:
+          badge:   output/output-ash.json
+          label:   "output(): ash"
+          status:  ${{ job.status }}
+          skipped: ${{ steps.tests.outputs.skipped }}
   unit-test-output-dash-ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -148,6 +176,7 @@ jobs:
   publish-badges:
     needs:
       - unit-test-output-bash-ubuntu
+      - unit-test-output-busybox-ash-ubuntu
       - unit-test-output-dash-ubuntu
       - unit-test-output-zsh-ubuntu
     # Run whether the tests passed or failed, but not if the run was
