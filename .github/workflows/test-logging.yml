@@ -3,7 +3,9 @@ run-name: ${{ github.actor }} triggered testing of logging() without code covera
 on:
   push:
     paths:
-      - logging/**
+      - logging/logging.sh
+      - logging/**/*.sh
+      - spec/unit/logging/logging_*
       - .github/workflows/**
       - .github/actions/**
   workflow_dispatch:

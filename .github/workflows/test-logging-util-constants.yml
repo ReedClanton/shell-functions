@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - logging/util/constants.sh
+      - spec/unit/logging/util/constants_*
       - .github/workflows/**
       - .github/actions/**
   workflow_dispatch:
