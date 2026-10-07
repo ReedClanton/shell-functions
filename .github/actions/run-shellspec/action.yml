@@ -66,7 +66,7 @@ runs:
         # Only zero vs. non-zero matters to callers.
         report="$report_dir/results_junit.xml"
         if [ -f "$report" ]; then
-          skipped=$(grep -c '<skipped' "$report" || true)
+          skipped=$(grep -c '<skip' "$report" || true)
         else
           echo "::warning::ShellSpec didn't write $report, so skips couldn't be counted."
           skipped=''
