@@ -1,6 +1,12 @@
 name: Style Guide Check of output()
 run-name: ${{ github.actor }} triggered style guide check of output() for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
-on: [push, workflow_dispatch]
+on:
+  push:
+    paths:
+      - output/output.sh
+      - .github/workflows/**
+      - .github/actions/**
+  workflow_dispatch:
 jobs:
   style-guide-output:
     runs-on: ubuntu-latest

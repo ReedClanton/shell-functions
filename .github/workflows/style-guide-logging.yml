@@ -1,6 +1,12 @@
 name: Style Guide Check of logging()
 run-name: ${{ github.actor }} triggered style guide check of logging() for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
-on: [push, workflow_dispatch]
+on:
+  push:
+    paths:
+      - logging/logging.sh
+      - .github/workflows/**
+      - .github/actions/**
+  workflow_dispatch:
 jobs:
   style-guide-logging:
     runs-on: ubuntu-latest

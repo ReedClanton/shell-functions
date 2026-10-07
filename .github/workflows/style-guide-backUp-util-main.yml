@@ -1,14 +1,14 @@
-name: Style Guide Check of output()'s Constants File
-run-name: ${{ github.actor }} triggered style guide check of output()'s constants file for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
+name: Style Guide Check of backUp.sh's Main File
+run-name: ${{ github.actor }} triggered style guide check of backUp.sh's main.sh file for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
 on:
   push:
     paths:
-      - output/util/constants.sh
+      - backUp/util/main.sh
       - .github/workflows/**
       - .github/actions/**
   workflow_dispatch:
 jobs:
-  style-guide-output-util-constants:
+  style-guide-backUp-util-main:
     runs-on: ubuntu-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
@@ -16,5 +16,5 @@ jobs:
       - name: Install Style Guide Checking Tool...
         uses: ./.github/actions/install-shfmt-linux
       - name: Running style guide check...
-        run:  shfmt --diff --case-indent --posix ./output/util/constants.sh
+        run:  shfmt --diff --case-indent --posix ./backUp/util/main.sh
 

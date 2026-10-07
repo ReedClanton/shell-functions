@@ -1,6 +1,12 @@
 name: Style Guide Check of logging()'s Constants File
 run-name: ${{ github.actor }} triggered style guide check of logging()'s constants file for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
-on: [push, workflow_dispatch]
+on:
+  push:
+    paths:
+      - logging/util/constants.sh
+      - .github/workflows/**
+      - .github/actions/**
+  workflow_dispatch:
 jobs:
   style-guide-logging-util-constants:
     runs-on: ubuntu-latest
