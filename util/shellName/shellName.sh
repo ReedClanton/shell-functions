@@ -45,7 +45,7 @@ for fullArg in "$@"; do
 
 	# Determine what option user gave.
 	case $fullArg in
-		-h|--help)
+		-h | --help)
 			echo "$SHELL_NAME_DOC"
 			exit 0
 			;;
