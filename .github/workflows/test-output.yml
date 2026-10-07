@@ -22,8 +22,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-apt
         with:
           shell: bash
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output() from a 'bash' shell on ${{ github.workspace }}...
+      - name: Running tests of output() from 'bash'...
         id:   tests
         uses: ./.github/actions/run-shellspec
         with:
@@ -50,8 +49,7 @@ jobs:
         with:
           shell:    ash
           package:  busybox
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output() from a 'ash' shell on ${{ github.workspace }}...
+      - name: Running tests of output() from 'ash'...
         id:   tests
         uses: ./.github/actions/run-shellspec
         with:
@@ -77,8 +75,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-apt
         with:
           shell: dash
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output() from a 'dash' shell on ${{ github.workspace }}...
+      - name: Running tests of output() from 'dash'...
         id:   tests
         uses: ./.github/actions/run-shellspec
         with:
@@ -104,8 +101,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-apt
         with:
           shell: zsh
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output() from a 'zsh' shell on ${{ github.workspace }}...
+      - name: Running tests of output() from 'zsh'...
         id:   tests
         uses: ./.github/actions/run-shellspec
         with:
@@ -131,8 +127,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: bash
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output() from a 'bash' shell, with out code coverage, from ${{ github.workspace }}...
+      - name: Running tests of output() from 'bash'...
         uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/output/output_*
@@ -149,8 +144,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: dash
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output() from a 'dash' shell, with out code coverage, from ${{ github.workspace }}...
+      - name: Running tests of output() from 'dash'...
         uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/output/output_*
@@ -167,8 +161,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: zsh
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output() from a 'zsh' shell, with out code coverage, from ${{ github.workspace }}...
+      - name: Running tests of output() from 'zsh'...
         uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/output/output_*

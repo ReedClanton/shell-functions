@@ -22,8 +22,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-apt
         with:
           shell: bash
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of logging() from a 'bash' shell on ${{ github.workspace }}...
+      - name: Running tests of logging() from 'bash'...
         uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/logging/logging_*
@@ -40,8 +39,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-apt
         with:
           shell: dash
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of logging() from a 'dash' shell on ${{ github.workspace }}...
+      - name: Running tests of logging() from 'dash'...
         uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/logging/logging_*
@@ -58,8 +56,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-apt
         with:
           shell: zsh
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of logging() from a 'zsh' shell on ${{ github.workspace }}...
+      - name: Running tests of logging() from 'zsh'...
         uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/logging/logging_*
@@ -76,8 +73,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: bash
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of logging() from a 'bash' shell, with out code coverage, from ${{ github.workspace }}...
+      - name: Running tests of logging() from 'bash'...
         uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/logging/logging_*
@@ -94,8 +90,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: dash
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of logging() from a 'dash' shell, with out code coverage, from ${{ github.workspace }}...
+      - name: Running tests of logging() from 'dash'...
         uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/logging/logging_*
@@ -112,8 +107,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: zsh
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of logging() from a 'zsh' shell, with out code coverage, from ${{ github.workspace }}...
+      - name: Running tests of logging() from 'zsh'...
         uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/logging/logging_*

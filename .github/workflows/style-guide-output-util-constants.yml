@@ -1,5 +1,5 @@
 name: Style Guide Check of output()'s Constants File
-run-name: ${{ github.actor }} triggered style guide check of output()'s constants file for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
+run-name: ${{ github.actor }} triggered style guide check of output()'s constants.sh file for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
 on:
   push:
     paths:

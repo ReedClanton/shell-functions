@@ -19,8 +19,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-apt
         with:
           shell: zsh
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output() from a 'zsh' shell, with code coverage, from ${{ github.workspace }}...
+      - name: Running tests of output() from 'zsh' with code coverage...
         uses: ./.github/actions/run-shellspec
         with:
           test-path:            spec/unit/output/output_*

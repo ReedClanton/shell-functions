@@ -1,4 +1,4 @@
-name: Test output()'s createHeaderFooter() util Function
+name: Test output()'s createHeaderFooter() Util Function
 run-name: ${{ github.actor }} triggered testing of output()'s createHeaderFooter() util function without code coverage for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
 on:
   push:
@@ -21,8 +21,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-apt
         with:
           shell: bash
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output()'s createHeaderFooter() util function from a 'bash' shell on ${{ github.workspace }}...
+      - name: Running tests of output()'s createHeaderFooter() util function from 'bash'...
         id:   tests
         uses: ./.github/actions/run-shellspec
         with:
@@ -49,8 +48,7 @@ jobs:
         with:
           shell:    ash
           package:  busybox
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output()'s createHeaderFooter() from a 'ash' shell on ${{ github.workspace }}...
+      - name: Running tests of output()'s createHeaderFooter() from 'ash'...
         id:   tests
         uses: ./.github/actions/run-shellspec
         with:
@@ -76,8 +74,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-apt
         with:
           shell: dash
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output()'s createHeaderFooter() util function from a 'dash' shell on ${{ github.workspace }}...
+      - name: Running tests of output()'s createHeaderFooter() util function from 'dash'...
         id:   tests
         uses: ./.github/actions/run-shellspec
         with:
@@ -103,8 +100,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-apt
         with:
           shell: zsh
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output()'s createHeaderFooter() util function from a 'zsh' shell on ${{ github.workspace }}...
+      - name: Running tests of output()'s createHeaderFooter() util function from 'zsh'...
         id:   tests
         uses: ./.github/actions/run-shellspec
         with:
@@ -130,8 +126,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: bash
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output()'s createHeaderFooter() util function from a 'bash' shell, with out code coverage, from ${{ github.workspace }}...
+      - name: Running tests of output()'s createHeaderFooter() util function from 'bash'...
         uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/output/util/createHeaderFooter_*
@@ -148,8 +143,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: dash
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output()'s createHeaderFooter() util function from a 'dash' shell, with out code coverage, from ${{ github.workspace }}...
+      - name: Running tests of output()'s createHeaderFooter() util function from 'dash'...
         uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/output/util/createHeaderFooter_*
@@ -166,8 +160,7 @@ jobs:
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: zsh
-      # TODO: Sort out they `github.workspace` is blank.
-      - name: Running tests of output()'s createHeaderFooter() util function from a 'zsh' shell, with out code coverage, from ${{ github.workspace }}...
+      - name: Running tests of output()'s createHeaderFooter() util function from 'zsh'...
         uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/output/util/createHeaderFooter_*
