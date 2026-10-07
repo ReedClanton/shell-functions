@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} triggered testing of output() without code coverag
 on:
   push:
     paths:
-      - output/output.sh
+      - output/**
       - .github/workflows/**
       - .github/actions/**
   workflow_dispatch:

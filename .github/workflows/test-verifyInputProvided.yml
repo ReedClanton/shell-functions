@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} triggered testing of verifyInputProvided() without
 on:
   push:
     paths:
-      - util/verifyInputProvided/verifyInputProvided.sh
+      - util/verifyInputProvided/**
       - .github/workflows/**
       - .github/actions/**
   workflow_dispatch:
