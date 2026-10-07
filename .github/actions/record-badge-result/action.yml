@@ -1,8 +1,7 @@
 name: Record Badge Result
 description: >-
   Records one test job's result for a badge by uploading it as a small
-  artifact. Run it as the last step of a test job, with
-  `if: ${{ !cancelled() }}`, so failures are recorded too. A later
+  artifact. Run it as the last step of a test job. A later
   `publish-badges` job combines every recorded result into the badges.
 
 inputs:
