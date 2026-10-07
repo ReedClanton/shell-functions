@@ -22,7 +22,6 @@ Describe "Output:" output
 				It "Source file" outputUtilConstantsShellCompatibility:sourceFile
 					When run source $constants
 					The stderr should not be present
-					The lines of stdout should equal 1
 					The stdout should not be present
 					The status should be success
 				End
