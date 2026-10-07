@@ -12,16 +12,16 @@ jobs:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install ShellSpec (testing framework)
-        uses: .github/actions/install-shellspec
+        uses: ./.github/actions/install-shellspec
       - name: Install Kcov (code coverage tool)
-        uses: .github/actions/install-kcov-from-source
+        uses: ./.github/actions/install-kcov-from-source
       - name: Install zsh (shell)
-        uses: .github/actions/install-shell-via-apt
+        uses: ./.github/actions/install-shell-via-apt
         with:
           shell: zsh
       # TODO: Sort out they `github.workspace` is blank.
       - name: Running tests of output()'s createHeaderFooter() util function from a 'zsh' shell, with code coverage, from ${{ github.workspace }}...
-        uses: .github/actions/run-shellspec
+        uses: ./.github/actions/run-shellspec
         with:
           test-path:            spec/unit/output/util/createHeaderFooter_*
           shell:                /bin/zsh

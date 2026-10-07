@@ -8,15 +8,15 @@ jobs:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Installing ShellSpec
-        uses: .github/actions/install-shellspec
+        uses: ./.github/actions/install-shellspec
       - name: Install bash (shell)
         id:   bash
-        uses: .github/actions/install-shell-via-apt
+        uses: ./.github/actions/install-shell-via-apt
         with:
           shell: bash
       # TODO: Sort out they `github.workspace` is blank.
       - name: Running tests of verifyInputProvided() from a 'bash' shell on ${{ github.workspace }}...
-        uses: .github/actions/run-shellspec
+        uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:        ${{ steps.bash.outputs.path }}
@@ -26,15 +26,15 @@ jobs:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Installing ShellSpec
-        uses: .github/actions/install-shellspec
+        uses: ./.github/actions/install-shellspec
       - name: Install dash (shell)
         id:   dash
-        uses: .github/actions/install-shell-via-apt
+        uses: ./.github/actions/install-shell-via-apt
         with:
           shell: dash
       # TODO: Sort out they `github.workspace` is blank.
       - name: Running tests of verifyInputProvided() from a 'dash' shell on ${{ github.workspace }}...
-        uses: .github/actions/run-shellspec
+        uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:        ${{ steps.dash.outputs.path }}
@@ -44,15 +44,15 @@ jobs:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Installing ShellSpec
-        uses: .github/actions/install-shellspec
+        uses: ./.github/actions/install-shellspec
       - name: Install zsh (shell)
         id:   zsh
-        uses: .github/actions/install-shell-via-apt
+        uses: ./.github/actions/install-shell-via-apt
         with:
           shell: zsh
       # TODO: Sort out they `github.workspace` is blank.
       - name: Running tests of verifyInputProvided() from a 'zsh' shell on ${{ github.workspace }}...
-        uses: .github/actions/run-shellspec
+        uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:        ${{ steps.zsh.outputs.path }}
@@ -62,15 +62,15 @@ jobs:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Installing ShellSpec...
-        uses: .github/actions/install-shellspec
+        uses: ./.github/actions/install-shellspec
       - name: Installing bash (shell)
         id:   bash
-        uses: .github/actions/install-shell-via-homebrew
+        uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: bash
       # TODO: Sort out they `github.workspace` is blank.
       - name: Running tests of verifyInputProvided() from a 'bash' shell, with out code coverage, from ${{ github.workspace }}...
-        uses: .github/actions/run-shellspec
+        uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:        ${{ steps.bash.outputs.path }}
@@ -80,15 +80,15 @@ jobs:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Installing ShellSpec...
-        uses: .github/actions/install-shellspec
+        uses: ./.github/actions/install-shellspec
       - name: Installing dash (shell)
         id:   dash
-        uses: .github/actions/install-shell-via-homebrew
+        uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: dash
       # TODO: Sort out they `github.workspace` is blank.
       - name: Running tests of verifyInputProvided() from a 'dash' shell, with out code coverage, from ${{ github.workspace }}...
-        uses: .github/actions/run-shellspec
+        uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:        ${{ steps.dash.outputs.path }}
@@ -98,15 +98,15 @@ jobs:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Installing ShellSpec...
-        uses: .github/actions/install-shellspec
+        uses: ./.github/actions/install-shellspec
       - name: Installing zsh (shell)
         id:   zsh
-        uses: .github/actions/install-shell-via-homebrew
+        uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: zsh
       # TODO: Sort out they `github.workspace` is blank.
       - name: Running tests of verifyInputProvided() from a 'zsh' shell, with out code coverage, from ${{ github.workspace }}...
-        uses: .github/actions/run-shellspec
+        uses: ./.github/actions/run-shellspec
         with:
           test-path:    ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:        ${{ steps.zsh.outputs.path }}
