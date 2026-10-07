@@ -15,7 +15,7 @@ inputs:
     description: "Text on the left side of the badge (e.g. '<funcName>.sh: <shell>')."
     required: true
   status:
-    description: The job's status so far. Pass `${{ job.status }}`.
+    description: The job's status so far.
     required: true
   skipped:
     description: The `skipped` output of the run-shellspec action.
