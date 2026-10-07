@@ -29,8 +29,8 @@ inputs:
 outputs:
   skipped:
     description: >-
-      Non-zero when at least one example was skipped, '0' when none were,
-      and empty when ShellSpec didn't produce a report (e.g. it crashed).
+      Number of skipped examples, or empty when ShellSpec didn't produce a
+      report (e.g. it crashed).
     value: ${{ steps.run.outputs.skipped }}
 
 runs:
@@ -62,8 +62,9 @@ runs:
         # `TEST_PATH` is intentionally unquoted so wild cards expand.
         shellspec "$@" $TEST_PATH || rc=$?
 
-        # Each skipped example gets a <skipped> element in the JUnit report.
-        # Only zero vs. non-zero matters to callers.
+        # ShellSpec marks each skipped example with a <skip> element, one
+        # per line. Number of lines that are returned by `grep` represents
+        # the number of tests skipped.
         report="$report_dir/results_junit.xml"
         if [ -f "$report" ]; then
           skipped=$(grep -c '<skip' "$report" || true)

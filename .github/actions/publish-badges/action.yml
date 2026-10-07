@@ -1,0 +1,118 @@
+name: Publish Badges
+description: >-
+  Combines every result recorded by `record-badge-result` in this run and
+  writes one Shields.io endpoint JSON file per badge to a dedicated branch
+  (default 'badges'), under a directory named after the tested branch, in
+  a single commit. The calling job needs `permissions: contents: write`.
+
+inputs:
+  badge-branch:
+    description: Branch the JSON files are stored on.
+    required: false
+    default: 'badges'
+  token:
+    description: Token used to push to the badge branch.
+    required: false
+    default: ${{ github.token }}
+
+runs:
+  using: composite
+  steps:
+    - name: Downloading recorded results...
+      uses: actions/download-artifact@v4
+      with:
+        pattern:        badge-result-*
+        path:           ${{ runner.temp }}/badge-results
+        merge-multiple: true
+
+    - name:  Publishing badges...
+      shell: sh
+      env:
+        TOKEN:        ${{ inputs.token }}
+        REPO:         ${{ github.repository }}
+        REF_NAME:     ${{ github.ref_name }}
+        BADGE_BRANCH: ${{ inputs.badge-branch }}
+      run: |
+        results="$RUNNER_TEMP/badge-results"
+        if ! ls "$results"/*.tsv >/dev/null 2>&1; then
+          echo "No badge results were recorded, so there's nothing to publish."
+          exit 0
+        fi
+
+        # Each result line is: badge path, label, job status, skip count.
+        # A badge takes the worst result of all jobs that share its path:
+        #   failed (a job failed) > unknown (no skip count)
+        #   > "N skipped" > passed.
+        # Jobs sharing a badge run the same tests on different platforms, so
+        # N is the most skipped by any one job, not the total across jobs.
+        summary="$RUNNER_TEMP/badge-summary.tsv"
+        awk -F '\t' '
+          {
+            if ($3 != "success")  rank = 3
+            else if ($4 == "")    rank = 2
+            else if ($4 + 0 > 0)  rank = 1
+            else                  rank = 0
+            if (!($1 in worst) || rank > worst[$1]) worst[$1] = rank
+            if ($4 + 0 > skipped[$1] + 0) skipped[$1] = $4 + 0
+            label[$1] = $2
+          }
+          END {
+            split("passed skipped unknown failed", message, " ")
+            split("brightgreen orange lightgrey red", color, " ")
+            for (badge in worst) {
+              text = message[worst[badge] + 1]
+              if (worst[badge] == 1) text = skipped[badge] " skipped"
+              printf "%s\t%s\t%s\t%s\n", badge, label[badge],
+                text, color[worst[badge] + 1]
+            }
+          }
+        ' "$results"/*.tsv > "$summary"
+
+        dir="$RUNNER_TEMP/badges"
+        git init -q "$dir"
+        cd "$dir"
+        git remote add origin "https://x-access-token:$TOKEN@github.com/$REPO.git"
+        git config user.name  'github-actions[bot]'
+        git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+        tab=$(printf '\t')
+
+        # Other workflows may push to the badge branch at the same time, so
+        # retry on a rejected push, starting again from the latest commit.
+        attempt=1
+        while :; do
+          if git fetch -q --depth 1 origin "$BADGE_BRANCH"; then
+            git checkout -q -f -B "$BADGE_BRANCH" FETCH_HEAD
+          else
+            # First run: the badge branch doesn't exist yet, so start it with
+            # no history. If it does exist, the push below is rejected (it
+            # isn't forced) and the next attempt fetches it.
+            git symbolic-ref HEAD "refs/heads/$BADGE_BRANCH"
+          fi
+
+          while IFS="$tab" read -r badge label message color; do
+            file="$REF_NAME/$badge"
+            mkdir -p "$(dirname "$file")"
+            printf '{"schemaVersion":1,"label":"%s","message":"%s","color":"%s"}\n' \
+              "$label" "$message" "$color" > "$file"
+            git add "$file"
+            echo "$file: $message"
+          done < "$summary"
+
+          if git diff --cached --quiet; then
+            echo "Badges are unchanged."
+            exit 0
+          fi
+
+          git commit -q -m "Update badges for $REF_NAME"
+          if git push -q origin "HEAD:refs/heads/$BADGE_BRANCH"; then
+            exit 0
+          fi
+
+          if [ "$attempt" -ge 5 ]; then
+            echo "::error::Unable to push badges to $BADGE_BRANCH."
+            exit 1
+          fi
+          attempt=$((attempt + 1))
+          sleep "$attempt"
+        done
