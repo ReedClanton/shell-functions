@@ -6,20 +6,20 @@ on:
     types: [opened, ready_for_review, reopened, synchronize]
   workflow_dispatch:
 jobs:
-  unit-test-output-zsh-ubuntu-code-coverage:
+  test-output-zsh-ubuntu-code-coverage:
     runs-on: ubuntu-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
-      - name: Install ShellSpec (testing framework)
+      - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
-      - name: Install Kcov (code coverage tool)
+      - name: Install Kcov...
         uses: ./.github/actions/install-kcov-from-source
-      - name: Install zsh (shell)
+      - name: Install zsh (shell)...
         uses: ./.github/actions/install-shell-via-apt
         with:
           shell: zsh
-      - name: Running tests of output() from 'zsh' with code coverage...
+      - name: Run test(s) on zsh with code coverage...
         uses: ./.github/actions/run-shellspec
         with:
           test-path:            spec/unit/output/output_*

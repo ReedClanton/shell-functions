@@ -1,33 +1,38 @@
 name: Test output()'s createHeaderFooter() Util Function
-run-name: ${{ github.actor }} triggered testing of output()'s createHeaderFooter() util function without code coverage for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
+run-name: ${{ github.actor }} triggered testing of output()'s createHeaderFooter() util function for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
 on:
   push:
+    # Run this when there are touched.
     paths:
+      # CUT.
       - output/util/createHeaderFooter.sh
+      # CUT test(s).
       - spec/unit/output/util/createHeaderFooter_*
-      - .github/workflows/**
-      - .github/actions/**
+      # This or related workflows.
+      - .github/workflows/test-output*
+      # All action(s), regardless of if used.
+      - .github/actions/**/*
   workflow_dispatch:
 jobs:
-  unit-test-output-util-createHeaderFooter-bash-ubuntu:
+  test-output-util-createHeaderFooter-bash-ubuntu:
     runs-on: ubuntu-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
-      - name: Installing ShellSpec
+      - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
-      - name: Install bash (shell)
+      - name: Install bash (shell)...
         id:   bash
         uses: ./.github/actions/install-shell-via-apt
         with:
           shell: bash
-      - name: Running tests of output()'s createHeaderFooter() util function from 'bash'...
+      - name: Run test(s) on bash...
         id:   tests
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:    ./spec/unit/output/util/createHeaderFooter_*
-          shell:        ${{ steps.bash.outputs.path }}
-      - name: Recording bash result for badge...
+          test-path:  ./spec/unit/output/util/createHeaderFooter_*
+          shell:      ${{ steps.bash.outputs.path }}
+      - name: Record result for badge...
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
@@ -35,52 +40,52 @@ jobs:
           label:    "createHeaderFooter(): bash"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
-  unit-test-output-util-createHeaderFooter-busybox-ash-ubuntu:
+  test-output-util-createHeaderFooter-busybox-ash-ubuntu:
     runs-on: ubuntu-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
-      - name: Installing ShellSpec
+      - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
-      - name: Install BusyBox ash (shell)
+      - name: Install BusyBox ash (shell)...
         id:   ash
         uses: ./.github/actions/install-shell-via-apt
         with:
           shell:    ash
           package:  busybox
-      - name: Running tests of output()'s createHeaderFooter() from 'ash'...
+      - name: Run test(s) on ash...
         id:   tests
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:    ./spec/unit/output/util/createHeaderFooter_*
-          shell:        ${{ steps.ash.outputs.path }}
-      - name: Recording ash result for badge...
+          test-path:  ./spec/unit/output/util/createHeaderFooter_*
+          shell:      ${{ steps.ash.outputs.path }}
+      - name: Record result for badge...
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
-          badge:   output/util/createHeaderFooter-ash.json
-          label:   "createHeaderFooter(): ash"
-          status:  ${{ job.status }}
-          skipped: ${{ steps.tests.outputs.skipped }}
-  unit-test-output-util-createHeaderFooter-dash-ubuntu:
+          badge:    output/util/createHeaderFooter-ash.json
+          label:    "createHeaderFooter(): ash"
+          status:   ${{ job.status }}
+          skipped:  ${{ steps.tests.outputs.skipped }}
+  test-output-util-createHeaderFooter-dash-ubuntu:
     runs-on: ubuntu-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
-      - name: Installing ShellSpec
+      - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
-      - name: Install dash (shell)
+      - name: Install dash (shell)...
         id:   dash
         uses: ./.github/actions/install-shell-via-apt
         with:
           shell: dash
-      - name: Running tests of output()'s createHeaderFooter() util function from 'dash'...
+      - name: Run test(s) on dash...
         id:   tests
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:    ./spec/unit/output/util/createHeaderFooter_*
-          shell:        ${{ steps.dash.outputs.path }}
-      - name: Recording dash result for badge...
+          test-path:  ./spec/unit/output/util/createHeaderFooter_*
+          shell:      ${{ steps.dash.outputs.path }}
+      - name: Record result for badge...
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
@@ -88,25 +93,25 @@ jobs:
           label:    "createHeaderFooter(): dash"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
-  unit-test-output-util-createHeaderFooter-zsh-ubuntu:
+  test-output-util-createHeaderFooter-zsh-ubuntu:
     runs-on: ubuntu-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
-      - name: Installing ShellSpec
+      - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
-      - name: Install zsh (shell)
+      - name: Install zsh (shell)...
         id:   zsh
         uses: ./.github/actions/install-shell-via-apt
         with:
           shell: zsh
-      - name: Running tests of output()'s createHeaderFooter() util function from 'zsh'...
+      - name: Run test(s) on zsh...
         id:   tests
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:    ./spec/unit/output/util/createHeaderFooter_*
-          shell:        ${{ steps.zsh.outputs.path }}
-      - name: Recording zsh result for badge...
+          test-path:  ./spec/unit/output/util/createHeaderFooter_*
+          shell:      ${{ steps.zsh.outputs.path }}
+      - name: Record result for badge...
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
@@ -114,63 +119,63 @@ jobs:
           label:    "createHeaderFooter(): zsh"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
-  unit-test-output-util-createHeaderFooter-bash-macos:
+  test-output-util-createHeaderFooter-bash-macos:
     runs-on: macos-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
-      - name: Installing ShellSpec...
+      - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
-      - name: Installing bash (shell)
+      - name: Install bash (shell)...
         id:   bash
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: bash
-      - name: Running tests of output()'s createHeaderFooter() util function from 'bash'...
+      - name: Run test(s) on bash...
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:    ./spec/unit/output/util/createHeaderFooter_*
-          shell:        ${{ steps.bash.outputs.path }}
-  unit-test-output-util-createHeaderFooter-dash-macos:
+          test-path:  ./spec/unit/output/util/createHeaderFooter_*
+          shell:      ${{ steps.bash.outputs.path }}
+  test-output-util-createHeaderFooter-dash-macos:
     runs-on: macos-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
-      - name: Installing ShellSpec...
+      - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
-      - name: Installing dash (shell)
+      - name: Install dash (shell)...
         id:   dash
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: dash
-      - name: Running tests of output()'s createHeaderFooter() util function from 'dash'...
+      - name: Run test(s) on dash...
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:    ./spec/unit/output/util/createHeaderFooter_*
-          shell:        ${{ steps.dash.outputs.path }}
-  unit-test-output-util-createHeaderFooter-zsh-macos:
+          test-path:  ./spec/unit/output/util/createHeaderFooter_*
+          shell:      ${{ steps.dash.outputs.path }}
+  test-output-util-createHeaderFooter-zsh-macos:
     runs-on: macos-latest
     steps:
       - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
-      - name: Installing ShellSpec...
+      - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
-      - name: Installing zsh (shell)
+      - name: Installing zsh (shell)...
         id:   zsh
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: zsh
-      - name: Running tests of output()'s createHeaderFooter() util function from 'zsh'...
+      - name: Run test(s) on zsh...
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:    ./spec/unit/output/util/createHeaderFooter_*
-          shell:        ${{ steps.zsh.outputs.path }}
+          test-path:  ./spec/unit/output/util/createHeaderFooter_*
+          shell:      ${{ steps.zsh.outputs.path }}
   publish-badges:
     needs:
-      - unit-test-output-util-createHeaderFooter-bash-ubuntu
-      - unit-test-output-util-createHeaderFooter-busybox-ash-ubuntu
-      - unit-test-output-util-createHeaderFooter-dash-ubuntu
-      - unit-test-output-util-createHeaderFooter-zsh-ubuntu
+      - test-output-util-createHeaderFooter-bash-ubuntu
+      - test-output-util-createHeaderFooter-busybox-ash-ubuntu
+      - test-output-util-createHeaderFooter-dash-ubuntu
+      - test-output-util-createHeaderFooter-zsh-ubuntu
     # Run whether the tests passed or failed, but not if the run was
     # cancelled, so a cancelled run doesn't overwrite the last real result.
     if: ${{ !cancelled() }}

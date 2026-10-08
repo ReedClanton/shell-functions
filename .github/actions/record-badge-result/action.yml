@@ -25,15 +25,15 @@ inputs:
 runs:
   using: composite
   steps:
-    - name:  Recording result for ${{ inputs.badge }}...
-      id:    record
-      if:    ${{ !cancelled() }}
-      shell: sh
+    - name:   Recording result for ${{ inputs.badge }}...
+      id:     record
+      if:     ${{ !cancelled() }}
+      shell:  sh
       env:
-        BADGE:   ${{ inputs.badge }}
-        LABEL:   ${{ inputs.label }}
-        STATUS:  ${{ inputs.status }}
-        SKIPPED: ${{ inputs.skipped }}
+        BADGE:    ${{ inputs.badge }}
+        LABEL:    ${{ inputs.label }}
+        STATUS:   ${{ inputs.status }}
+        SKIPPED:  ${{ inputs.skipped }}
       run: |
         # Artifact names can't contain '/', and must be unique within a run.
         # The badge path, job ID and OS together are unique per test job,
