@@ -25,9 +25,14 @@ jobs:
         uses: ./.github/actions/install-shellspec
       - name: Install bash (shell)...
         id:   bash
-        uses: ./.github/actions/install-shell-via-apt
+        uses: ./.github/actions/install-shell-via-source
         with:
-          shell: bash
+          version:  2.05b
+      #- name: Install bash (shell)...
+      #  id:   bash
+      #  uses: ./.github/actions/install-shell-via-apt
+      #  with:
+      #    shell: bash
       - name: Run test(s) on bash...
         id:   tests
         uses: ./.github/actions/run-shellspec
@@ -38,8 +43,8 @@ jobs:
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
-          badge:    util/verifyInputProvided/verifyInputProvided-bash.json
-          label:    "verifyInputProvided(): bash"
+          badge:    util/verifyInputProvided/verifyInputProvided-bash-2.05b.json
+          label:    "verifyInputProvided(): bash 2.05b"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-verifyInputProvided-busybox-ash-ubuntu:
