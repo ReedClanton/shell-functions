@@ -148,7 +148,6 @@ jobs:
           shell:      ${{ steps.zsh.outputs.path }}
   publish-badges:
     needs:
-      - test-verifyInputProvided-bash-ubuntu
       - test-verifyInputProvided-busybox-ash-ubuntu
       - test-verifyInputProvided-dash-ubuntu
       - test-verifyInputProvided-zsh-ubuntu
