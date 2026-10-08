@@ -9,11 +9,10 @@ inputs:
   version:
     description: >-
       bash version as '<major>.<minor>[.<patch level>]', e.g. '5.2.37',
-      '4.4.23', '3.2.57' or '2.05b' (the first release with multibyte
-      character support). Without a patch level, the unpatched
-      release is built. Official patches are applied in order up to the
-      given patch level. Defaults to the latest release with all of its
-      patches.
+      '4.4.23' or '3.2.57' (the oldest version this project supports).
+      Without a patch level, the unpatched release is built. Official
+      patches are applied in order up to the given patch level. Defaults
+      to the latest release with all of its patches.
     required: false
     default: ''
   mirror:
@@ -94,7 +93,7 @@ runs:
       uses: actions/cache/restore@v4
       with:
         path: ~/.cache/install-bash-from-source/${{ steps.resolve.outputs.version }}
-        key:  install-bash-from-source-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.resolve.outputs.version }}
+        key:  install-bash-from-source-v2-${{ runner.os }}-${{ runner.arch }}-${{ steps.resolve.outputs.version }}
 
     # Everything from here until the cache is saved only runs on a cache miss.
     - name:  Building bash ${{ steps.resolve.outputs.version }}...
@@ -118,9 +117,8 @@ runs:
             ;;
         esac
         # Patch files are named after the release without its dot, e.g.
-        # 'bash44-023' for 4.4 and 'bash205b-013' for 2.05b.
+        # 'bash44-023' for 4.4 and 'bash32-057' for 3.2.
         nodot=$(printf '%s' "$base" | tr -d '.')
-        major=${base%%.*}
 
         # Only install build tools the runner doesn't already have; GitHub's
         # Ubuntu images include most of them, and apt-get update is slow.
@@ -186,17 +184,12 @@ runs:
         done
 
         # Modern compilers reject some old C that bash relied on, so turn
-        # those errors back into warnings. Releases before 4.0 are built as
-        # C89; later ones as C17, so a compiler that defaults to C23 doesn't
-        # break their old-style function declarations.
+        # those errors back into warnings. Build as C17, so a compiler that
+        # defaults to C23 doesn't break old-style function declarations.
         cflags='-O2 -fcommon'
         cflags="$cflags -Wno-error=implicit-function-declaration -Wno-error=implicit-int"
         cflags="$cflags -Wno-error=incompatible-pointer-types -Wno-error=int-conversion"
-        if [ "$major" -lt 4 ]; then
-          cflags="$cflags -std=gnu89"
-        else
-          cflags="$cflags -std=gnu17"
-        fi
+        cflags="$cflags -std=gnu17"
 
         # bash's own malloc misbehaves on modern 64-bit systems in older
         # releases; the system malloc is safe for every version.
@@ -218,7 +211,7 @@ runs:
       uses: actions/cache/save@v4
       with:
         path: ~/.cache/install-bash-from-source/${{ steps.resolve.outputs.version }}
-        key:  install-bash-from-source-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.resolve.outputs.version }}
+        key:  install-bash-from-source-v2-${{ runner.os }}-${{ runner.arch }}-${{ steps.resolve.outputs.version }}
 
     - name:  Verifying bash ${{ steps.resolve.outputs.version }}...
       id:    finish
