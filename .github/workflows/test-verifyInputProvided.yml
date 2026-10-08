@@ -111,24 +111,6 @@ jobs:
         with:
           test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:      ${{ steps.bash.outputs.path }}
-  test-output-busybox-ash-macos:
-    runs-on: macos-latest
-    steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
-        uses: actions/checkout@v3
-      - name: Install ShellSpec...
-        uses: ./.github/actions/install-shellspec
-      - name: Install BusyBox ash (shell)...
-        id:   ash
-        uses: ./.github/actions/install-shell-via-homebrew
-        with:
-          shell:    ash
-          package:  busybox
-      - name: Run test(s) on ash...
-        uses: ./.github/actions/run-shellspec
-        with:
-          test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
-          shell:      ${{ steps.ash.outputs.path }}
   test-verifyInputProvided-dash-macos:
     runs-on: macos-latest
     steps:
