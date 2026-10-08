@@ -5,7 +5,9 @@ description: >-
   tested branch, then recomputes all of that branch's badges in a single
   commit. A badge also reflects the results of the code it depends on, as
   listed in `.github/badge-dependencies`. Badge paths must end in
-  '-<shell>.json'. The calling job must check out the repo and needs
+  '-<shell>.json'. It also writes one project-wide badge per shell,
+  'project-<shell>.json', covering every tested file in that shell.
+  Note: The calling job must check out the repo and needs
   `permissions: contents: write`.
 
 inputs:
@@ -124,9 +126,36 @@ runs:
           # unit is a badge path without its '-<shell>.json' ending. A badge
           # covers its own unit plus all of its dependencies (followed
           # transitively) in the same shell, and takes the worst result:
-          #   not compatible (a test failed) > unknown (no skip count, or no
-          #   result at all) > "N skipped" (summed across units) > compatible.
+          #   - Not Compatible (a test failed)
+          #     >
+          #   - unknown (no skip count, or no result at all)
+          #     >
+          #   - "N skipped" (summed across units)
+          #     >
+          #   - Compatible
+          # It also writes a 'project-<shell>.json' badge for each shell, which
+          # takes the worst result of every unit tested in that shell. Each
+          # unit's own result is used once, so skips aren't double counted
+          # through dependencies.
           awk -F '\t' '
+            # Sets message and color for a badge from its worst rank and
+            # its total skip count.
+            function describe(worst, total) {
+              if (worst == 3) {
+                message = "Not Compatible"
+                color = "red"
+              } else if (worst == 2) {
+                message = "unknown"
+                color = "lightgrey"
+              } else if (worst == 1) {
+                message = total " skipped"
+                color = "orange"
+              } else {
+                message = "Compatible"
+                color = "brightgreen"
+              }
+            }
+
             FILENAME == ARGV[1] {
               line = $0
               sub(/#.*/, "", line)
@@ -156,6 +185,8 @@ runs:
                 if (!match(badge, /-[^\/-]+\.json$/)) continue
                 unit = substr(badge, 1, RSTART - 1)
                 suffix = substr(badge, RSTART)
+                units[unit] = 1
+                suffixes[suffix] = 1
 
                 split("", seen)
                 top = 1
@@ -179,20 +210,29 @@ runs:
                     if (dep[i] != "") stack[++top] = dep[i]
                 }
 
-                if (worst == 3) {
-                  message = "Not Compatible"
-                  color = "red"
-                } else if (worst == 2) {
-                  message = "unknown"
-                  color = "lightgrey"
-                } else if (worst == 1) {
-                  message = total " skipped"
-                  color = "orange"
-                } else {
-                  message = "Compatible"
-                  color = "brightgreen"
-                }
+                describe(worst, total)
                 printf "%s\t%s\t%s\t%s\n", badge, label[badge], message, color
+              }
+              # Project badges: one per shell, built from each unit result
+              # directly rather than from the inherited badges above.
+              for (suffix in suffixes) {
+                worst = 0
+                total = 0
+                for (unit in units) {
+                  key = unit suffix
+                  if (key in rank) {
+                    if (rank[key] > worst) {
+                      worst = rank[key]
+                    }
+                    total += skipped[key]
+                  } else if (worst < 2) {
+                    worst = 2
+                  }
+                }
+                # "-zsh.json" becomes "zsh".
+                shellName = substr(suffix, 2, length(suffix) - 6)
+                describe(worst, total)
+                printf "%s\t%s\t%s\t%s\n", "project" suffix, shellName, message, color
               }
             }
           ' "$DEPENDENCIES" "$stored" > "$summary"
