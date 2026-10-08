@@ -65,7 +65,7 @@ jobs:
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
-          badge:    util/verifyInputProvided-ash.json
+          badge:    util/verifyInputProvided/verifyInputProvided-ash.json
           label:    "verifyInputProvided(): ash"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
