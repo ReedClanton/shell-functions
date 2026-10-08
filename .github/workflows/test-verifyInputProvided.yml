@@ -27,7 +27,7 @@ jobs:
         id:   bash
         uses: ./.github/actions/install-bash-via-source
         with:
-          version:  3.0.16
+          version:  3.1
       #- name: Install bash (shell)...
       #  id:   bash
       #  uses: ./.github/actions/install-shell-via-apt
@@ -44,7 +44,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    util/verifyInputProvided/verifyInputProvided-bash-oldest.json
-          label:    "verifyInputProvided(): bash 3.0.16"
+          label:    "verifyInputProvided(): bash 3.1"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-verifyInputProvided-busybox-ash-ubuntu:
