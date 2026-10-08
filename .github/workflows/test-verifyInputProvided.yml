@@ -33,6 +33,33 @@ jobs:
         with:
           test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:      ${{ steps.bash.outputs.path }}
+  test-verifyInputProvided-busybox-ash-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v3
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install BusyBox ash (shell)...
+        id:   ash
+        uses: ./.github/actions/install-shell-via-apt
+        with:
+          shell:    ash
+          package:  busybox
+      - name: Run test(s) on ash...
+        id:   tests
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
+          shell:      ${{ steps.ash.outputs.path }}
+      - name: Record result for badge...
+        if:   ${{ !cancelled() }}
+        uses: ./.github/actions/record-badge-result
+        with:
+          badge:    util/verifyInputProvided-ash.json
+          label:    "verifyInputProvided(): ash"
+          status:   ${{ job.status }}
+          skipped:  ${{ steps.tests.outputs.skipped }}
   test-verifyInputProvided-dash-ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -84,6 +111,24 @@ jobs:
         with:
           test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:      ${{ steps.bash.outputs.path }}
+  test-output-busybox-ash-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v3
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install BusyBox ash (shell)...
+        id:   ash
+        uses: ./.github/actions/install-shell-via-homebrew
+        with:
+          shell:    ash
+          package:  busybox
+      - name: Run test(s) on ash...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
+          shell:      ${{ steps.ash.outputs.path }}
   test-verifyInputProvided-dash-macos:
     runs-on: macos-latest
     steps:
@@ -118,4 +163,19 @@ jobs:
         with:
           test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:      ${{ steps.zsh.outputs.path }}
-
+  publish-badges:
+    needs:
+      - test-verifyInputProvided-bash-ubuntu
+      - test-verifyInputProvided-busybox-ash-ubuntu
+      - test-verifyInputProvided-dash-ubuntu
+      - test-verifyInputProvided-zsh-ubuntu
+    # Run whether the tests passed or failed, but not if the run was
+    # cancelled, so a cancelled run doesn't overwrite the last real result.
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      # Needed so the local publish-badges action is available.
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/publish-badges
