@@ -111,12 +111,13 @@ for fullArg in "$@"; do
 
 	# Determine what option user gave.
 	case $fullArg in
-		-h|--help)
+		-h | --help)
 			echo "$BACKUP_DOC"
 			exit 0
 			;;
-		-q|--quiet)
-			logging $warnLvl -m="-q/--quiet not implemented yet"  ;;
+		-q | --quiet)
+			logging $warnLvl -m="-q/--quiet not implemented yet"
+			;;
 		*)
 			logging $errLvl --full-title -m="Invalid given argument: '$fullArg', see doc:"
 			echo "$BACKUP_DOC"
