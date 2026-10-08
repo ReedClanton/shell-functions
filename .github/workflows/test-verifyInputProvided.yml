@@ -29,10 +29,19 @@ jobs:
         with:
           shell: bash
       - name: Run test(s) on bash...
+        id:   tests
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:      ${{ steps.bash.outputs.path }}
+      - name: Record result for badge...
+        if:   ${{ !cancelled() }}
+        uses: ./.github/actions/record-badge-result
+        with:
+          badge:    util/verifyInputProvided/verifyInputProvided-bash.json
+          label:    "verifyInputProvided(): bash"
+          status:   ${{ job.status }}
+          skipped:  ${{ steps.tests.outputs.skipped }}
   test-verifyInputProvided-busybox-ash-ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -73,10 +82,19 @@ jobs:
         with:
           shell: dash
       - name: Run test(s) on dash...
+        id:   tests
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:      ${{ steps.dash.outputs.path }}
+      - name: Record result for badge...
+        if:   ${{ !cancelled() }}
+        uses: ./.github/actions/record-badge-result
+        with:
+          badge:    util/verifyInputProvided/verifyInputProvided-dash.json
+          label:    "verifyInputProvided(): dash"
+          status:   ${{ job.status }}
+          skipped:  ${{ steps.tests.outputs.skipped }}
   test-verifyInputProvided-zsh-ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -90,10 +108,19 @@ jobs:
         with:
           shell: zsh
       - name: Run test(s) on zsh...
+        id:   tests
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:      ${{ steps.zsh.outputs.path }}
+      - name: Record result for badge...
+        if:   ${{ !cancelled() }}
+        uses: ./.github/actions/record-badge-result
+        with:
+          badge:    util/verifyInputProvided/verifyInputProvided-zsh.json
+          label:    "verifyInputProvided(): zsh"
+          status:   ${{ job.status }}
+          skipped:  ${{ steps.tests.outputs.skipped }}
   test-verifyInputProvided-bash-macos:
     runs-on: macos-latest
     steps:
