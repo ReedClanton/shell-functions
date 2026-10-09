@@ -37,7 +37,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    output/util/createHeaderFooter-bash_legacy.json
-          label:    "createHeaderFooter(): bash ${{ steps.shell.outputs.version }}"
+          label:    "bash ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-output-util-createHeaderFooter-dash-legacy-ubuntu:
@@ -63,7 +63,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    output/util/createHeaderFooter-dash_legacy.json
-          label:    "createHeaderFooter(): ${{ steps.shell.outputs.version }}"
+          label:    "dash ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   #test-output-util-createHeaderFooter-zsh-legacy-ubuntu:
@@ -89,7 +89,7 @@ jobs:
   #      uses: ./.github/actions/record-badge-result
   #      with:
   #        badge:    output/util/createHeaderFooter-zsh_legacy.json
-  #        label:    "createHeaderFooter: ${{ steps.shell.outputs.version }}"
+  #        label:    "zsh ${{ steps.shell.outputs.version }}"
   #        status:   ${{ job.status }}
   #        skipped:  ${{ steps.tests.outputs.skipped }}
   publish-badges:

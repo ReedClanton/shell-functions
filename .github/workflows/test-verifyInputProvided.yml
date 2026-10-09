@@ -40,7 +40,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    util/verifyInputProvided/verifyInputProvided-ash.json
-          label:    "verifyInputProvided(): ash"
+          label:    "ash"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-verifyInputProvided-zsh-ubuntu:
@@ -66,7 +66,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    util/verifyInputProvided/verifyInputProvided-zsh.json
-          label:    "verifyInputProvided(): zsh"
+          label:    " zsh"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-verifyInputProvided-bash-macos:

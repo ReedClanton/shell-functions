@@ -37,7 +37,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    output/util/constants-bash_legacy.json
-          label:    "constants.sh: bash ${{ steps.shell.outputs.version }}"
+          label:    "bash ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-output-util-constants-dash-legacy-ubuntu:
@@ -63,7 +63,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    output/util/constants-dash_legacy.json
-          label:    "constants.sh: dash ${{ steps.shell.outputs.version }}"
+          label:    "dash ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   #test-output-util-constants-zsh-legacy-ubuntu:
@@ -89,7 +89,7 @@ jobs:
   #      uses: ./.github/actions/record-badge-result
   #      with:
   #        badge:    output/util/constants-zsh_legacy.json
-  #        label:    "constants.sh: zsh ${{ steps.shell.outputs.version }}"
+  #        label:    "zsh ${{ steps.shell.outputs.version }}"
   #        status:   ${{ job.status }}
   #        skipped:  ${{ steps.tests.outputs.skipped }}
   publish-badges:

@@ -38,7 +38,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    output/util/constants-ash.json
-          label:    "constants.sh: ash"
+          label:    "ash"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-output-util-constants-zsh-ubuntu:
@@ -64,7 +64,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    output/util/constants-zsh.json
-          label:    "constants.sh: zsh"
+          label:    "zsh"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-output-util-constants-bash-macos:

@@ -46,7 +46,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    output/util/createHeaderFooter-dash.json
-          label:    "createHeaderFooter(): dash"
+          label:    "dash"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-output-util-createHeaderFooter-zsh-ubuntu:
@@ -72,7 +72,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    output/util/createHeaderFooter-zsh.json
-          label:    "createHeaderFooter(): zsh"
+          label:    "zsh"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-output-util-createHeaderFooter-bash-macos:

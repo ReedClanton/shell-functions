@@ -39,7 +39,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    util/verifyInputProvided/verifyInputProvided-bash_legacy.json
-          label:    "verifyInputProvided(): bash ${{ steps.shell.outputs.version }}"
+          label:    "bash ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-verifyInputProvided-dash-legacy-ubuntu:
@@ -65,7 +65,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    util/verifyInputProvided/verifyInputProvided-dash_legacy.json
-          label:    "verifyInputProvided(): dash ${{ steps.shell.outputs.version }}"
+          label:    "dash ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   #test-verifyInputProvided-zsh-legacy-ubuntu:
@@ -91,7 +91,7 @@ jobs:
   #      uses: ./.github/actions/record-badge-result
   #      with:
   #        badge:    util/verifyInputProvided/verifyInputProvided-zsh_legacy.json
-  #        label:    "verifyInputProvided(): zsh ${{ steps.shell.outputs.version }}"
+  #        label:    "zsh ${{ steps.shell.outputs.version }}"
   #        status:   ${{ job.status }}
   #        skipped:  ${{ steps.tests.outputs.skipped }}
   publish-badges:

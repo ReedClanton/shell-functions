@@ -40,7 +40,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    output/output-ash.json
-          label:    "output(): ash"
+          label:    "ash"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-output-zsh-ubuntu:
@@ -66,7 +66,7 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    output/output-zsh.json
-          label:    "output(): zsh"
+          label:    "zsh"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-output-bash-macos:
