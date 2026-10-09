@@ -77,7 +77,7 @@ jobs:
         id:   shell
         uses: ./.github/actions/install-zsh-via-source
         with:
-          version: 5.0.0
+          version: 5.0.1
       - name: Run test(s) on zsh...
         id:   tests
         uses: ./.github/actions/run-shellspec
