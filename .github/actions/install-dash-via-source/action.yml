@@ -17,7 +17,7 @@ inputs:
   mirror:
     description: Base URL to download dash releases from.
     required: false
-    default: 'https://gondor.apana.org.au/~herbert/dash/files'
+    default: 'http://gondor.apana.org.au/~herbert/dash/files'
 
 outputs:
   path:
