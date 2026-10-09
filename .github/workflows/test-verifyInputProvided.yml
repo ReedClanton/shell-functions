@@ -54,7 +54,8 @@ jobs:
         id:   shell
         uses: ./.github/actions/install-shell-via-nixpkgs
         with:
-          shell:  yash
+          shell:    yash
+          version:  2.53
       - name: Run test(s) on yash...
         id:   tests
         uses: ./.github/actions/run-shellspec
