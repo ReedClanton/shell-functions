@@ -79,7 +79,7 @@ jobs:
   #      id:   shell
   #      uses: ./.github/actions/install-shell-via-apt
   #      with:
-  #        shell: zsh
+  #        version: ############
   #    - name: Run test(s) on zsh...
   #      id:   tests
   #      uses: ./.github/actions/run-shellspec

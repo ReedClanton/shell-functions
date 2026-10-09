@@ -51,7 +51,7 @@ jobs:
         id:   shell
         uses: ./.github/actions/install-dash-via-source
         with:
-          shell: dash
+          version:  0.5.13.1
       - name: Run test(s) on dash...
         id:   tests
         uses: ./.github/actions/run-shellspec
@@ -77,7 +77,7 @@ jobs:
   #      id:   shell
   #      uses: ./.github/actions/install-zsh-via-source
   #      with:
-  #        shell: zsh
+  #        version: #########
   #    - name: Run test(s) on zsh...
   #      id:   tests
   #      uses: ./.github/actions/run-shellspec

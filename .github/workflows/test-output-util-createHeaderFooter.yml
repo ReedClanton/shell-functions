@@ -38,14 +38,14 @@ jobs:
         uses: ./.github/actions/record-badge-result
         with:
           badge:    output/util/createHeaderFooter-ash.json
-          label:    "createHeaderFooter(): ash"
+          label:    "ash"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
       - name: Record result for badge...
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
-          badge:    output/util/createHeaderFooter-dash.json
+          badge:    output/util/createHeaderFooter-ash.json
           label:    "dash"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
