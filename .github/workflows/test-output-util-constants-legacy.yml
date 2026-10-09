@@ -49,7 +49,7 @@ jobs:
         uses: ./.github/actions/install-shellspec
       - name: Install dash (shell)...
         id:   shell
-        uses: ./.github/actions/install-shell-via-apt
+        uses: ./.github/actions/install-dash-via-source
         with:
           shell: dash
       - name: Run test(s) on dash...
@@ -75,7 +75,7 @@ jobs:
   #      uses: ./.github/actions/install-shellspec
   #    - name: Install zsh (shell)...
   #      id:   shell
-  #      uses: ./.github/actions/install-shell-via-apt
+  #      uses: ./.github/actions/install-zsh-via-source
   #      with:
   #        shell: zsh
   #    - name: Run test(s) on zsh...
