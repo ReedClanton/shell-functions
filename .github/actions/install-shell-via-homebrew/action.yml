@@ -1,12 +1,12 @@
 name: Install a Shell via Homebrew
 description: >-
-  Uses the shell already on PATH (macOS ships bash, zsh and dash) or
+  Uses the shell already on PATH (MacOS ships bash, zsh and dash) or
   installs it with Homebrew, then verifies it runs and reports its
   absolute path.
 
 inputs:
   shell:
-    description: Command name of the shell (e.g. 'zsh', 'dash', 'yash').
+    description: Command name of the shell (e.g. 'zsh', 'dash', 'bash').
     required: true
   formula:
     description: Homebrew formula that provides the shell. Defaults to the shell's name.
@@ -15,7 +15,7 @@ inputs:
   homebrew:
     description: >-
       Set to 'true' to install from Homebrew even when a copy is already on
-      PATH (e.g. to test a current bash instead of macOS's bash 3.2).
+      PATH (e.g. to test a current bash instead of MacOS's bash 3.2).
     required: false
     default: 'false'
 
