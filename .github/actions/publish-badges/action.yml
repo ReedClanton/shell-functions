@@ -218,10 +218,13 @@ runs:
               # Project badges: one per shell, built from each unit result
               # directly rather than from the inherited badges above.
               for (suffix in suffixes) {
+                # Worst rank of any unit in this shell (see describe).
                 worst = 0
+                # Skipped examples summed across every unit in this shell.
                 total = 0
-                # Label taken from what's set by the child badges.
+                # Label the units recorded for this shell, e.g. "bash 3.2".
                 projectLabel = ""
+                # Set to 1 once two units recorded different labels.
                 labelMismatch = 0
                 for (unit in units) {
                   key = unit suffix
