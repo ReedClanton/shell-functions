@@ -1,22 +1,20 @@
-name: Test verifyInputProvided() on Legacy Shell(s)
-run-name: ${{ github.actor }} triggered testing of verifyInputProvided() on legacy shell(s) for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
+name: Test output()'s Constants File on Legacy Shell(s)
+run-name: ${{ github.actor }} triggered testing of output()'s constants.sh on legacy shell(s) for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
 on:
   push:
     # Run this when these are touched.
     paths:
       # CUT.
-      - util/verifyInputProvided/verifyInputProvided.sh
-      # Library(ies) used by CUT.
-      - util/verifyInputProvided/**/*.sh
+      - output/util/constants.sh
       # CUT test(s).
-      - spec/unit/util/verifyInputProvided/verifyInputProvided_*
+      - spec/unit/output/util/constants_*
       # This or related workflows.
-      - .github/workflows/test-verifyInputProvided*
+      - .github/workflows/test-output*
       # All action(s), regardless of if used.
       - .github/actions/**/*
   workflow_dispatch:
 jobs:
-  test-verifyInputProvided-bash-legacy-ubuntu:
+  test-output-util-constants-bash-legacy-ubuntu:
     runs-on: ubuntu-latest
     steps:
       - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
@@ -32,17 +30,17 @@ jobs:
         id:   tests
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
+          test-path:  ./spec/unit/output/util/constants_*
           shell:      ${{ steps.bash.outputs.path }}
       - name: Record result for badge...
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
-          badge:    util/verifyInputProvided/verifyInputProvided-bash-legacy.json
-          label:    "verifyInputProvided(): bash 3.2"
+          badge:    output/util/constants-bash-legacy.json
+          label:    "constants.sh: bash 3.2"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
-  #test-verifyInputProvided-dash-legacy-ubuntu:
+  #test-output-util-constants-dash-legacy-ubuntu:
   #  runs-on: ubuntu-latest
   #  steps:
   #    - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
@@ -58,17 +56,17 @@ jobs:
   #      id:   tests
   #      uses: ./.github/actions/run-shellspec
   #      with:
-  #        test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
+  #        test-path:  ./spec/unit/output/util/constants_*
   #        shell:      ${{ steps.dash.outputs.path }}
   #    - name: Record result for badge...
   #      if:   ${{ !cancelled() }}
   #      uses: ./.github/actions/record-badge-result
   #      with:
-  #        badge:    util/verifyInputProvided/verifyInputProvided-dash.json
-  #        label:    "verifyInputProvided(): dash"
+  #        badge:    output/util/constants-dash-legacy.json
+  #        label:    "constants.sh: dash"
   #        status:   ${{ job.status }}
   #        skipped:  ${{ steps.tests.outputs.skipped }}
-  #test-verifyInputProvided-zsh-legacy-ubuntu:
+  #test-output-util-constants-zsh-legacy-ubuntu:
   #  runs-on: ubuntu-latest
   #  steps:
   #    - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
@@ -84,21 +82,21 @@ jobs:
   #      id:   tests
   #      uses: ./.github/actions/run-shellspec
   #      with:
-  #        test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
+  #        test-path:  ./spec/unit/output/util/constants_*
   #        shell:      ${{ steps.zsh.outputs.path }}
   #    - name: Record result for badge...
   #      if:   ${{ !cancelled() }}
   #      uses: ./.github/actions/record-badge-result
   #      with:
-  #        badge:    util/verifyInputProvided/verifyInputProvided-zsh.json
-  #        label:    "verifyInputProvided(): zsh"
+  #        badge:    output/util/constants-zsh-legacy.json
+  #        label:    "constants.sh: zsh"
   #        status:   ${{ job.status }}
   #        skipped:  ${{ steps.tests.outputs.skipped }}
   publish-badges:
     needs:
-      - test-verifyInputProvided-bash-legacy-ubuntu
-  #    - test-verifyInputProvided-dash-legacy-ubuntu
-  #    - test-verifyInputProvided-zsh-legacy-ubuntu
+      - test-output-util-constants-bash-legacy-ubuntu
+  #    - test-output-util-constants-dash-legacy-ubuntu
+  #    - test-output-util-constants-zsh-legacy-ubuntu
     # Run whether the tests passed or failed, but not if the run was
     # cancelled, so a cancelled run doesn't overwrite the last real result.
     if: ${{ !cancelled() }}

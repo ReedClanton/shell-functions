@@ -11,7 +11,7 @@ on:
       # This or related workflows.
       - .github/workflows/test-output*
       # All action(s), regardless of if used.
-      - .github/actions/**
+      - .github/actions/**/*
   workflow_dispatch:
 jobs:
   test-output-util-constants-bash-ubuntu:

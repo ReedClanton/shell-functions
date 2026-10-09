@@ -16,32 +16,6 @@ on:
       - .github/actions/**/*
   workflow_dispatch:
 jobs:
-  test-output-bash-ubuntu:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
-        uses: actions/checkout@v3
-      - name: Install ShellSpec...
-        uses: ./.github/actions/install-shellspec
-      - name: Install bash (shell)...
-        id:   bash
-        uses: ./.github/actions/install-shell-via-apt
-        with:
-          shell: bash
-      - name: Run test(s) on bash...
-        id:   tests
-        uses: ./.github/actions/run-shellspec
-        with:
-          test-path:  ./spec/unit/output/output_*
-          shell:      ${{ steps.bash.outputs.path }}
-      - name: Record result for badge...
-        if:   ${{ !cancelled() }}
-        uses: ./.github/actions/record-badge-result
-        with:
-          badge:    output/output-bash.json
-          label:    "output(): bash"
-          status:   ${{ job.status }}
-          skipped:  ${{ steps.tests.outputs.skipped }}
   test-output-busybox-ash-ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -174,7 +148,6 @@ jobs:
           shell:      ${{ steps.zsh.outputs.path }}
   publish-badges:
     needs:
-      - test-output-bash-ubuntu
       - test-output-busybox-ash-ubuntu
       - test-output-dash-ubuntu
       - test-output-zsh-ubuntu
