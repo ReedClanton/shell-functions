@@ -24,7 +24,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install bash 3.2 (shell)...
-        id:   bash
+        id:   shell
         uses: ./.github/actions/install-bash-via-source
         with:
           version:  3.2
@@ -33,13 +33,13 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/output/output_*
-          shell:      ${{ steps.bash.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
       - name: Record result for badge...
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
           badge:    output/output-bash-legacy.json
-          label:    "output(): bash ${{ steps.bash.outputs.version }}"
+          label:    "output(): bash ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-output-dash-legacy-ubuntu:
@@ -50,22 +50,22 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install dash (shell)...
-        id:   dash
+        id:   shell
         uses: ./.github/actions/install-dash-via-source
         with:
-          version:  0.5.13
+          version:  0.5.13.1
       - name: Run test(s) on dash...
         id:   tests
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/output/output_*
-          shell:      ${{ steps.dash.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
       - name: Record result for badge...
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
           badge:    output/output-dash-legacy.json
-          label:    "output(): dash 0.5.13"
+          label:    "output(): dash ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   #test-output-zsh-legacy-ubuntu:

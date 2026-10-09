@@ -24,7 +24,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install bash 3.2 (shell)...
-        id:   bash
+        id:   shell
         uses: ./.github/actions/install-bash-via-source
         with:
           version:  3.2
@@ -33,13 +33,13 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
-          shell:      ${{ steps.bash.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
       - name: Record result for badge...
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
           badge:    util/verifyInputProvided/verifyInputProvided-bash-legacy.json
-          label:    "verifyInputProvided(): bash 3.2"
+          label:    "verifyInputProvided(): bash ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   #test-verifyInputProvided-dash-legacy-ubuntu:
