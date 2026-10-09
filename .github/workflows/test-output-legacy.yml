@@ -38,7 +38,7 @@ jobs:
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
-          badge:    output/output-bash-legacy.json
+          badge:    output/output-bash_legacy.json
           label:    "output(): bash ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
@@ -64,7 +64,7 @@ jobs:
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
-          badge:    output/output-dash-legacy.json
+          badge:    output/output-dash_legacy.json
           label:    "output(): dash ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
@@ -90,7 +90,7 @@ jobs:
   #      if:   ${{ !cancelled() }}
   #      uses: ./.github/actions/record-badge-result
   #      with:
-  #        badge:    output/output-zsh-legacy.json
+  #        badge:    output/output-zsh_legacy.json
   #        label:    "output(): zsh ${{ steps.shell.outputs.version }}"
   #        status:   ${{ job.status }}
   #        skipped:  ${{ steps.tests.outputs.skipped }}

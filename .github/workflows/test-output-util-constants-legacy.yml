@@ -36,7 +36,7 @@ jobs:
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
-          badge:    output/util/constants-bash-legacy.json
+          badge:    output/util/constants-bash_legacy.json
           label:    "constants.sh: bash ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
@@ -62,7 +62,7 @@ jobs:
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
-          badge:    output/util/constants-dash-legacy.json
+          badge:    output/util/constants-dash_legacy.json
           label:    "constants.sh: dash ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
@@ -88,7 +88,7 @@ jobs:
   #      if:   ${{ !cancelled() }}
   #      uses: ./.github/actions/record-badge-result
   #      with:
-  #        badge:    output/util/constants-zsh-legacy.json
+  #        badge:    output/util/constants-zsh_legacy.json
   #        label:    "constants.sh: zsh ${{ steps.shell.outputs.version }}"
   #        status:   ${{ job.status }}
   #        skipped:  ${{ steps.tests.outputs.skipped }}
