@@ -1,0 +1,164 @@
+name: Install dash via Source
+description: >-
+  Downloads a dash release from the dash maintainer's release directory,
+  builds it, then verifies it runs and reports its absolute path and
+  version. Built shells are cached, so each version is only built once.
+  Linux runners only.
+
+inputs:
+  version:
+    description: >-
+      dash version, exactly as it appears in the release file names, e.g.
+      '0.5.13.1', '0.5.12' or '0.5.11.5'. Note that dash only supports
+      multibyte characters from 0.5.13 onward. Defaults to the latest
+      release.
+    required: false
+    default: ''
+  mirror:
+    description: Base URL to download dash releases from.
+    required: false
+    default: 'https://gondor.apana.org.au/~herbert/dash/files'
+
+outputs:
+  path:
+    description: Absolute path to the shell, for passing to `shellspec --shell`.
+    value: ${{ steps.finish.outputs.path }}
+  version:
+    description: >-
+      Version of dash that was built (e.g. '0.5.12'). dash can't report its
+      own version, so this is the requested or resolved version.
+    value: ${{ steps.finish.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    # The cache key must be known before the cache can be restored. A given
+    # version is used as is, with no network access. "Latest" is looked up
+    # from the mirror's file listing, so the key names the exact version
+    # and a new dash release gets its own cache entry.
+    - name:  Resolving dash ${{ inputs.version || '(latest)' }}...
+      id:    resolve
+      shell: sh
+      env:
+        VERSION: ${{ inputs.version }}
+        MIRROR:  ${{ inputs.mirror }}
+      run: |
+        if [ -n "$VERSION" ]; then
+          version=$VERSION
+        else
+          if ! listing=$(curl -fsSL --retry 3 "$MIRROR/"); then
+            echo "::error::Couldn't list the dash releases at $MIRROR."
+            exit 1
+          fi
+          # Release files are named like 'dash-0.5.12.tar.gz' or
+          # 'dash-0.5.13.1.tar.gz'. Signature files don't match on their own,
+          # and duplicates are removed by 'sort -u'.
+          version=$(printf '%s\n' "$listing" \
+            | grep -Eo 'dash-[0-9]+(\.[0-9]+)+\.tar\.gz' \
+            | sed 's/^dash-//; s/\.tar\.gz$//' \
+            | sort -uV \
+            | tail -n 1)
+          if [ -z "$version" ]; then
+            echo "::error::Found no dash releases at $MIRROR."
+            exit 1
+          fi
+        fi
+
+        echo "Using dash $version."
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+
+    - name: Restoring cached dash ${{ steps.resolve.outputs.version }}...
+      id:   cache
+      uses: actions/cache/restore@v4
+      with:
+        path: ~/.cache/install-dash-from-source/${{ steps.resolve.outputs.version }}
+        key:  install-dash-from-source-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.resolve.outputs.version }}
+
+    # Everything from here until the cache is saved only runs on a cache miss.
+    - name:  Building dash ${{ steps.resolve.outputs.version }}...
+      if:    steps.cache.outputs.cache-hit != 'true'
+      shell: sh
+      env:
+        VERSION: ${{ steps.resolve.outputs.version }}
+        MIRROR:  ${{ inputs.mirror }}
+      run: |
+        install_dir="$HOME/.cache/install-dash-from-source/$VERSION"
+
+        # Only install build tools the runner doesn't already have; GitHub's
+        # Ubuntu images include most of them, and apt-get update is slow.
+        # autotools-dev provides current config.guess/config.sub (see below).
+        missing=''
+        for package in autotools-dev build-essential; do
+          if ! dpkg-query -W -f='${Status}' "$package" 2>/dev/null | grep -q 'install ok installed'; then
+            missing="$missing $package"
+          fi
+        done
+        if [ -n "$missing" ]; then
+          echo "Installing build tools:$missing"
+          sudo apt-get update -qq
+          # $missing is intentionally unquoted so each package is separate.
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends $missing
+        fi
+
+        work="$RUNNER_TEMP/dash-build"
+        rm -rf "$work"
+        mkdir -p "$work"
+        cd "$work"
+
+        if ! curl -fsSL --retry 3 "$MIRROR/dash-$VERSION.tar.gz" | tar -xz; then
+          echo "::error::Couldn't download dash-$VERSION.tar.gz from $MIRROR."
+          exit 1
+        fi
+        cd "dash-$VERSION"
+
+        # Older releases may ship a config.guess/config.sub that predate
+        # aarch64, so configure can't identify the runner. Use current ones.
+        for script in config.guess config.sub; do
+          if [ -f "$script" ]; then
+            cp "/usr/share/misc/$script" "$script"
+          fi
+        done
+
+        # Newer compilers turn some warnings in older C code into errors, so
+        # turn them back into warnings. Build as C17, so a compiler that
+        # defaults to C23 doesn't break old-style function declarations.
+        cflags='-O2'
+        cflags="$cflags -Wno-error=implicit-function-declaration -Wno-error=implicit-int"
+        cflags="$cflags -Wno-error=incompatible-pointer-types -Wno-error=int-conversion"
+        cflags="$cflags -std=gnu17"
+
+        CFLAGS="$cflags" ./configure
+
+        # Retry serially in case a release's Makefile isn't parallel-safe.
+        if ! make -j"$(nproc)"; then
+          echo "Parallel build failed, so retrying serially..."
+          make
+        fi
+
+        # Copy just the binary; nothing else is needed to run it.
+        mkdir -p "$install_dir/bin"
+        cp src/dash "$install_dir/bin/dash"
+
+    - name: Caching dash ${{ steps.resolve.outputs.version }} for later runs...
+      if:   steps.cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ~/.cache/install-dash-from-source/${{ steps.resolve.outputs.version }}
+        key:  install-dash-from-source-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.resolve.outputs.version }}
+
+    - name:  Verifying dash ${{ steps.resolve.outputs.version }}...
+      id:    finish
+      shell: sh
+      env:
+        VERSION: ${{ steps.resolve.outputs.version }}
+      run: |
+        path="$HOME/.cache/install-dash-from-source/$VERSION/bin/dash"
+
+        if ! "$path" -c :; then
+          echo "::error::$path was built but failed to run."
+          exit 1
+        fi
+
+        echo "Using dash $VERSION at $path."
+        echo "path=$path" >> "$GITHUB_OUTPUT"
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"

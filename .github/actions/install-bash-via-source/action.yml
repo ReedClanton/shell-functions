@@ -1,4 +1,4 @@
-name: Install bash from Source
+name: Install bash via Source
 description: >-
   Downloads a bash release and its official patches from the GNU FTP site,
   builds it, then verifies it runs and reports its absolute path and
