@@ -3,14 +3,14 @@
 [![bash legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Ffeature%2F4-github-status-badge-pathfinding%2Fproject-bash_legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
 [![ash](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Ffeature%2F4-github-status-badge-pathfinding%2Fproject-ash.json)](https://github.com/ReedClanton/shell-functions/actions)
 [![dash legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Ffeature%2F4-github-status-badge-pathfinding%2Fproject-dash_legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
-[![zsh](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Ffeature%2F4-github-status-badge-pathfinding%2Fproject-zsh.json)](https://github.com/ReedClanton/shell-functions/actions)
+[![zsh legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Ffeature%2F4-github-status-badge-pathfinding%2Fproject-zsh_legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
 
 TODO: Replace the above badges with the ones from below prior to merging to `main`.
 
 [![bash legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Fmain%2Fproject-bash_legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
 [![ash](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Fmain%2Fproject-ash.json)](https://github.com/ReedClanton/shell-functions/actions)
 [![dash legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Fmain%2Fproject-dash_legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
-[![zsh](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Fmain%2Fproject-zsh.json)](https://github.com/ReedClanton/shell-functions/actions)
+[![zsh legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Fmain%2Fproject-zsh_legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
 
 This repository contains a number of shell functions that add functionality to your shell environment. Checkout the [Functions](#functions) section for more details! To use them, see the [Setup](#setup) section.
 

@@ -68,37 +68,37 @@ jobs:
           label:    "dash ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
-  #test-verifyInputProvided-zsh-legacy-ubuntu:
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #    - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
-  #      uses: actions/checkout@v3
-  #    - name: Install ShellSpec...
-  #      uses: ./.github/actions/install-shellspec
-  #    - name: Install zsh (shell)...
-  #      id:   shell
-  #      uses: ./.github/actions/install-zsh-via-source
-  #      with:
-  #        version: ############
-  #    - name: Run test(s) on zsh...
-  #      id:   tests
-  #      uses: ./.github/actions/run-shellspec
-  #      with:
-  #        test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
-  #        shell:      ${{ steps.shell.outputs.path }}
-  #    - name: Record result for badge...
-  #      if:   ${{ !cancelled() }}
-  #      uses: ./.github/actions/record-badge-result
-  #      with:
-  #        badge:    util/verifyInputProvided/verifyInputProvided-zsh_legacy.json
-  #        label:    "zsh ${{ steps.shell.outputs.version }}"
-  #        status:   ${{ job.status }}
-  #        skipped:  ${{ steps.tests.outputs.skipped }}
+  test-verifyInputProvided-zsh-legacy-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v3
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install zsh (shell)...
+        id:   shell
+        uses: ./.github/actions/install-zsh-via-source
+        with:
+          version: 4.2
+      - name: Run test(s) on zsh...
+        id:   tests
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
+          shell:      ${{ steps.shell.outputs.path }}
+      - name: Record result for badge...
+        if:   ${{ !cancelled() }}
+        uses: ./.github/actions/record-badge-result
+        with:
+          badge:    util/verifyInputProvided/verifyInputProvided-zsh_legacy.json
+          label:    "zsh ${{ steps.shell.outputs.version }}"
+          status:   ${{ job.status }}
+          skipped:  ${{ steps.tests.outputs.skipped }}
   publish-badges:
     needs:
       - test-verifyInputProvided-bash-legacy-ubuntu
       - test-verifyInputProvided-dash-legacy-ubuntu
-  #    - test-verifyInputProvided-zsh-legacy-ubuntu
+      - test-verifyInputProvided-zsh-legacy-ubuntu
     # Run whether the tests passed or failed, but not if the run was
     # cancelled, so a cancelled run doesn't overwrite the last real result.
     if: ${{ !cancelled() }}

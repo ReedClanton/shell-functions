@@ -49,32 +49,6 @@ jobs:
           label:    "dash"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
-  test-output-util-createHeaderFooter-zsh-ubuntu:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
-        uses: actions/checkout@v3
-      - name: Install ShellSpec...
-        uses: ./.github/actions/install-shellspec
-      - name: Install zsh (shell)...
-        id:   shell
-        uses: ./.github/actions/install-shell-via-nixpkgs
-        with:
-          shell: zsh
-      - name: Run test(s) on zsh...
-        id:   tests
-        uses: ./.github/actions/run-shellspec
-        with:
-          test-path:  ./spec/unit/output/util/createHeaderFooter_*
-          shell:      ${{ steps.shell.outputs.path }}
-      - name: Record result for badge...
-        if:   ${{ !cancelled() }}
-        uses: ./.github/actions/record-badge-result
-        with:
-          badge:    output/util/createHeaderFooter-zsh.json
-          label:    "zsh"
-          status:   ${{ job.status }}
-          skipped:  ${{ steps.tests.outputs.skipped }}
   test-output-util-createHeaderFooter-bash-macos:
     runs-on: macos-latest
     steps:
@@ -129,7 +103,6 @@ jobs:
   publish-badges:
     needs:
       - test-output-util-createHeaderFooter-busybox-ash-ubuntu
-      - test-output-util-createHeaderFooter-zsh-ubuntu
     # Run whether the tests passed or failed, but not if the run was
     # cancelled, so a cancelled run doesn't overwrite the last real result.
     if: ${{ !cancelled() }}
