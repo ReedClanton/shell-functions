@@ -25,7 +25,7 @@ jobs:
         uses: ./.github/actions/install-shellspec
       - name: Install bash (shell)...
         id:   bash
-        uses: ./.github/actions/install-shell-via-apt
+        uses: ./.github/actions/install-shell-via-nixpkgs
         with:
           shell: bash
       - name: Run test(s) on bash...
@@ -42,7 +42,7 @@ jobs:
         uses: ./.github/actions/install-shellspec
       - name: Install dash (shell)...
         id:   dash
-        uses: ./.github/actions/install-shell-via-apt
+        uses: ./.github/actions/install-shell-via-nixpkgs
         with:
           shell: dash
       - name: Run test(s) on dash...
@@ -59,7 +59,7 @@ jobs:
         uses: ./.github/actions/install-shellspec
       - name: Install zsh (shell)...
         id:   zsh
-        uses: ./.github/actions/install-shell-via-apt
+        uses: ./.github/actions/install-shell-via-nixpkgs
         with:
           shell: zsh
       - name: Run test(s) on zsh...
