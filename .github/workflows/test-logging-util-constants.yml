@@ -22,7 +22,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install bash (shell)...
-        id:   bash
+        id:   shell
         uses: ./.github/actions/install-shell-via-nixpkgs
         with:
           shell: bash
@@ -30,7 +30,7 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/logging/util/constants_*
-          shell:      ${{ steps.bash.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
   test-logging-util-constants-dash-ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -39,7 +39,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install dash (shell)...
-        id:   dash
+        id:   shell
         uses: ./.github/actions/install-shell-via-nixpkgs
         with:
           shell: dash
@@ -47,7 +47,7 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/logging/util/constants_*
-          shell:      ${{ steps.dash.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
   test-logging-util-constants-zsh-ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -56,7 +56,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install zsh (shell)...
-        id:   zsh
+        id:   shell
         uses: ./.github/actions/install-shell-via-nixpkgs
         with:
           shell: zsh
@@ -64,7 +64,7 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/logging/util/constants_*
-          shell:      ${{ steps.zsh.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
   test-logging-util-constants-bash-macos:
     runs-on: macos-latest
     steps:
@@ -73,7 +73,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install bash (shell)...
-        id:   bash
+        id:   shell
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: bash
@@ -81,7 +81,7 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/logging/util/constants_*
-          shell:      ${{ steps.bash.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
   test-logging-util-constants-dash-macos:
     runs-on: macos-latest
     steps:
@@ -90,7 +90,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install dash (shell)...
-        id:   dash
+        id:   shell
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: dash
@@ -98,7 +98,7 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/logging/util/constants_*
-          shell:      ${{ steps.dash.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
   test-logging-util-constants-zsh-macos:
     runs-on: macos-latest
     steps:
@@ -107,7 +107,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install zsh (shell)...
-        id:   zsh
+        id:   shell
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: zsh
@@ -115,5 +115,5 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/logging/util/constants_*
-          shell:      ${{ steps.zsh.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
 

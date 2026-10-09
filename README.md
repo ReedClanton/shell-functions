@@ -1,15 +1,15 @@
 # Shell Functions
 
-[![bash](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Fmain%2Fproject-bash.json)](https://github.com/ReedClanton/shell-functions/actions)
+[![bash legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Fmain%2Fproject-bash-legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
 [![ash](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Fmain%2Fproject-ash.json)](https://github.com/ReedClanton/shell-functions/actions)
-[![dash](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Fmain%2Fproject-dash.json)](https://github.com/ReedClanton/shell-functions/actions)
+[![dash legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Fmain%2Fproject-dash-legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
 [![zsh](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Fmain%2Fproject-zsh.json)](https://github.com/ReedClanton/shell-functions/actions)
 
 TODO: Remove the badges below prior to merging, and ensure the ones above work after merging to main.
 
-[![bash](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Ffeature%2F4-github-status-badge-pathfinding%2Fproject-bash.json)](https://github.com/ReedClanton/shell-functions/actions)
+[![bash legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Ffeature%2F4-github-status-badge-pathfinding%2Fproject-bash-legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
 [![ash](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Ffeature%2F4-github-status-badge-pathfinding%2Fproject-ash.json)](https://github.com/ReedClanton/shell-functions/actions)
-[![dash](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Ffeature%2F4-github-status-badge-pathfinding%2Fproject-dash.json)](https://github.com/ReedClanton/shell-functions/actions)
+[![dash legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Ffeature%2F4-github-status-badge-pathfinding%2Fproject-dash-legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
 [![zsh](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Ffeature%2F4-github-status-badge-pathfinding%2Fproject-zsh.json)](https://github.com/ReedClanton/shell-functions/actions)
 
 This repository contains a number of shell functions that add functionality to your shell environment. Checkout the [Functions](#functions) section for more details! To use them, see the [Setup](#setup) section.

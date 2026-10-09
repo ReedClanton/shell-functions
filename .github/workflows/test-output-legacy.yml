@@ -76,7 +76,7 @@ jobs:
   #    - name: Install ShellSpec...
   #      uses: ./.github/actions/install-shellspec
   #    - name: Install zsh (shell)...
-  #      id:   zsh
+  #      id:   shell
   #      uses: ./.github/actions/install-shell-via-apt
   #      with:
   #        shell: zsh
@@ -85,19 +85,19 @@ jobs:
   #      uses: ./.github/actions/run-shellspec
   #      with:
   #        test-path:  ./spec/unit/output/output_*
-  #        shell:      ${{ steps.zsh.outputs.path }}
+  #        shell:      ${{ steps.shell.outputs.path }}
   #    - name: Record result for badge...
   #      if:   ${{ !cancelled() }}
   #      uses: ./.github/actions/record-badge-result
   #      with:
   #        badge:    output/output-zsh-legacy.json
-  #        label:    "output(): zsh"
+  #        label:    "output(): zsh ${{ steps.shell.outputs.version }}"
   #        status:   ${{ job.status }}
   #        skipped:  ${{ steps.tests.outputs.skipped }}
   publish-badges:
     needs:
       - test-output-bash-legacy-ubuntu
-  #    - test-output-dash-legacy-ubuntu
+      - test-output-dash-legacy-ubuntu
   #    - test-output-zsh-legacy-ubuntu
     # Run whether the tests passed or failed, but not if the run was
     # cancelled, so a cancelled run doesn't overwrite the last real result.

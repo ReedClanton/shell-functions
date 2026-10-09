@@ -22,7 +22,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install bash 3.2 (shell)...
-        id:   bash
+        id:   shell
         uses: ./.github/actions/install-bash-via-source
         with:
           version:  3.2
@@ -31,41 +31,41 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/output/util/constants_*
-          shell:      ${{ steps.bash.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
       - name: Record result for badge...
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
         with:
           badge:    output/util/constants-bash-legacy.json
-          label:    "constants.sh: bash 3.2"
+          label:    "constants.sh: bash ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
-  #test-output-util-constants-dash-legacy-ubuntu:
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #    - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
-  #      uses: actions/checkout@v3
-  #    - name: Install ShellSpec...
-  #      uses: ./.github/actions/install-shellspec
-  #    - name: Install dash (shell)...
-  #      id:   dash
-  #      uses: ./.github/actions/install-shell-via-apt
-  #      with:
-  #        shell: dash
-  #    - name: Run test(s) on dash...
-  #      id:   tests
-  #      uses: ./.github/actions/run-shellspec
-  #      with:
-  #        test-path:  ./spec/unit/output/util/constants_*
-  #        shell:      ${{ steps.dash.outputs.path }}
-  #    - name: Record result for badge...
-  #      if:   ${{ !cancelled() }}
-  #      uses: ./.github/actions/record-badge-result
-  #      with:
-  #        badge:    output/util/constants-dash-legacy.json
-  #        label:    "constants.sh: dash"
-  #        status:   ${{ job.status }}
-  #        skipped:  ${{ steps.tests.outputs.skipped }}
+  test-output-util-constants-dash-legacy-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v3
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install dash (shell)...
+        id:   shell
+        uses: ./.github/actions/install-shell-via-apt
+        with:
+          shell: dash
+      - name: Run test(s) on dash...
+        id:   tests
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/output/util/constants_*
+          shell:      ${{ steps.shell.outputs.path }}
+      - name: Record result for badge...
+        if:   ${{ !cancelled() }}
+        uses: ./.github/actions/record-badge-result
+        with:
+          badge:    output/util/constants-dash-legacy.json
+          label:    "constants.sh: dash ${{ steps.shell.outputs.version }}"
+          status:   ${{ job.status }}
+          skipped:  ${{ steps.tests.outputs.skipped }}
   #test-output-util-constants-zsh-legacy-ubuntu:
   #  runs-on: ubuntu-latest
   #  steps:
@@ -74,7 +74,7 @@ jobs:
   #    - name: Install ShellSpec...
   #      uses: ./.github/actions/install-shellspec
   #    - name: Install zsh (shell)...
-  #      id:   zsh
+  #      id:   shell
   #      uses: ./.github/actions/install-shell-via-apt
   #      with:
   #        shell: zsh
@@ -83,19 +83,19 @@ jobs:
   #      uses: ./.github/actions/run-shellspec
   #      with:
   #        test-path:  ./spec/unit/output/util/constants_*
-  #        shell:      ${{ steps.zsh.outputs.path }}
+  #        shell:      ${{ steps.shell.outputs.path }}
   #    - name: Record result for badge...
   #      if:   ${{ !cancelled() }}
   #      uses: ./.github/actions/record-badge-result
   #      with:
   #        badge:    output/util/constants-zsh-legacy.json
-  #        label:    "constants.sh: zsh"
+  #        label:    "constants.sh: zsh ${{ steps.shell.outputs.version }}"
   #        status:   ${{ job.status }}
   #        skipped:  ${{ steps.tests.outputs.skipped }}
   publish-badges:
     needs:
       - test-output-util-constants-bash-legacy-ubuntu
-  #    - test-output-util-constants-dash-legacy-ubuntu
+      - test-output-util-constants-dash-legacy-ubuntu
   #    - test-output-util-constants-zsh-legacy-ubuntu
     # Run whether the tests passed or failed, but not if the run was
     # cancelled, so a cancelled run doesn't overwrite the last real result.

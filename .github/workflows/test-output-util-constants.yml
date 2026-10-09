@@ -22,7 +22,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install bash (shell)...
-        id:   bash
+        id:   shell
         uses: ./.github/actions/install-shell-via-nixpkgs
         with:
           shell: bash
@@ -31,7 +31,7 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/output/util/constants_*
-          shell:      ${{ steps.bash.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
       - name: Record result for badge...
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
@@ -48,7 +48,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install BusyBox ash (shell)...
-        id:   ash
+        id:   shell
         uses: ./.github/actions/install-shell-via-nixpkgs
         with:
           shell:    ash
@@ -58,7 +58,7 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/output/util/constants_*
-          shell:      ${{ steps.ash.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
       - name: Record result for badge...
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
@@ -75,7 +75,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install dash (shell)...
-        id:   dash
+        id:   shell
         uses: ./.github/actions/install-shell-via-nixpkgs
         with:
           shell: dash
@@ -84,7 +84,7 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/output/util/constants_*
-          shell:      ${{ steps.dash.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
       - name: Record result for badge...
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
@@ -101,7 +101,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install zsh (shell)...
-        id:   zsh
+        id:   shell
         uses: ./.github/actions/install-shell-via-nixpkgs
         with:
           shell: zsh
@@ -110,7 +110,7 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/output/util/constants_*
-          shell:      ${{ steps.zsh.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
       - name: Record result for badge...
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
@@ -127,7 +127,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install bash (shell)...
-        id:   bash
+        id:   shell
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: bash
@@ -135,7 +135,7 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/output/util/constants_*
-          shell:      ${{ steps.bash.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
   test-output-util-constants-dash-macos:
     runs-on: macos-latest
     steps:
@@ -144,7 +144,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install dash (shell)...
-        id:   dash
+        id:   shell
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: dash
@@ -152,7 +152,7 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/output/util/constants_*
-          shell:      ${{ steps.dash.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
   test-output-util-constants-zsh-macos:
     runs-on: macos-latest
     steps:
@@ -161,7 +161,7 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install zsh (shell)...
-        id:   zsh
+        id:   shell
         uses: ./.github/actions/install-shell-via-homebrew
         with:
           shell: zsh
@@ -169,7 +169,7 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:  ./spec/unit/output/util/constants_*
-          shell:      ${{ steps.zsh.outputs.path }}
+          shell:      ${{ steps.shell.outputs.path }}
   publish-badges:
     needs:
       - test-output-util-constants-bash-ubuntu

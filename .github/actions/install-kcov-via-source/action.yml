@@ -1,4 +1,4 @@
-name: Install Kcov
+name: Install Kcov via Source
 description: >-
   Builds Kcov from source on an Ubuntu runner and puts `kcov` on PATH.
   The build is cached per Kcov version and Ubuntu release, so later runs

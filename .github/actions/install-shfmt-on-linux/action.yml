@@ -1,4 +1,4 @@
-name: Install shfmt (style checking Tool)
+name: Install shfmt on Linux
 description: >-
   Downloads a pinned shfmt release binary on a Linux runner and puts
   `shfmt` on PATH. The binary is cached per version and CPU architecture,

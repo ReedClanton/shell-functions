@@ -14,8 +14,9 @@ jobs:
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
       - name: Install Kcov...
-        uses: ./.github/actions/install-kcov-from-source
+        uses: ./.github/actions/install-kcove-on-linux
       - name: Install zsh (shell)...
+        id:   shell
         uses: ./.github/actions/install-shell-via-nixpkgs
         with:
           shell: zsh
@@ -23,6 +24,6 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:            spec/unit/logging/util/constants_*
-          shell:                ${{ steps.zsh.outputs.path }}
+          shell:                ${{ steps.shell.outputs.path }}
           kcov-include-pattern: logging/util/constants.sh
           kcov-limit:           91
