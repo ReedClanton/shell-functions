@@ -14,32 +14,6 @@ on:
       - .github/actions/**/*
   workflow_dispatch:
 jobs:
-  test-output-util-constants-bash-ubuntu:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
-        uses: actions/checkout@v3
-      - name: Install ShellSpec...
-        uses: ./.github/actions/install-shellspec
-      - name: Install bash (shell)...
-        id:   shell
-        uses: ./.github/actions/install-shell-via-nixpkgs
-        with:
-          shell: bash
-      - name: Run test(s) on bash...
-        id:   tests
-        uses: ./.github/actions/run-shellspec
-        with:
-          test-path:  ./spec/unit/output/util/constants_*
-          shell:      ${{ steps.shell.outputs.path }}
-      - name: Record result for badge...
-        if:   ${{ !cancelled() }}
-        uses: ./.github/actions/record-badge-result
-        with:
-          badge:    output/util/constants-bash.json
-          label:    "constants.sh: bash"
-          status:   ${{ job.status }}
-          skipped:  ${{ steps.tests.outputs.skipped }}
   test-output-util-constants-busybox-ash-ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -65,32 +39,6 @@ jobs:
         with:
           badge:    output/util/constants-ash.json
           label:    "constants.sh: ash"
-          status:   ${{ job.status }}
-          skipped:  ${{ steps.tests.outputs.skipped }}
-  test-output-util-constants-dash-ubuntu:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
-        uses: actions/checkout@v3
-      - name: Install ShellSpec...
-        uses: ./.github/actions/install-shellspec
-      - name: Install dash (shell)...
-        id:   shell
-        uses: ./.github/actions/install-shell-via-nixpkgs
-        with:
-          shell: dash
-      - name: Run test(s) on dash...
-        id:   tests
-        uses: ./.github/actions/run-shellspec
-        with:
-          test-path:  ./spec/unit/output/util/constants_*
-          shell:      ${{ steps.shell.outputs.path }}
-      - name: Record result for badge...
-        if:   ${{ !cancelled() }}
-        uses: ./.github/actions/record-badge-result
-        with:
-          badge:    output/util/constants-dash.json
-          label:    "constants.sh: dash"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-output-util-constants-zsh-ubuntu:

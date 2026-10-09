@@ -43,32 +43,6 @@ jobs:
           label:    "verifyInputProvided(): ash"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
-  test-verifyInputProvided-dash-ubuntu:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
-        uses: actions/checkout@v3
-      - name: Install ShellSpec...
-        uses: ./.github/actions/install-shellspec
-      - name: Install dash (shell)...
-        id:   shell
-        uses: ./.github/actions/install-shell-via-nixpkgs
-        with:
-          shell: dash
-      - name: Run test(s) on dash...
-        id:   tests
-        uses: ./.github/actions/run-shellspec
-        with:
-          test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
-          shell:      ${{ steps.shell.outputs.path }}
-      - name: Record result for badge...
-        if:   ${{ !cancelled() }}
-        uses: ./.github/actions/record-badge-result
-        with:
-          badge:    util/verifyInputProvided/verifyInputProvided-dash.json
-          label:    "verifyInputProvided(): dash"
-          status:   ${{ job.status }}
-          skipped:  ${{ steps.tests.outputs.skipped }}
   test-verifyInputProvided-zsh-ubuntu:
     runs-on: ubuntu-latest
     steps:

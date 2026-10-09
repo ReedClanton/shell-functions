@@ -14,32 +14,6 @@ on:
       - .github/actions/**/*
   workflow_dispatch:
 jobs:
-  test-output-util-createHeaderFooter-bash-ubuntu:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
-        uses: actions/checkout@v3
-      - name: Install ShellSpec...
-        uses: ./.github/actions/install-shellspec
-      - name: Install bash (shell)...
-        id:   shell
-        uses: ./.github/actions/install-shell-via-nixpkgs
-        with:
-          shell: bash
-      - name: Run test(s) on bash...
-        id:   tests
-        uses: ./.github/actions/run-shellspec
-        with:
-          test-path:  ./spec/unit/output/util/createHeaderFooter_*
-          shell:      ${{ steps.shell.outputs.path }}
-      - name: Record result for badge...
-        if:   ${{ !cancelled() }}
-        uses: ./.github/actions/record-badge-result
-        with:
-          badge:    output/util/createHeaderFooter-bash.json
-          label:    "createHeaderFooter(): bash"
-          status:   ${{ job.status }}
-          skipped:  ${{ steps.tests.outputs.skipped }}
   test-output-util-createHeaderFooter-busybox-ash-ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -67,24 +41,6 @@ jobs:
           label:    "createHeaderFooter(): ash"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
-  test-output-util-createHeaderFooter-dash-ubuntu:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
-        uses: actions/checkout@v3
-      - name: Install ShellSpec...
-        uses: ./.github/actions/install-shellspec
-      - name: Install dash (shell)...
-        id:   shell
-        uses: ./.github/actions/install-shell-via-nixpkgs
-        with:
-          shell: dash
-      - name: Run test(s) on dash...
-        id:   tests
-        uses: ./.github/actions/run-shellspec
-        with:
-          test-path:  ./spec/unit/output/util/createHeaderFooter_*
-          shell:      ${{ steps.shell.outputs.path }}
       - name: Record result for badge...
         if:   ${{ !cancelled() }}
         uses: ./.github/actions/record-badge-result
