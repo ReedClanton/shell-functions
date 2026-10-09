@@ -123,7 +123,6 @@ jobs:
   publish-badges:
     needs:
       - test-output-busybox-ash-ubuntu
-      - test-output-dash-ubuntu
       - test-output-zsh-ubuntu
     # Run whether the tests passed or failed, but not if the run was
     # cancelled, so a cancelled run doesn't overwrite the last real result.

@@ -128,9 +128,7 @@ jobs:
           shell:      ${{ steps.shell.outputs.path }}
   publish-badges:
     needs:
-      - test-output-util-createHeaderFooter-bash-ubuntu
       - test-output-util-createHeaderFooter-busybox-ash-ubuntu
-      - test-output-util-createHeaderFooter-dash-ubuntu
       - test-output-util-createHeaderFooter-zsh-ubuntu
     # Run whether the tests passed or failed, but not if the run was
     # cancelled, so a cancelled run doesn't overwrite the last real result.
