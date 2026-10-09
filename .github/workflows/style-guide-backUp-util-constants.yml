@@ -4,8 +4,8 @@ on:
   push:
     paths:
       - backUp/util/constants.sh
-      - .github/workflows/**
-      - .github/actions/**
+      - .github/workflows/style-guide-backUp*
+      - .github/actions/**/*
   workflow_dispatch:
 jobs:
   style-guide-backUp-util-constants:

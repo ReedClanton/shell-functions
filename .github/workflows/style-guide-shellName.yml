@@ -4,8 +4,8 @@ on:
   push:
     paths:
       - util/shellName/shellName.sh
-      - .github/workflows/**
-      - .github/actions/**
+      - .github/workflows/style-guide-shellName*
+      - .github/actions/**/*
   workflow_dispatch:
 jobs:
   style-guide-util-shellName:

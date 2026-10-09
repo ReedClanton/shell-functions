@@ -4,8 +4,8 @@ on:
   push:
     paths:
       - logging/logging.sh
-      - .github/workflows/**
-      - .github/actions/**
+      - .github/workflows/style-guide-logging*
+      - .github/actions/**/*
   workflow_dispatch:
 jobs:
   style-guide-logging:

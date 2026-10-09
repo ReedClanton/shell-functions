@@ -4,8 +4,8 @@ on:
   push:
     paths:
       - output/util/createHeaderFooter.sh
-      - .github/workflows/**
-      - .github/actions/**
+      - .github/workflows/style-guide-output*
+      - .github/actions/**/*
   workflow_dispatch:
 jobs:
   style-guide-output-util-createHeaderFooter:
