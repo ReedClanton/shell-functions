@@ -23,6 +23,6 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:            spec/unit/util/verifyInputProvided/verifyInputProvided_*
-          shell:                /bin/zsh
+          shell:                ${{ steps.zsh.outputs.path }}
           kcov-include-pattern: util/verifyInputProvided/verifyInputProvided.sh
           kcov-limit:           91

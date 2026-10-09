@@ -23,6 +23,6 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:            spec/unit/logging/util/constants_*
-          shell:                /bin/zsh
+          shell:                ${{ steps.zsh.outputs.path }}
           kcov-include-pattern: logging/util/constants.sh
           kcov-limit:           91

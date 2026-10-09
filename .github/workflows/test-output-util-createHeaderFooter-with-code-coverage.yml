@@ -23,6 +23,6 @@ jobs:
         uses: ./.github/actions/run-shellspec
         with:
           test-path:            spec/unit/output/util/createHeaderFooter_*
-          shell:                /bin/zsh
+          shell:                ${{ steps.zsh.outputs.path }}
           kcov-include-pattern: output/util/createHeaderFooter.sh
           kcov-limit:           91
