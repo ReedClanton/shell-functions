@@ -1,0 +1,3 @@
+# Badges
+
+This branch doesn't contain code. It's used by GitHub actions to track the status of tests across GitHub workflows. This is needed by the badges you see in the `README.md`s on `main` because some of the badges include data from other workflows. For example, the test status of `output()`'s `createHeaderFooter()` is included in `output()`'s badge. Then, the shell badges in the `README.md` at the top level of the project reflect the status of all badges at lower levels. This was done so you know the level of shell compatibility for each part of the project, as well as for the project as a whole, without having to re-run the test suite even more that it already gets run.
