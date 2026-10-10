@@ -1,0 +1,127 @@
+name: Test logging()
+run-name: ${{ github.actor }} triggered testing of logging() for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
+on:
+  push:
+    # Run this when these are touched.
+    paths:
+      # CUT.
+      - logging/logging.sh
+      # Library(ies) used by CUT.
+      - logging/**/*.sh
+      # CUT test(s).
+      - spec/unit/logging/logging_*
+      # Test configuration.
+      - spec/spec_helper.sh
+      - .shellspec
+      - spec/support/bin/*
+      # Badge configuration.
+      - .github/badge-dependencies
+      # This or related workflows.
+      - .github/workflows/test-logging*
+      # All action(s), regardless of if used.
+      - .github/actions/**/*
+  workflow_dispatch:
+jobs:
+  test-logging-bash-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install bash (shell)...
+        id:   shell
+        uses: ./.github/actions/install-shell-via-nixpkgs
+        with:
+          shell: bash
+      - name: Run test(s) on bash...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/logging/logging_*
+          shell:      ${{ steps.shell.outputs.path }}
+  test-logging-dash-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install dash (shell)...
+        id:   shell
+        uses: ./.github/actions/install-shell-via-nixpkgs
+        with:
+          shell: dash
+      - name: Run test(s) on dash...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/logging/logging_*
+          shell:      ${{ steps.shell.outputs.path }}
+  test-logging-zsh-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install zsh (shell)...
+        id:   shell
+        uses: ./.github/actions/install-shell-via-nixpkgs
+        with:
+          shell: zsh
+      - name: Run test(s) on zsh...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/logging/logging_*
+          shell:      ${{ steps.shell.outputs.path }}
+  test-logging-bash-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install bash (shell)...
+        id:   shell
+        uses: ./.github/actions/install-shell-via-homebrew
+        with:
+          shell: bash
+      - name: Run test(s) on bash...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/logging/logging_*
+          shell:      ${{ steps.shell.outputs.path }}
+  test-logging-dash-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install dash (shell)...
+        id:   shell
+        uses: ./.github/actions/install-shell-via-homebrew
+        with:
+          shell: dash
+      - name: Run test(s) on dash...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/logging/logging_*
+          shell:      ${{ steps.shell.outputs.path }}
+  test-logging-zsh-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install zsh (shell)...
+        id:   shell
+        uses: ./.github/actions/install-shell-via-homebrew
+        with:
+          shell: zsh
+      - name: Run test(s) on zsh...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/logging/logging_*
+          shell:      ${{ steps.shell.outputs.path }}
+

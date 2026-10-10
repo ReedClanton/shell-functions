@@ -1,0 +1,118 @@
+name: Test verifyInputProvided() on Legacy Shell(s)
+run-name: ${{ github.actor }} triggered testing of verifyInputProvided() on legacy shell(s) for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
+on:
+  push:
+    # Run this when these are touched.
+    paths:
+      # CUT.
+      - util/verifyInputProvided/verifyInputProvided.sh
+      # Library(ies) used by CUT.
+      - util/verifyInputProvided/**/*.sh
+      # CUT test(s).
+      - spec/unit/util/verifyInputProvided/verifyInputProvided_*
+      # Test configuration.
+      - spec/spec_helper.sh
+      - .shellspec
+      - spec/support/bin/*
+      # Badge configuration.
+      - .github/badge-dependencies
+      # This or related workflows.
+      - .github/workflows/test-util-verifyInputProvided*
+      # All action(s), regardless of if used.
+      - .github/actions/**/*
+  workflow_dispatch:
+jobs:
+  test-util-verifyInputProvided-bash-legacy-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install bash 3.2 (shell)...
+        id:   shell
+        uses: ./.github/actions/install-bash-via-source
+        with:
+          version:  '3.2'
+      - name: Run test(s) on bash...
+        id:   tests
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
+          shell:      ${{ steps.shell.outputs.path }}
+      - name: Record result for badge...
+        if:   ${{ !cancelled() }}
+        uses: ./.github/actions/record-badge-result
+        with:
+          badge:    util/verifyInputProvided/verifyInputProvided-bash_legacy.json
+          label:    "bash ${{ steps.shell.outputs.version }}"
+          status:   ${{ job.status }}
+          skipped:  ${{ steps.tests.outputs.skipped }}
+  test-util-verifyInputProvided-dash-legacy-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install dash 0.5.13.1 (shell)...
+        id:   shell
+        uses: ./.github/actions/install-dash-via-source
+        with:
+          version:  '0.5.13.1'
+      - name: Run test(s) on dash...
+        id:   tests
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
+          shell:      ${{ steps.shell.outputs.path }}
+      - name: Record result for badge...
+        if:   ${{ !cancelled() }}
+        uses: ./.github/actions/record-badge-result
+        with:
+          badge:    util/verifyInputProvided/verifyInputProvided-dash_legacy.json
+          label:    "dash ${{ steps.shell.outputs.version }}"
+          status:   ${{ job.status }}
+          skipped:  ${{ steps.tests.outputs.skipped }}
+  test-util-verifyInputProvided-zsh-legacy-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install zsh 5.0.1 (shell)...
+        id:   shell
+        uses: ./.github/actions/install-zsh-via-source
+        with:
+          version: '5.0.1'
+      - name: Run test(s) on zsh...
+        id:   tests
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
+          shell:      ${{ steps.shell.outputs.path }}
+      - name: Record result for badge...
+        if:   ${{ !cancelled() }}
+        uses: ./.github/actions/record-badge-result
+        with:
+          badge:    util/verifyInputProvided/verifyInputProvided-zsh_legacy.json
+          label:    "zsh ${{ steps.shell.outputs.version }}"
+          status:   ${{ job.status }}
+          skipped:  ${{ steps.tests.outputs.skipped }}
+  publish-badges:
+    needs:
+      - test-util-verifyInputProvided-bash-legacy-ubuntu
+      - test-util-verifyInputProvided-dash-legacy-ubuntu
+      - test-util-verifyInputProvided-zsh-legacy-ubuntu
+    # Run whether the tests passed or failed, but not if the run was
+    # cancelled, so a cancelled run doesn't overwrite the last real result.
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Write badges out to `badge` branch so they show up in `README.md` files...
+        uses: ./.github/actions/publish-badges

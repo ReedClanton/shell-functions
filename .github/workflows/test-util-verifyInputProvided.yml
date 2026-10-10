@@ -1,0 +1,116 @@
+name: Test verifyInputProvided()
+run-name: ${{ github.actor }} triggered testing of verifyInputProvided() for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
+on:
+  push:
+    # Run this when these are touched.
+    paths:
+      # CUT.
+      - util/verifyInputProvided/verifyInputProvided.sh
+      # Library(ies) used by CUT.
+      - util/verifyInputProvided/**/*.sh
+      # CUT test(s).
+      - spec/unit/util/verifyInputProvided/verifyInputProvided_*
+      # Test configuration.
+      - spec/spec_helper.sh
+      - .shellspec
+      - spec/support/bin/*
+      # Badge configuration.
+      - .github/badge-dependencies
+      # This or related workflows.
+      - .github/workflows/test-util-verifyInputProvided*
+      # All action(s), regardless of if used.
+      - .github/actions/**/*
+  workflow_dispatch:
+jobs:
+  test-util-verifyInputProvided-busybox-ash-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install BusyBox ash (shell)...
+        id:   shell
+        uses: ./.github/actions/install-shell-via-nixpkgs
+        with:
+          shell:    ash
+          package:  busybox
+      - name: Run test(s) on ash...
+        id:   tests
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
+          shell:      ${{ steps.shell.outputs.path }}
+      - name: Record result for badge...
+        if:   ${{ !cancelled() }}
+        uses: ./.github/actions/record-badge-result
+        with:
+          badge:    util/verifyInputProvided/verifyInputProvided-ash.json
+          label:    "ash"
+          status:   ${{ job.status }}
+          skipped:  ${{ steps.tests.outputs.skipped }}
+  test-util-verifyInputProvided-bash-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install bash (shell)...
+        id:   shell
+        uses: ./.github/actions/install-shell-via-homebrew
+        with:
+          shell: bash
+      - name: Run test(s) on bash...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
+          shell:      ${{ steps.shell.outputs.path }}
+  test-util-verifyInputProvided-dash-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install dash (shell)...
+        id:   shell
+        uses: ./.github/actions/install-shell-via-homebrew
+        with:
+          shell: dash
+      - name: Run test(s) on dash...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
+          shell:      ${{ steps.shell.outputs.path }}
+  test-util-verifyInputProvided-zsh-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Install ShellSpec...
+        uses: ./.github/actions/install-shellspec
+      - name: Install zsh (shell)...
+        id:   shell
+        uses: ./.github/actions/install-shell-via-homebrew
+        with:
+          shell: zsh
+      - name: Run test(s) on zsh...
+        uses: ./.github/actions/run-shellspec
+        with:
+          test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
+          shell:      ${{ steps.shell.outputs.path }}
+  publish-badges:
+    needs:
+      - test-util-verifyInputProvided-busybox-ash-ubuntu
+    # Run whether the tests passed or failed, but not if the run was
+    # cancelled, so a cancelled run doesn't overwrite the last real result.
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Write badges out to `badge` branch so they show up in `README.md` files...
+        uses: ./.github/actions/publish-badges

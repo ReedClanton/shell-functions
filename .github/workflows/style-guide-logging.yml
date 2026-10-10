@@ -1,14 +1,20 @@
 name: Style Guide Check of logging()
-run-name: ${{ github.actor }} has triggered style guide check of logging() for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
-on: [push, workflow_dispatch]
+run-name: ${{ github.actor }} triggered style guide check of logging() for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
+on:
+  push:
+    paths:
+      - logging/logging.sh
+      - .github/workflows/style-guide-logging*
+      - .github/actions/**/*
+  workflow_dispatch:
 jobs:
   style-guide-logging:
     runs-on: ubuntu-latest
     steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
-        uses: actions/checkout@v3
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
       - name: Install Style Guide Checking Tool...
-        uses: ./.github/actions/install-shfmt-via-snap
-      - name: Running style guide check...
+        uses: ./.github/actions/install-shfmt-on-linux
+      - name: Run style guide check...
         run:  shfmt --diff --case-indent --posix ./logging/logging.sh
 

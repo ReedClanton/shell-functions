@@ -46,11 +46,14 @@ These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creatio
         - [ ] Is run by a GitHub workflow (the pipeline).
         - [ ] Runs successfully by GitHub runner (the pipeline).
         - [ ] New unit tests are being run by GitHub actions (pipeline).
+        - [ ] New code's dependency tree has been added to `<repoRoot>/.github/badge-dependencies`.
     - Coverage:
         - [ ] Unit test coverage of *_all_ code touched* has **not** dropped.
         - [ ] 100% coverage exists for *_all_ added code*.
         - [ ] Checked if unit test coverage has increased, if so:
             - [ ] Update GitHub workflows `.yml` files that run the unit tests in the pipeline to increase the minimum coverage level required for pipeline success.
+            - **Importnat**:
+                - Until #20 is worked, pipeline doesn't enforce failure due to lack of code coverage!
     - All tests (unit, functional, or otherwise) run successfully:
         - [ ] By GitHub runner (the pipeline).
         - [ ] Locally.

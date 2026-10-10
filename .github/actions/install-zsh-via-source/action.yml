@@ -1,0 +1,206 @@
+name: Install zsh via Source
+description: >-
+  Downloads a zsh release from zsh.org (newest releases from its 'pub'
+  directory, older ones from 'pub/old'), builds it, then verifies it runs and
+  reports its absolute path and version. The shell and its loadable modules
+  are cached, so each version is only built once. Linux runners only.
+
+inputs:
+  version:
+    description: >-
+      zsh version, exactly as it appears in the release file names, e.g.
+      '5.9', '5.8.1' or '4.3.17'. Note that zsh only supports multibyte
+      characters from the 4.3 series onward. Defaults to the latest
+      release.
+    required: false
+    default: ''
+
+outputs:
+  path:
+    description: Absolute path to the shell, for passing to `shellspec --shell`.
+    value: ${{ steps.finish.outputs.path }}
+  version:
+    description: Version reported by the built zsh (e.g. '5.9').
+    value: ${{ steps.finish.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    # The cache key must be known before the cache can be restored. A given
+    # version is used as is, with no network access. "Latest" is looked up
+    # from zsh.org's file listing, so the key names the exact version
+    # and a new zsh release gets its own cache entry.
+    - name:  Resolving zsh ${{ inputs.version || '(latest)' }}...
+      id:    resolve
+      shell: sh
+      env:
+        VERSION:      ${{ inputs.version }}
+        RELEASES_URL: https://www.zsh.org/pub
+      run: |
+        if [ -n "$VERSION" ]; then
+          version=$VERSION
+        else
+          if ! listing=$(curl -fsSL --retry 3 "$RELEASES_URL/"); then
+            echo "::error::Couldn't list the zsh releases at $RELEASES_URL."
+            exit 1
+          fi
+          # Only final releases match (e.g. 'zsh-5.9.tar.xz'); documentation
+          # ('zsh-5.9-doc.tar.xz') and test releases ('zsh-5.8.0.2-test.tar.xz')
+          # don't, because a '-' follows their version number.
+          version=$(printf '%s\n' "$listing" \
+            | grep -Eo 'zsh-[0-9]+(\.[0-9]+)+\.tar\.(xz|gz|bz2)' \
+            | sed 's/^zsh-//; s/\.tar\.[a-z0-9]*$//' \
+            | sort -uV \
+            | tail -n 1)
+          if [ -z "$version" ]; then
+            echo "::error::Found no zsh releases at $RELEASES_URL."
+            exit 1
+          fi
+        fi
+
+        echo "Using zsh $version."
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+
+    - name: Restoring cached zsh ${{ steps.resolve.outputs.version }}...
+      id:   cache
+      uses: actions/cache/restore@v4
+      with:
+        path: ~/.cache/install-zsh-via-source/${{ steps.resolve.outputs.version }}
+        key:  install-zsh-via-source-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.resolve.outputs.version }}
+
+    # Everything from here until the cache is saved only runs on a cache miss.
+    - name:  Building zsh ${{ steps.resolve.outputs.version }}...
+      if:    steps.cache.outputs.cache-hit != 'true'
+      shell: sh
+      env:
+        VERSION:      ${{ steps.resolve.outputs.version }}
+        RELEASES_URL: https://www.zsh.org/pub
+      run: |
+        install_dir="$HOME/.cache/install-zsh-via-source/$VERSION"
+
+        # Only install build tools the runner doesn't already have; GitHub's
+        # Ubuntu images include most of them, and apt-get update is slow.
+        # zsh can't be built without a terminal library, so libncurses-dev
+        # is required. autotools-dev provides current config.guess and
+        # config.sub (see below).
+        missing=''
+        for package in autotools-dev build-essential libncurses-dev; do
+          if ! dpkg-query -W -f='${Status}' "$package" 2>/dev/null | grep -q 'install ok installed'; then
+            missing="$missing $package"
+          fi
+        done
+        if [ -n "$missing" ]; then
+          echo "Installing build tools:$missing"
+          sudo apt-get update -qq
+          # $missing is intentionally unquoted so each package is separate.
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends $missing
+        fi
+
+        work="$RUNNER_TEMP/zsh-build"
+        rm -rf "$work"
+        mkdir -p "$work"
+        cd "$work"
+
+        # Recent releases are .tar.xz and older ones .tar.gz or .tar.bz2.
+        # The newest releases are in the top directory and older
+        # ones in 'old', so try each location and format until one works.
+        archive=''
+        for dir in "$RELEASES_URL" "$RELEASES_URL/old"; do
+          for extension in tar.xz tar.gz tar.bz2; do
+            if curl -fsSL --retry 3 -o "zsh-$VERSION.$extension" "$dir/zsh-$VERSION.$extension"; then
+              archive="zsh-$VERSION.$extension"
+              break 2
+            fi
+            rm -f "zsh-$VERSION.$extension"
+          done
+        done
+        if [ -z "$archive" ]; then
+          echo "::error::Couldn't find zsh $VERSION at $RELEASES_URL or $RELEASES_URL/old."
+          exit 1
+        fi
+        echo "Downloaded $archive."
+
+        # GNU tar detects the compression format itself.
+        tar -xf "$archive"
+        cd "zsh-$VERSION"
+
+        # Older releases ship a config.guess/config.sub that predate aarch64,
+        # so configure can't identify the runner. Use current ones.
+        for script in config.guess config.sub; do
+          if [ -f "$script" ]; then
+            cp "/usr/share/misc/$script" "$script"
+          fi
+        done
+
+        # Newer compilers turn some warnings in older C code into errors, so
+        # turn them back into warnings. Build as C17, so a compiler that
+        # defaults to C23 doesn't break old-style function declarations.
+        cflags='-O2'
+        cflags="$cflags -Wno-error=implicit-function-declaration -Wno-error=implicit-int"
+        cflags="$cflags -Wno-error=incompatible-pointer-types -Wno-error=int-conversion"
+        cflags="$cflags -std=gnu17"
+
+        # --prefix: zsh loads many features from separate module files, from
+        #   a directory fixed at build time. Installing into the cache
+        #   directory keeps that path valid when the cache is restored, since
+        #   it's the same on every run.
+        # --enable-etcdir: zsh reads startup files like /etc/zshenv even when
+        #   running scripts. Pointing it at an empty directory keeps the
+        #   runner's own zsh configuration, if any, out of the tests.
+        # --with-tcsetpgrp: configure checks job control using the
+        #   controlling terminal, which CI jobs don't have, and stops with
+        #   "no controlling tty". This tells it job control works, as it does
+        #   on Linux.
+        # --enable-multibyte: on by default in releases that support it;
+        #   passed so it's explicit. Older configure scripts only warn about
+        #   options they don't know.
+        CFLAGS="$cflags" ./configure \
+          --prefix="$install_dir" \
+          --enable-etcdir="$install_dir/etc" \
+          --with-tcsetpgrp \
+          --enable-multibyte
+
+        # Retry serially in case a release's Makefile isn't parallel-safe.
+        if ! make -j"$(nproc)"; then
+          echo "Parallel build failed, so retrying serially..."
+          make
+        fi
+
+        # Install only the binary and its modules. The full 'make install'
+        # also installs documentation, which needs tools (e.g. yodl) the
+        # runner doesn't have.
+        make install.bin install.modules
+        mkdir -p "$install_dir/etc"
+
+    - name: Caching zsh ${{ steps.resolve.outputs.version }} for later runs...
+      if:   steps.cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ~/.cache/install-zsh-via-source/${{ steps.resolve.outputs.version }}
+        key:  install-zsh-via-source-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.resolve.outputs.version }}
+
+    - name:  Verifying zsh ${{ steps.resolve.outputs.version }}...
+      id:    finish
+      shell: sh
+      env:
+        VERSION: ${{ steps.resolve.outputs.version }}
+      run: |
+        path="$HOME/.cache/install-zsh-via-source/$VERSION/bin/zsh"
+
+        if ! "$path" -c :; then
+          echo "::error::$path was built but failed to run."
+          exit 1
+        fi
+
+        # Loading a module confirms zsh finds its module files, which only
+        # works if they were installed where the build expects them.
+        if ! "$path" -c 'zmodload zsh/zutil'; then
+          echo "::error::$path runs, but can't load its modules."
+          exit 1
+        fi
+
+        version=$("$path" -c 'echo "$ZSH_VERSION"')
+
+        echo "Using zsh $version at $path."
+        echo "path=$path" >> "$GITHUB_OUTPUT"
+        echo "version=$version" >> "$GITHUB_OUTPUT"

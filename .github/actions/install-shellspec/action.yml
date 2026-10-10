@@ -1,34 +1,41 @@
-name: Install shellspec
-description: Installs shellspec (testing tool) onto runner.
-runs:
-  using: 'composite'
-  steps:
-    - name:  Installing 'shellspec' (POSIX shell script testing tool)...
-      id:    shellspecInstallTry1
-      continue-on-error: true
-      shell: bash
-      run:   curl -fsSL https://git.io/shellspec | sh -s -- --yes
-    # shellspec's server doesn't reliably work, so retry when it fails.
-    - name:  Installing 'shellspec' (try 2)...
-      id:    shellspecInstallTry2
-      if:    steps.shellspecInstallTry1.outcome == 'failure'
-      continue-on-error: true
-      shell: bash
-      run:   curl -fsSL https://git.io/shellspec | sh -s -- --yes
-    - name:  Installing 'shellspec' (try 3)...
-      id:    shellspecInstallTry3
-      if:    steps.shellspecInstallTry2.outcome == 'failure'
-      continue-on-error: true
-      shell: bash
-      run:   curl -fsSL https://git.io/shellspec | sh -s -- --yes
-    - name:  Installing 'shellspec' (try 4)...
-      id:    shellspecInstallTry4
-      if:    steps.shellspecInstallTry3.outcome == 'failure'
-      continue-on-error: true
-      shell: bash
-      run:   curl -fsSL https://git.io/shellspec | sh -s -- --yes
-    - name:  Installing 'shellspec' (try 5)...
-      if:    steps.shellspecInstallTry4.outcome == 'failure'
-      shell: bash
-      run:   curl -fsSL https://git.io/shellspec | sh -s -- --yes
+name: Install ShellSpec
+description: >-
+  Downloads a ShellSpec (testing framework) release and puts `shellspec` on PATH. Works on
+  both Ubuntu and macOS runners.
 
+inputs:
+  version:
+    description: ShellSpec release to install.
+    required: false
+    default: '0.28.1'
+
+outputs:
+  path:
+    description: Absolute path to the installed `shellspec` executable.
+    value: ${{ steps.install.outputs.path }}
+
+runs:
+  using: composite
+  steps:
+    - name:  Installing ShellSpec ${{ inputs.version }}...
+      id:    install
+      shell: sh
+      env:
+        VERSION:     ${{ inputs.version }}
+        INSTALL_DIR: ${{ runner.tool_cache }}/shellspec/${{ inputs.version }}
+      run: |
+        # Skip the download if this version is already present (e.g. on a
+        # self-hosted runner that keeps its tool cache between jobs).
+        if [ ! -x "$INSTALL_DIR/shellspec" ]; then
+          mkdir -p "$INSTALL_DIR"
+          # ShellSpec's server doesn't reliably work, so retry a few times.
+          curl -fsSL --retry 3 \
+              "https://github.com/shellspec/shellspec/releases/download/$VERSION/shellspec-dist.tar.gz" \
+            | tar -xz --strip-components=1 -C "$INSTALL_DIR"
+        fi
+
+        # Verify successful install.
+        "$INSTALL_DIR/shellspec" --version
+
+        echo "$INSTALL_DIR" >> "$GITHUB_PATH"
+        echo "path=$INSTALL_DIR/shellspec" >> "$GITHUB_OUTPUT"

@@ -1,0 +1,196 @@
+name: Install a Shell via Nixpkgs
+description: >-
+  Installs a specific version of a shell from nixpkgs (or the latest version
+  when none is given), then verifies it runs and reports its absolute path
+  and version. The version is resolved to a nixpkgs commit with the Nixhub
+  API. Note that Nixhub has rate limits. Note likely to hit them, but they
+  exist. The shell and everything it needs to run are cached, so later runs
+  restore it in seconds without installing Nix. Linux runners only.
+
+inputs:
+  shell:
+    description: Command name of the shell (e.g. 'bash', 'dash', 'zsh', 'ash').
+    required: true
+  package:
+    description: >-
+      Nix package that provides the shell, as named on nixhub.io. Defaults to
+      the shell's name. Use 'busybox' for BusyBox ash.
+    required: false
+    default: ''
+  version:
+    description: >-
+      Version of the package to install (e.g. '4.4.23'), as listed on
+      nixhub.io. Defaults to the latest version. Prefer an exact version, so
+      the cached install never changes. If exact version isn't provided,
+      like '4.4' rather than '4.4.23', then the latest version of '4.4' will
+      be used. This will also require going out to Nixhub.
+    required: false
+    default: ''
+
+outputs:
+  path:
+    description: Absolute path to the shell, for passing to `shellspec --shell`.
+    value: ${{ steps.finish.outputs.path }}
+  version:
+    description: Version of the package that was installed.
+    value: ${{ steps.finish.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    # The cache key must be known before the cache can be restored. A
+    # requested version is used directly, so a cache hit needs no network
+    # lookup at all. "Latest" can change, so it's resolved first and the key
+    # uses the exact package it resolved to.
+    - name:  Choosing cache key for ${{ inputs.package || inputs.shell }} ${{ inputs.version || '(latest)' }}...
+      id:    key
+      shell: sh
+      env:
+        PACKAGE:  ${{ inputs.package || inputs.shell }}
+        VERSION:  ${{ inputs.version }}
+      run: |
+        system="$(uname -m)-linux"
+        echo "system=$system" >> "$GITHUB_OUTPUT"
+
+        if [ -n "$VERSION" ]; then
+          key="install-shell-via-nix-v1-$system-$PACKAGE-$VERSION"
+        else
+          json="$RUNNER_TEMP/install-shell-via-nix-$PACKAGE.json"
+          if ! curl -fsSL --retry 3 --get \
+              --data-urlencode "name=$PACKAGE" \
+              --data-urlencode "version=latest" \
+              -o "$json" https://search.devbox.sh/v2/resolve; then
+            echo "::error::Nixhub couldn't resolve the latest version of '$PACKAGE'."
+            exit 1
+          fi
+          store_path=$(jq -r --arg s "$system" \
+            '[.systems[$s].outputs // [] | .[] | select(.default)][0].path // empty' "$json")
+          if [ -z "$store_path" ]; then
+            echo "::error::Nixhub has no '$system' build of '$PACKAGE'."
+            exit 1
+          fi
+          key="install-shell-via-nix-v1-$system-$PACKAGE-latest-${store_path##*/}"
+        fi
+
+        echo "Cache key: $key"
+        echo "key=$key" >> "$GITHUB_OUTPUT"
+
+    - name: Restoring cached ${{ inputs.package || inputs.shell }}...
+      id:   cache
+      uses: actions/cache/restore@v4
+      with:
+        path: ~/.cache/install-shell-via-nix/${{ inputs.package || inputs.shell }}
+        key:  ${{ steps.key.outputs.key }}
+
+    # Everything from here until the cache is saved only runs on a cache miss.
+    - name: Installing Nix...
+      if:   steps.cache.outputs.cache-hit != 'true'
+      uses: cachix/install-nix-action@v31
+
+    - name:  Installing ${{ inputs.package || inputs.shell }} ${{ inputs.version || '(latest)' }} with Nix...
+      if:    steps.cache.outputs.cache-hit != 'true'
+      shell: sh
+      env:
+        PACKAGE:   ${{ inputs.package || inputs.shell }}
+        VERSION:   ${{ inputs.version || 'latest' }}
+        SYSTEM:    ${{ steps.key.outputs.system }}
+      run: |
+        cache_dir="$HOME/.cache/install-shell-via-nix/$PACKAGE"
+
+        # Look the version up, unless the key step already did ("latest").
+        json="$RUNNER_TEMP/install-shell-via-nix-$PACKAGE.json"
+        if [ ! -f "$json" ]; then
+          if ! curl -fsSL --retry 3 --get \
+              --data-urlencode "name=$PACKAGE" \
+              --data-urlencode "version=$VERSION" \
+              -o "$json" https://search.devbox.sh/v2/resolve; then
+            echo "::error::Nixhub couldn't resolve '$PACKAGE' version '$VERSION'. Check nixhub.io for the versions it knows."
+            exit 1
+          fi
+        fi
+
+        resolved_version=$(jq -r '.version' "$json")
+        rev=$(jq -r --arg s "$SYSTEM" '.systems[$s].flake_installable.ref.rev // empty' "$json")
+        attr=$(jq -r --arg s "$SYSTEM" '.systems[$s].flake_installable.attr_path // empty' "$json")
+        out=$(jq -r --arg s "$SYSTEM" \
+          '[.systems[$s].outputs // [] | .[] | select(.default)][0].path // empty' "$json")
+
+        if [ -z "$rev" ]; then
+          echo "::error::Nixhub has no '$SYSTEM' build of '$PACKAGE' $resolved_version."
+          exit 1
+        fi
+        echo "Resolved $PACKAGE $VERSION to $resolved_version (nixpkgs $rev)."
+
+        # Download the prebuilt package from the Nix binary cache. If it isn't
+        # there, build it from the nixpkgs commit instead (slow, but cached
+        # afterwards).
+        if [ -n "$out" ] && nix-store --realise "$out" >/dev/null 2>&1; then
+          echo "Downloaded prebuilt $out."
+        else
+          echo "No prebuilt package found, so building from nixpkgs $rev..."
+          out=$(nix-build --no-out-link -E \
+            "(import (fetchTarball \"https://github.com/NixOS/nixpkgs/archive/$rev.tar.gz\") {}).$attr" \
+            | head -n 1)
+        fi
+
+        # Archive the package and everything it depends on (its "closure").
+        # Nix packages refer to each other by absolute /nix/store paths, so
+        # extracting this archive back into /nix/store is all a later run
+        # needs; it doesn't need Nix installed!
+        mkdir -p "$cache_dir"
+        nix-store --query --requisites "$out" | sed 's|^/||' > "$RUNNER_TEMP/install-shell-via-nix-closure.txt"
+        tar -cf "$cache_dir/closure.tar" -C / -T "$RUNNER_TEMP/install-shell-via-nix-closure.txt"
+        printf '%s\n' "$out" > "$cache_dir/store-path"
+        printf '%s\n' "$resolved_version" > "$cache_dir/version"
+        printf '%s\n' "$rev" > "$cache_dir/nixpkgs-revision"
+
+    - name: Caching ${{ inputs.package || inputs.shell }} for later runs...
+      if:   steps.cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ~/.cache/install-shell-via-nix/${{ inputs.package || inputs.shell }}
+        key:  ${{ steps.key.outputs.key }}
+
+    - name:  Verifying ${{ inputs.shell }}...
+      id:    finish
+      shell: sh
+      env:
+        SHELL_NAME: ${{ inputs.shell }}
+        PACKAGE:    ${{ inputs.package || inputs.shell }}
+        CACHE_HIT:  ${{ steps.cache.outputs.cache-hit }}
+      run: |
+        cache_dir="$HOME/.cache/install-shell-via-nix/$PACKAGE"
+
+        # On a cache hit Nix isn't installed, so unpack the cached closure
+        # into /nix/store, where the package expects to find it.
+        if [ "$CACHE_HIT" = true ]; then
+          sudo mkdir -p /nix/store
+          sudo tar -xf "$cache_dir/closure.tar" -C /
+        fi
+
+        out=$(cat "$cache_dir/store-path")
+        path="$out/bin/$SHELL_NAME"
+
+        # BusyBox may not ship a link for every applet. It picks the applet
+        # to run from the name it's invoked as, so create one if needed.
+        if [ ! -x "$path" ] && [ -x "$out/bin/busybox" ]; then
+          bin_dir="$RUNNER_TEMP/install-shell-via-nix-bin"
+          mkdir -p "$bin_dir"
+          ln -sf "$out/bin/busybox" "$bin_dir/$SHELL_NAME"
+          path="$bin_dir/$SHELL_NAME"
+        fi
+
+        if [ ! -x "$path" ]; then
+          echo "::error::$PACKAGE is installed at $out, but it has no '$SHELL_NAME' executable."
+          exit 1
+        fi
+
+        if ! "$path" -c :; then
+          echo "::error::$path is installed but failed to run."
+          exit 1
+        fi
+
+        version=$(cat "$cache_dir/version")
+        echo "Using $PACKAGE $version at $path."
+        echo "path=$path" >> "$GITHUB_OUTPUT"
+        echo "version=$version" >> "$GITHUB_OUTPUT"

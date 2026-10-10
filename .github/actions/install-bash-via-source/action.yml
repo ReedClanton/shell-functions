@@ -1,0 +1,235 @@
+name: Install bash via Source
+description: >-
+  Downloads a bash release and its official patches from the GNU FTP site,
+  builds it, then verifies it runs and reports its absolute path and
+  version. Built shells are cached, so each version is only built once.
+  Linux runners only.
+
+inputs:
+  version:
+    description: >-
+      bash version as '<major>.<minor>[.<patch level>]', e.g. '5.2.37',
+      '4.4.23' or '3.2.57' (the oldest version this project supports).
+      Without a patch level, the unpatched release is built. Official
+      patches are applied in order up to the given patch level. Defaults
+      to the latest release with all of its patches.
+    required: false
+    default: ''
+  mirror:
+    description: Base URL to download bash releases and patches from.
+    required: false
+    default: 'https://ftp.gnu.org/gnu/bash'
+
+outputs:
+  path:
+    description: Absolute path to the shell, for passing to `shellspec --shell`.
+    value: ${{ steps.finish.outputs.path }}
+  version:
+    description: Version reported by the built bash (e.g. '4.4.23').
+    value: ${{ steps.finish.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    # The cache key must be known before the cache can be restored. A given
+    # version is used as is, with no network access. "Latest" is looked up
+    # from the mirror's file listings, so the key names the exact version
+    # and a new bash release or patch gets its own cache entry.
+    - name:  Resolving bash ${{ inputs.version || '(latest)' }}...
+      id:    resolve
+      shell: sh
+      env:
+        VERSION: ${{ inputs.version }}
+        MIRROR:  ${{ inputs.mirror }}
+      run: |
+        if [ -n "$VERSION" ]; then
+          version=$VERSION
+        else
+          if ! listing=$(curl -fsSL --retry 3 "$MIRROR/"); then
+            echo "::error::Couldn't list the bash releases at $MIRROR."
+            exit 1
+          fi
+          # Only final releases match (e.g. 'bash-5.3.tar.gz'); betas and
+          # release candidates ('bash-5.3-rc1.tar.gz') don't.
+          base=$(printf '%s\n' "$listing" \
+            | grep -Eo 'bash-[0-9]+\.[0-9]+[a-z]?\.tar\.gz' \
+            | sed 's/^bash-//; s/\.tar\.gz$//' \
+            | sort -uV \
+            | tail -n 1)
+          if [ -z "$base" ]; then
+            echo "::error::Found no bash releases at $MIRROR."
+            exit 1
+          fi
+
+          # A new release may not have a patch directory yet.
+          nodot=$(printf '%s' "$base" | tr -d '.')
+          patch_level=0
+          if patches=$(curl -fsSL --retry 3 "$MIRROR/bash-$base-patches/" 2>/dev/null); then
+            last=$(printf '%s\n' "$patches" \
+              | grep -Eo "bash$nodot-[0-9]{3}" \
+              | sort -u \
+              | tail -n 1)
+            if [ -n "$last" ]; then
+              # Strip leading zeros ('023' -> '23'), which some shells would
+              # otherwise read as an octal number.
+              patch_level=${last##*-}
+              patch_level=${patch_level#0}
+              patch_level=${patch_level#0}
+            fi
+          fi
+
+          if [ "$patch_level" -eq 0 ]; then
+            version=$base
+          else
+            version="$base.$patch_level"
+          fi
+        fi
+
+        echo "Using bash $version."
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+
+    - name: Restoring cached bash ${{ steps.resolve.outputs.version }}...
+      id:   cache
+      uses: actions/cache/restore@v4
+      with:
+        path: ~/.cache/install-bash-from-source/${{ steps.resolve.outputs.version }}
+        key:  install-bash-from-source-v2-${{ runner.os }}-${{ runner.arch }}-${{ steps.resolve.outputs.version }}
+
+    # Everything from here until the cache is saved only runs on a cache miss.
+    - name:  Building bash ${{ steps.resolve.outputs.version }}...
+      if:    steps.cache.outputs.cache-hit != 'true'
+      shell: sh
+      env:
+        VERSION: ${{ steps.resolve.outputs.version }}
+        MIRROR:  ${{ inputs.mirror }}
+      run: |
+        install_dir="$HOME/.cache/install-bash-from-source/$VERSION"
+
+        # Split '4.4.23' into the release ('4.4') and patch level ('23').
+        case $VERSION in
+          *.*.*)
+            base=${VERSION%.*}
+            patch_level=${VERSION##*.}
+            ;;
+          *)
+            base=$VERSION
+            patch_level=0
+            ;;
+        esac
+        # Patch files are named after the release without its dot, e.g.
+        # 'bash44-023' for 4.4 and 'bash32-057' for 3.2.
+        nodot=$(printf '%s' "$base" | tr -d '.')
+
+        # Only install build tools the runner doesn't already have; GitHub's
+        # Ubuntu images include most of them, and apt-get update is slow.
+        # bison regenerates the parser if a patch touches it. autotools-dev
+        # provides current config.guess/config.sub (see below).
+        missing=''
+        for package in autotools-dev bison build-essential; do
+          if ! dpkg-query -W -f='${Status}' "$package" 2>/dev/null | grep -q 'install ok installed'; then
+            missing="$missing $package"
+          fi
+        done
+        if [ -n "$missing" ]; then
+          echo "Installing build tools:$missing"
+          sudo apt-get update -qq
+          # $missing is intentionally unquoted so each package is separate.
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends $missing
+        fi
+
+        work="$RUNNER_TEMP/bash-build"
+        rm -rf "$work"
+        mkdir -p "$work"
+        cd "$work"
+
+        if ! curl -fsSL --retry 3 "$MIRROR/bash-$base.tar.gz" | tar -xz; then
+          echo "::error::Couldn't download bash-$base.tar.gz from $MIRROR."
+          exit 1
+        fi
+        cd "bash-$base"
+
+        # Download every patch in one curl call, so it reuses one connection
+        # instead of opening a new one per patch (5.2 alone has dozens).
+        set --
+        i=1
+        while [ "$i" -le "$patch_level" ]; do
+          name="bash$nodot-$(printf '%03d' "$i")"
+          set -- "$@" -o "$work/$name" "$MIRROR/bash-$base-patches/$name"
+          i=$((i + 1))
+        done
+        if [ "$#" -gt 0 ]; then
+          if ! curl -fsSL --retry 3 --fail-early "$@"; then
+            echo "::error::Couldn't download the patches for bash $base up to $patch_level."
+            exit 1
+          fi
+        fi
+
+        # Apply the patches in order.
+        i=1
+        while [ "$i" -le "$patch_level" ]; do
+          name="bash$nodot-$(printf '%03d' "$i")"
+          if ! patch -p0 -s < "$work/$name"; then
+            echo "::error::Couldn't apply $name."
+            exit 1
+          fi
+          i=$((i + 1))
+        done
+
+        # Old releases ship a config.guess/config.sub that predate x86_64 and
+        # aarch64, so configure can't identify the runner. Use current ones.
+        for script in config.guess config.sub; do
+          if [ -f "support/$script" ]; then
+            cp "/usr/share/misc/$script" "support/$script"
+          fi
+        done
+
+        # Modern compilers reject some old C that bash relied on, so turn
+        # those errors back into warnings. Build as C17, so a compiler that
+        # defaults to C23 doesn't break old-style function declarations.
+        cflags='-O2 -fcommon'
+        cflags="$cflags -Wno-error=implicit-function-declaration -Wno-error=implicit-int"
+        cflags="$cflags -Wno-error=incompatible-pointer-types -Wno-error=int-conversion"
+        cflags="$cflags -std=gnu17"
+
+        # bash's own malloc misbehaves on modern 64-bit systems in older
+        # releases; the system malloc is safe for every version.
+        CFLAGS="$cflags" ./configure --without-bash-malloc --disable-nls
+
+        # Old Makefiles aren't always safe to run in parallel.
+        if ! make -j"$(nproc)"; then
+          echo "Parallel build failed, so retrying serially..."
+          make
+        fi
+
+        # Copy just the binary. Old 'make install' targets also install docs,
+        # which can need tools a modern runner doesn't have.
+        mkdir -p "$install_dir/bin"
+        cp bash "$install_dir/bin/bash"
+
+    - name: Caching bash ${{ steps.resolve.outputs.version }} for later runs...
+      if:   steps.cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ~/.cache/install-bash-from-source/${{ steps.resolve.outputs.version }}
+        key:  install-bash-from-source-v2-${{ runner.os }}-${{ runner.arch }}-${{ steps.resolve.outputs.version }}
+
+    - name:  Verifying bash ${{ steps.resolve.outputs.version }}...
+      id:    finish
+      shell: sh
+      env:
+        VERSION: ${{ steps.resolve.outputs.version }}
+      run: |
+        path="$HOME/.cache/install-bash-from-source/$VERSION/bin/bash"
+
+        if ! "$path" -c :; then
+          echo "::error::$path was built but failed to run."
+          exit 1
+        fi
+
+        # BASH_VERSION looks like '4.4.23(1)-release'; keep '4.4.23'.
+        version=$("$path" -c 'echo "$BASH_VERSION"')
+        version=${version%%(*}
+
+        echo "Using bash $version at $path."
+        echo "path=$path" >> "$GITHUB_OUTPUT"
+        echo "version=$version" >> "$GITHUB_OUTPUT"
