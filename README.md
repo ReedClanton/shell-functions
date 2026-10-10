@@ -155,8 +155,7 @@ Alternatively, enter `<funcationName> --help` for a document that describes how 
 |	|	|										multiple workflows.
 |	|	|
 |	|	├─ description-of-what-action-does/		Directory title identifies what the action does,
-|	|	|	|									contain no spaces or capital letters, and use `-`
-|	|	|	|									to separate words.
+|	|	|	|									contain no spaces, and use `-` to separate words.
 |	|	|	|
 |	|	|	├─ action.yml						Tells GitHub runner what should be done.
 |	|	|	|
@@ -171,8 +170,7 @@ Alternatively, enter `<funcationName> --help` for a document that describes how 
 |	|	|										re-use of actions across workflows.
 |	|	|
 |	|	├─ description-of-what-workflow-does.yml	Title identifies what the action does,
-|	|	|										contains no spaces or capital letters, and use `-`
-|	|	:										to separate words.
+|	|	|										contains no spaces, and use `-` to separate words.
 |	|
 ├─ docs/										Contains resources, like photos, used by the
 │	:											`README.md` file in this directory.
