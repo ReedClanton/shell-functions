@@ -59,13 +59,13 @@ done
 
 # Determine name of current shell.
 shellName=${SHELL#/*/*/*/*/}
-if [[ "$SHELL" = "$shellName" ]]; then
+if [ "$SHELL" = "$shellName" ]; then
 	shellName=${SHELL#/*/*/*/}
-	if [[ "$SHELL" = "$shellName" ]]; then
+	if [ "$SHELL" = "$shellName" ]; then
 		shellName=${SHELL#/*/*/}
-		if [[ "$SHELL" = "$shellName" ]]; then
+		if [ "$SHELL" = "$shellName" ]; then
 			shellName=${SHELL#/*/}
-			if [[ "$SHELL" = "$shellName" ]]; then
+			if [ "$SHELL" = "$shellName" ]; then
 				shellName=${SHELL#/}
 			fi
 		fi
@@ -73,7 +73,7 @@ if [[ "$SHELL" = "$shellName" ]]; then
 fi
 
 # Ensure shell name was found.
-if [[ "$SHELL" != "$shellName" && "$shellName" != "" ]]; then
+if [ "$SHELL" != "$shellName" ] && [ "$shellName" != "" ]; then
 	printf "$shellName"
 	exit 0
 else

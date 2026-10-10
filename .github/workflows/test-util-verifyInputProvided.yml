@@ -10,16 +10,22 @@ on:
       - util/verifyInputProvided/**/*.sh
       # CUT test(s).
       - spec/unit/util/verifyInputProvided/verifyInputProvided_*
+      # Test configuration.
+      - spec/spec_helper.sh
+      - .shellspec
+      - spec/support/bin/*
+      # Badge configuration.
+      - .github/badge-dependencies
       # This or related workflows.
-      - .github/workflows/test-verifyInputProvided*
+      - .github/workflows/test-util-verifyInputProvided*
       # All action(s), regardless of if used.
       - .github/actions/**/*
   workflow_dispatch:
 jobs:
-  test-verifyInputProvided-busybox-ash-ubuntu:
+  test-util-verifyInputProvided-busybox-ash-ubuntu:
     runs-on: ubuntu-latest
     steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
@@ -43,10 +49,10 @@ jobs:
           label:    "ash"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
-  test-verifyInputProvided-bash-macos:
+  test-util-verifyInputProvided-bash-macos:
     runs-on: macos-latest
     steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
@@ -60,10 +66,10 @@ jobs:
         with:
           test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:      ${{ steps.shell.outputs.path }}
-  test-verifyInputProvided-dash-macos:
+  test-util-verifyInputProvided-dash-macos:
     runs-on: macos-latest
     steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
@@ -77,10 +83,10 @@ jobs:
         with:
           test-path:  ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:      ${{ steps.shell.outputs.path }}
-  test-verifyInputProvided-zsh-macos:
+  test-util-verifyInputProvided-zsh-macos:
     runs-on: macos-latest
     steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
@@ -96,7 +102,7 @@ jobs:
           shell:      ${{ steps.shell.outputs.path }}
   publish-badges:
     needs:
-      - test-verifyInputProvided-busybox-ash-ubuntu
+      - test-util-verifyInputProvided-busybox-ash-ubuntu
     # Run whether the tests passed or failed, but not if the run was
     # cancelled, so a cancelled run doesn't overwrite the last real result.
     if: ${{ !cancelled() }}
@@ -104,6 +110,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      # Needed so the local publish-badges action is available.
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/publish-badges
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v3
+      - name: Write badges out to `badge` branch so they show up in `README.md` files...
+        uses: ./.github/actions/publish-badges

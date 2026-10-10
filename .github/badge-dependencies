@@ -2,6 +2,6 @@
 # colon, then the units it depends on, separated by spaces. A unit is a
 # badge path without its '-<shell>.json' ending. Dependencies are followed
 # transitively.
-logging/logging: logging/util/constants
+logging/logging: logging/util/constants output/output util/verifyInputProvided/verifyInputProvided
 output/output: output/util/constants output/util/createHeaderFooter
 util/verifyInputProvided/verifyInputProvided:

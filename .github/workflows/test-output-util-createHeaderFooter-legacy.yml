@@ -8,6 +8,12 @@ on:
       - output/util/createHeaderFooter.sh
       # CUT test(s).
       - spec/unit/output/util/createHeaderFooter_*
+      # Test configuration.
+      - spec/spec_helper.sh
+      - .shellspec
+      - spec/support/bin/*
+      # Badge configuration.
+      - .github/badge-dependencies
       # This or related workflows.
       - .github/workflows/test-output*
       # All action(s), regardless of if used.
@@ -25,7 +31,7 @@ jobs:
         id:   shell
         uses: ./.github/actions/install-bash-via-source
         with:
-          version:  3.2
+          version:  '3.2'
       - name: Run test(s) on bash...
         id:   tests
         uses: ./.github/actions/run-shellspec
@@ -43,15 +49,15 @@ jobs:
   test-output-util-createHeaderFooter-dash-legacy-ubuntu:
     runs-on: ubuntu-latest
     steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
-      - name: Install dash (shell)...
+      - name: Install dash 0.5.13.1 (shell)...
         id:   shell
         uses: ./.github/actions/install-dash-via-source
         with:
-          version:  0.5.13.1
+          version:  '0.5.13.1'
       - name: Run test(s) on dash...
         id:   tests
         uses: ./.github/actions/run-shellspec
@@ -69,15 +75,15 @@ jobs:
   test-output-util-createHeaderFooter-zsh-legacy-ubuntu:
     runs-on: ubuntu-latest
     steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
-      - name: Install zsh (shell)...
+      - name: Install zsh 5.0.1 (shell)...
         id:   shell
         uses: ./.github/actions/install-zsh-via-source
         with:
-          version: 5.0.1
+          version: '5.0.1'
       - name: Run test(s) on zsh...
         id:   tests
         uses: ./.github/actions/run-shellspec
@@ -104,6 +110,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      # Needed so the local publish-badges action is available.
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/publish-badges
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v3
+      - name: Write badges out to `badge` branch so they show up in `README.md` files...
+        uses: ./.github/actions/publish-badges

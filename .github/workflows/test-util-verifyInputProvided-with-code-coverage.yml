@@ -1,15 +1,15 @@
 name: Test verifyInputProvided() w/ Code Coverage
-run-name: ${{ github.actor }} triggered testing of verifyInputProvided() w/ code coverage for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
+run-name: ${{ github.actor }} triggered testing of verifyInputProvided() w/ code coverage for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
 on:
   pull_request:
     branches: [main]
     types: [opened, ready_for_review, reopened, synchronize]
   workflow_dispatch:
 jobs:
-  test-verifyInputProvided-zsh-ubuntu-code-coverage:
+  test-util-verifyInputProvided-zsh-ubuntu-code-coverage:
     runs-on: ubuntu-latest
     steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
@@ -23,7 +23,7 @@ jobs:
       - name: Run test(s) on zsh with code coverage...
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:            spec/unit/util/verifyInputProvided/verifyInputProvided_*
+          test-path:            ./spec/unit/util/verifyInputProvided/verifyInputProvided_*
           shell:                ${{ steps.shell.outputs.path }}
           kcov-include-pattern: util/verifyInputProvided/verifyInputProvided.sh
           kcov-limit:           91

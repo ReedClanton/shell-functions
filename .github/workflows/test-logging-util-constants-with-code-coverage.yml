@@ -1,5 +1,5 @@
 name: Test logging()'s Constants w/ Code Coverage
-run-name: ${{ github.actor }} triggered testing of logging()'s constants.sh w/ code coverage for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}
+run-name: ${{ github.actor }} triggered testing of logging()'s constants.sh w/ code coverage for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
 on:
   pull_request:
     branches: [main]
@@ -9,7 +9,7 @@ jobs:
   test-logging-util-constants-zsh-ubuntu-code-coverage:
     runs-on: ubuntu-latest
     steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
@@ -23,7 +23,7 @@ jobs:
       - name: Run test(s) on zsh with code coverage...
         uses: ./.github/actions/run-shellspec
         with:
-          test-path:            spec/unit/logging/util/constants_*
+          test-path:            ./spec/unit/logging/util/constants_*
           shell:                ${{ steps.shell.outputs.path }}
           kcov-include-pattern: logging/util/constants.sh
           kcov-limit:           91

@@ -10,6 +10,12 @@ on:
       - output/**/*.sh
       # CUT test(s).
       - spec/unit/output/output_*
+      # Test configuration.
+      - spec/spec_helper.sh
+      - .shellspec
+      - spec/support/bin/*
+      # Badge configuration.
+      - .github/badge-dependencies
       # This or related workflows.
       - .github/workflows/test-output*
       # All action(s), regardless of if used.
@@ -19,7 +25,7 @@ jobs:
   test-output-busybox-ash-ubuntu:
     runs-on: ubuntu-latest
     steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
@@ -46,7 +52,7 @@ jobs:
   test-output-bash-macos:
     runs-on: macos-latest
     steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
@@ -63,7 +69,7 @@ jobs:
   test-output-dash-macos:
     runs-on: macos-latest
     steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
@@ -80,7 +86,7 @@ jobs:
   test-output-zsh-macos:
     runs-on: macos-latest
     steps:
-      - name: Checking out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v3
       - name: Install ShellSpec...
         uses: ./.github/actions/install-shellspec
@@ -104,6 +110,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      # Needed so the local publish-badges action is available.
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/publish-badges
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v3
+      - name: Write badges out to `badge` branch so they show up in `README.md` files...
+        uses: ./.github/actions/publish-badges
