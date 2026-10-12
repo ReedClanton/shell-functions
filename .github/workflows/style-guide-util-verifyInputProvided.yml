@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - util/verifyInputProvided/verifyInputProvided.sh
-      - .github/workflows/style-guide-verifyInputProvided*
+      - .github/workflows/style-guide-util-verifyInputProvided*
       - .github/actions/**/*
   workflow_dispatch:
 jobs:
