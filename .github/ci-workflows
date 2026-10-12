@@ -1,0 +1,185 @@
+#################################################################################
+## CI Workflows
+##
+## Lists every workflow the CI workflow (ci.yml) calls, and the files each one
+## depends on. Read by the plan-ci action.
+##
+## Format:
+##   - '<workflow>: <pattern>...', where <workflow> is the file name without
+##     '.yml' (and the job id in ci.yml), and each <pattern> is a glob:
+##     '*' and '?' stop at '/', '**' crosses directories.
+##   - A workflow may span several lines; its patterns are combined.
+##   - A workflow with no patterns only runs for PRs, tags and manual runs.
+##
+## Effect:
+##   - On a branch push, a workflow runs when a file matching one of its
+##     patterns changed since it last succeeded, or when its last result
+##     wasn't a success.
+#################################################################################
+
+########################
+## Style Guide Checks ##
+########################
+style-guide-backUp: backUp/backUp.sh
+style-guide-backUp: .github/workflows/style-guide-backUp*
+style-guide-backUp: .github/actions/**/*
+style-guide-backUp: .github/workflows/ci.yml .github/ci-workflows
+
+style-guide-backUp-util-constants: backUp/util/constants.sh
+style-guide-backUp-util-constants: .github/workflows/style-guide-backUp*
+style-guide-backUp-util-constants: .github/actions/**/*
+style-guide-backUp-util-constants: .github/workflows/ci.yml .github/ci-workflows
+
+style-guide-backUp-util-main: backUp/util/main.sh
+style-guide-backUp-util-main: .github/workflows/style-guide-backUp*
+style-guide-backUp-util-main: .github/actions/**/*
+style-guide-backUp-util-main: .github/workflows/ci.yml .github/ci-workflows
+
+style-guide-logging: logging/logging.sh
+style-guide-logging: .github/workflows/style-guide-logging*
+style-guide-logging: .github/actions/**/*
+style-guide-logging: .github/workflows/ci.yml .github/ci-workflows
+
+style-guide-logging-util-constants: logging/util/constants.sh
+style-guide-logging-util-constants: .github/workflows/style-guide-logging*
+style-guide-logging-util-constants: .github/actions/**/*
+style-guide-logging-util-constants: .github/workflows/ci.yml .github/ci-workflows
+
+style-guide-logging-util-main: logging/util/main.sh
+style-guide-logging-util-main: .github/workflows/style-guide-logging*
+style-guide-logging-util-main: .github/actions/**/*
+style-guide-logging-util-main: .github/workflows/ci.yml .github/ci-workflows
+
+style-guide-output: output/output.sh
+style-guide-output: .github/workflows/style-guide-output*
+style-guide-output: .github/actions/**/*
+style-guide-output: .github/workflows/ci.yml .github/ci-workflows
+
+style-guide-output-util-constants: output/util/constants.sh
+style-guide-output-util-constants: .github/workflows/style-guide-output*
+style-guide-output-util-constants: .github/actions/**/*
+style-guide-output-util-constants: .github/workflows/ci.yml .github/ci-workflows
+
+style-guide-output-util-createHeaderFooter: output/util/createHeaderFooter.sh
+style-guide-output-util-createHeaderFooter: .github/workflows/style-guide-output*
+style-guide-output-util-createHeaderFooter: .github/actions/**/*
+style-guide-output-util-createHeaderFooter: .github/workflows/ci.yml .github/ci-workflows
+
+style-guide-output-util-main: output/util/main.sh
+style-guide-output-util-main: .github/workflows/style-guide-output*
+style-guide-output-util-main: .github/actions/**/*
+style-guide-output-util-main: .github/workflows/ci.yml .github/ci-workflows
+
+style-guide-shellFunctionSetup: shellFunctionSetup.sh
+style-guide-shellFunctionSetup: .github/workflows/style-guide-shellFunctionSetup*
+style-guide-shellFunctionSetup: .github/actions/**/*
+style-guide-shellFunctionSetup: .github/workflows/ci.yml .github/ci-workflows
+
+style-guide-util-shellName: util/shellName/shellName.sh
+style-guide-util-shellName: .github/workflows/style-guide-util-shellName*
+style-guide-util-shellName: .github/actions/**/*
+style-guide-util-shellName: .github/workflows/ci.yml .github/ci-workflows
+
+style-guide-util-verifyInputProvided: util/verifyInputProvided/verifyInputProvided.sh
+style-guide-util-verifyInputProvided: .github/workflows/style-guide-util-verifyInputProvided*
+style-guide-util-verifyInputProvided: .github/actions/**/*
+style-guide-util-verifyInputProvided: .github/workflows/ci.yml .github/ci-workflows
+
+###########
+## Tests ##
+###########
+test-logging: logging/logging.sh
+test-logging: logging/**/*.sh
+test-logging: spec/unit/logging/logging_*
+test-logging: spec/spec_helper.sh .shellspec spec/support/bin/*
+test-logging: .github/badge-dependencies
+test-logging: .github/workflows/test-logging*
+test-logging: .github/actions/**/*
+test-logging: .github/workflows/ci.yml .github/ci-workflows
+
+test-logging-util-constants: logging/util/constants.sh
+test-logging-util-constants: spec/unit/logging/util/constants_*
+test-logging-util-constants: spec/spec_helper.sh .shellspec spec/support/bin/*
+test-logging-util-constants: .github/badge-dependencies
+test-logging-util-constants: .github/workflows/test-logging*
+test-logging-util-constants: .github/actions/**/*
+test-logging-util-constants: .github/workflows/ci.yml .github/ci-workflows
+
+test-output: output/output.sh
+test-output: output/**/*.sh
+test-output: spec/unit/output/output_*
+test-output: spec/spec_helper.sh .shellspec spec/support/bin/*
+test-output: .github/badge-dependencies
+test-output: .github/workflows/test-output*
+test-output: .github/actions/**/*
+test-output: .github/workflows/ci.yml .github/ci-workflows
+
+test-output-legacy: output/output.sh
+test-output-legacy: output/**/*.sh
+test-output-legacy: spec/unit/output/output_*
+test-output-legacy: spec/spec_helper.sh .shellspec spec/support/bin/*
+test-output-legacy: .github/badge-dependencies
+test-output-legacy: .github/workflows/test-output*
+test-output-legacy: .github/actions/**/*
+test-output-legacy: .github/workflows/ci.yml .github/ci-workflows
+
+test-output-util-constants: output/util/constants.sh
+test-output-util-constants: spec/unit/output/util/constants_*
+test-output-util-constants: spec/spec_helper.sh .shellspec spec/support/bin/*
+test-output-util-constants: .github/badge-dependencies
+test-output-util-constants: .github/workflows/test-output*
+test-output-util-constants: .github/actions/**/*
+test-output-util-constants: .github/workflows/ci.yml .github/ci-workflows
+
+test-output-util-constants-legacy: output/util/constants.sh
+test-output-util-constants-legacy: spec/unit/output/util/constants_*
+test-output-util-constants-legacy: spec/spec_helper.sh .shellspec spec/support/bin/*
+test-output-util-constants-legacy: .github/badge-dependencies
+test-output-util-constants-legacy: .github/workflows/test-output*
+test-output-util-constants-legacy: .github/actions/**/*
+test-output-util-constants-legacy: .github/workflows/ci.yml .github/ci-workflows
+
+test-output-util-createHeaderFooter: output/util/createHeaderFooter.sh
+test-output-util-createHeaderFooter: spec/unit/output/util/createHeaderFooter_*
+test-output-util-createHeaderFooter: spec/spec_helper.sh .shellspec spec/support/bin/*
+test-output-util-createHeaderFooter: .github/badge-dependencies
+test-output-util-createHeaderFooter: .github/workflows/test-output*
+test-output-util-createHeaderFooter: .github/actions/**/*
+test-output-util-createHeaderFooter: .github/workflows/ci.yml .github/ci-workflows
+
+test-output-util-createHeaderFooter-legacy: output/util/createHeaderFooter.sh
+test-output-util-createHeaderFooter-legacy: spec/unit/output/util/createHeaderFooter_*
+test-output-util-createHeaderFooter-legacy: spec/spec_helper.sh .shellspec spec/support/bin/*
+test-output-util-createHeaderFooter-legacy: .github/badge-dependencies
+test-output-util-createHeaderFooter-legacy: .github/workflows/test-output*
+test-output-util-createHeaderFooter-legacy: .github/actions/**/*
+test-output-util-createHeaderFooter-legacy: .github/workflows/ci.yml .github/ci-workflows
+
+test-util-verifyInputProvided: util/verifyInputProvided/verifyInputProvided.sh
+test-util-verifyInputProvided: util/verifyInputProvided/**/*.sh
+test-util-verifyInputProvided: spec/unit/util/verifyInputProvided/verifyInputProvided_*
+test-util-verifyInputProvided: spec/spec_helper.sh .shellspec spec/support/bin/*
+test-util-verifyInputProvided: .github/badge-dependencies
+test-util-verifyInputProvided: .github/workflows/test-util-verifyInputProvided*
+test-util-verifyInputProvided: .github/actions/**/*
+test-util-verifyInputProvided: .github/workflows/ci.yml .github/ci-workflows
+
+test-util-verifyInputProvided-legacy: util/verifyInputProvided/verifyInputProvided.sh
+test-util-verifyInputProvided-legacy: util/verifyInputProvided/**/*.sh
+test-util-verifyInputProvided-legacy: spec/unit/util/verifyInputProvided/verifyInputProvided_*
+test-util-verifyInputProvided-legacy: spec/spec_helper.sh .shellspec spec/support/bin/*
+test-util-verifyInputProvided-legacy: .github/badge-dependencies
+test-util-verifyInputProvided-legacy: .github/workflows/test-util-verifyInputProvided*
+test-util-verifyInputProvided-legacy: .github/actions/**/*
+test-util-verifyInputProvided-legacy: .github/workflows/ci.yml .github/ci-workflows
+
+#############################
+## Tests w/ Code Coverage ##
+#############################
+# Only run for PRs, tags and manual runs.
+test-logging-with-code-coverage:
+test-logging-util-constants-with-code-coverage:
+test-output-with-code-coverage:
+test-output-util-constants-with-code-coverage:
+test-output-util-createHeaderFooter-with-code-coverage:
+test-util-verifyInputProvided-with-code-coverage:
