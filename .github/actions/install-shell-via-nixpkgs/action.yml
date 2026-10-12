@@ -3,7 +3,7 @@ description: >-
   Installs a specific version of a shell from nixpkgs (or the latest version
   when none is given), then verifies it runs and reports its absolute path
   and version. The version is resolved to a nixpkgs commit with the Nixhub
-  API. Note that Nixhub has rate limits. Note likely to hit them, but they
+  API. Note that Nixhub has rate limits. Not likely to hit them, but they
   exist. The shell and everything it needs to run are cached, so later runs
   restore it in seconds without installing Nix. Linux runners only.
 
@@ -19,11 +19,9 @@ inputs:
     default: ''
   version:
     description: >-
-      Version of the package to install (e.g. '4.4.23'), as listed on
+      Version of the package to install (e.g. '4.4-p23'), as listed on
       nixhub.io. Defaults to the latest version. Prefer an exact version, so
-      the cached install never changes. If exact version isn't provided,
-      like '4.4' rather than '4.4.23', then the latest version of '4.4' will
-      be used. This will also require going out to Nixhub.
+      the cached install never changes.
     required: false
     default: ''
 
