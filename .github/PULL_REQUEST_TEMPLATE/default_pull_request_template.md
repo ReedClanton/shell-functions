@@ -27,6 +27,13 @@ These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creatio
         - If not, provide a justification for this in the [Description of Changes](#description-of-changes) section.
     - [ ] Checked for *new* GitHub issue comments and addressed.
     - [ ] Verified *existing* GitHub issue comments have been addressed.
+- *All* renamed **or** new directories and files:
+    - [ ] If they contain CUT, then:
+        - [ ] `<repoRoot>/.github/badge-dependencies` is updated.
+        - [ ] `<repoRoot>/.github/ci-workflows` is updated.
+    - [ ] If they contain tests, then:
+        - [ ] `<repoRoot>/.github/ci-workflows` is updated.
+        - [ ] The workflow(s) that run them still do, or have been updated.
 - *All* code changes, *including* unit tests:
     - [ ] Adhere to the style guide:
         - Code style guide is located in the Shell Style Guide section of [`README.md`](https://github.com/ReedClanton/shell-functions/blob/main/README.md) at the root of the project.
@@ -66,6 +73,13 @@ These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creatio
 
 - For the GitHub issue associated with this work:
     - [ ] The **Scope** section is being adhered to.
+- *All* renamed **or** new directories and files:
+    - [ ] If they contain CUT, then:
+        - [ ] `<repoRoot>/.github/badge-dependencies` is updated.
+        - [ ] `<repoRoot>/.github/ci-workflows` is updated.
+    - [ ] If they contain tests, then:
+        - [ ] `<repoRoot>/.github/ci-workflows` is updated.
+        - [ ] The workflow(s) that run them still do, or have been updated.
 - Documentation:
     - [ ] `README.md` of *_all_ code touched*, *including* unit tests:
         - [ ] Has been read to asses what additions and updates should be made.
@@ -101,6 +115,13 @@ These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creatio
         - If not, provide a justification for this in the [Description of Changes](#description-of-changes) section.
     - [ ] Checked for *new* GitHub issue comments and addressed.
     - [ ] Verified *existing* GitHub issue comments have been addressed.
+- *All* renamed **or** new directories and files:
+    - [ ] If they contain CUT, then:
+        - [ ] `<repoRoot>/.github/badge-dependencies` is updated.
+        - [ ] `<repoRoot>/.github/ci-workflows` is updated.
+    - [ ] If they contain tests, then:
+        - [ ] `<repoRoot>/.github/ci-workflows` is updated.
+        - [ ] The workflow(s) that run them still do, or have been updated.
 - *All* code changes, *including* unit tests:
     - [ ] Adhere to the style guide:
         - Code style guide is located in the [`README.md` at the root of the repository](https://github.com/ReedClanton/shell-functions/blob/main/README.md#shell-style-guide).
