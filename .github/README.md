@@ -12,6 +12,10 @@ Badges are the little icons you see in the rendered `README.md` files across thi
 
 For example, if there is one bit of code that doesn't run on `zsh`, then the `zsh` badge in the `README.md` at the root of the project would reflect that. It will only be all <span style="color: green;">green</span> if *all* tested code in the repository passed all tests with no skips.
 
+## /ci-workflows
+
+This file is read in by the [`plan-ci` action](./actions/plan-ci/action.yml) (for more about this file, see the [`plan-ci` section](./actions/README.md#plan-ci) of the actions `README.md` file). [`ci-workflows`](./ci-workflows) lists, for each workflow, the files that matter to it. The `plan-ci` action then uses this information to tell which workflows are affected by the changes since each one last succeeded. This prevents workflows from being re-run when not needed, and ensure workflows continue to be run until they succeed.
+
 ## /ISSUE_TEMPLATE/
 
 This directory contains the templates used when creating GitHub issues.

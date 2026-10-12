@@ -1,11 +1,9 @@
 name: Style Guide Check of logging()'s Main File
 run-name: ${{ github.actor }} triggered style guide check of logging()'s main.sh file for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
 on:
-  push:
-    paths:
-      - logging/util/main.sh
-      - .github/workflows/style-guide-logging*
-      - .github/actions/**/*
+  # Run by ci.yml, which decides when this is needed.
+  workflow_call:
+  # Lets this workflow still be run on its own from the Actions tab.
   workflow_dispatch:
 jobs:
   style-guide-logging-util-main:

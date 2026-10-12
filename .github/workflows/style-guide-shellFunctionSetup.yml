@@ -1,11 +1,9 @@
 name: Style Guide Check of shellFunctionSetup.sh
 run-name: ${{ github.actor }} triggered style guide check of shellFunctionSetup.sh for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
 on:
-  push:
-    paths:
-      - shellFunctionSetup.sh
-      - .github/workflows/style-guide-shellFunctionSetup*
-      - .github/actions/**/*
+  # Run by ci.yml, which decides when this is needed.
+  workflow_call:
+  # Lets this workflow still be run on its own from the Actions tab.
   workflow_dispatch:
 jobs:
   style-guide-shellFunctionSetup:

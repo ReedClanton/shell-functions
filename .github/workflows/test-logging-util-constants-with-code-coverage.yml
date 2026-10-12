@@ -1,9 +1,9 @@
 name: Test logging()'s Constants w/ Code Coverage
 run-name: ${{ github.actor }} triggered testing of logging()'s constants.sh w/ code coverage for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
 on:
-  pull_request:
-    branches: [main]
-    types: [opened, ready_for_review, reopened, synchronize]
+  # Run by ci.yml, which decides when this is needed.
+  workflow_call:
+  # Lets this workflow still be run on its own from the Actions tab.
   workflow_dispatch:
 jobs:
   test-logging-util-constants-zsh-ubuntu-code-coverage:
