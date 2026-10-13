@@ -4,7 +4,7 @@
 
 ## The Basics
 
-These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creation**:
+These should be checked <ins>*immediately*</ins> upon PR (Pull Request) **creation**:
 
 - [ ] The name of the branch is:
     - `<feature/bug>/<issueId>-<issue-title-with-dashes-between-and-no-capitalization>`
@@ -34,32 +34,37 @@ These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creatio
     - [ ] If they contain tests, then:
         - [ ] `<repoRoot>/.github/ci-workflows` is updated.
         - [ ] The workflow(s) that run them still do, or have been updated.
+- *All* renamed **or** new workflows (`<repoRoot>/.github/workflows/*.yml`, other than `ci.yml`) are:
+    - [ ] Listed in `<repoRoot>/.github/ci-workflows`.
+    - [ ] Called by `<repoRoot>/.github/workflows/ci.yml`, with a job id that matches its name in `ci-workflows`.
+    - [ ] Listed under the `all-checks` job's `needs:` in `ci.yml`.
+    - [ ] Add test workflows to the `needs:` section of the `publish-badges` action.
 - *All* code changes, *including* unit tests:
     - [ ] Adhere to the style guide:
-        - Code style guide is located in the Shell Style Guide section of [`README.md`](https://github.com/ReedClanton/shell-functions/blob/main/README.md) at the root of the project.
+        - Code style guide is located in the [Shell Style Guide section of the `README.md`](https://github.com/ReedClanton/shell-functions/blob/main/README.md#shell-style-guide) at the root of this repository.
         - Test style guide is located in the [`README.md`](https://github.com/ReedClanton/shell-functions/blob/main/spec/unit/README.md) at the root of the unit testing directory.
     - [ ] Executes successfully locally.
     - [ ] Style checker executes successfully by the GitHub runner (pipeline).
 - Documentation:
     - [ ] `README.md` of *_all_ code touched*, *including* unit tests:
-        - [ ] Has been read to asses what additions and updates should be made.
+        - [ ] Has been read to assess what additions and updates should be made.
         - [ ] Has been updated.
     - [ ] Script/Function/Help doc of *_all_ code touched* (if you touch the file, you own all documentation updates):
-        - [ ] Has been read to asses what additions and updates should be made.
+        - [ ] Has been read to assess what additions and updates should be made.
         - [ ] Has been updated.
 - Testing:
     - New code:
-        - [ ] Has 100% Unit test coverage (other than `main.sh` files).
+        - [ ] Has 100% test coverage (other than `main.sh` files).
         - [ ] Is run by a GitHub workflow (the pipeline).
         - [ ] Runs successfully by GitHub runner (the pipeline).
-        - [ ] New unit tests are being run by GitHub actions (pipeline).
+        - [ ] New unit tests are being run by GitHub workflows (pipeline).
         - [ ] New code's dependency tree has been added to `<repoRoot>/.github/badge-dependencies`.
     - Coverage:
-        - [ ] Unit test coverage of *_all_ code touched* has **not** dropped.
+        - [ ] Test coverage of *_all_ code touched* has **not** dropped.
         - [ ] 100% coverage exists for *_all_ added code*.
         - [ ] Checked if unit test coverage has increased, if so:
             - [ ] Update GitHub workflows `.yml` files that run the unit tests in the pipeline to increase the minimum coverage level required for pipeline success.
-            - **Importnat**:
+            - **Important**:
                 - Until #20 is worked, pipeline doesn't enforce failure due to lack of code coverage!
     - All tests (unit, functional, or otherwise) run successfully:
         - [ ] By GitHub runner (the pipeline).
@@ -67,7 +72,7 @@ These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creatio
     - *If* new environment variable(s) were added:
         - [ ] Environment variables are unset by the `spec_helper_precheck()` function in `<repoRoot>/spec/spec_helper.sh`.
         - [ ] *All* unit tests of the code that uses them set or unset them at the top or within the test.
-        - [ ] 100% Unit test coverage of environment variable(s).
+        - [ ] 100% Test coverage of environment variable(s).
 
 ## Check Before Each Push
 
@@ -82,19 +87,19 @@ These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creatio
         - [ ] The workflow(s) that run them still do, or have been updated.
 - Documentation:
     - [ ] `README.md` of *_all_ code touched*, *including* unit tests:
-        - [ ] Has been read to asses what additions and updates should be made.
+        - [ ] Has been read to assess what additions and updates should be made.
         - [ ] Has been updated.
     - [ ] Script/Function/Help doc of *_all_ code touched* (if you touch the file, you own all documentation updates):
-        - [ ] Has been read to asses what additions and updates should be made.
+        - [ ] Has been read to assess what additions and updates should be made.
         - [ ] Has been updated.
 - Testing:
     - New code:
-        - [ ] Has 100% Unit test coverage (other than `main.sh` files).
+        - [ ] Has 100% test coverage (other than `main.sh` files).
         - [ ] Is run by a GitHub workflow (the pipeline).
         - [ ] Runs successfully by GitHub runner (the pipeline).
         - [ ] New unit tests are being run by GitHub actions (pipeline).
     - Coverage:
-        - [ ] Unit test coverage of *_all_ code touched* has **not** dropped.
+        - [ ] Test coverage of *_all_ code touched* has **not** dropped.
         - [ ] 100% coverage exists for *_all_ added code*.
         - [ ] Checked if unit test coverage has increased, if so:
             - [ ] Update GitHub workflows `.yml` files that run the unit tests in the pipeline to increase the minimum coverage level required for pipeline success.
@@ -104,7 +109,7 @@ These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creatio
     - *If* new environment variable(s) were added:
         - [ ] Environment variables are unset by the `spec_helper_precheck()` function in `<repoRoot>/spec/spec_helper.sh`.
         - [ ] *All* unit tests of the code that uses them set or unset them at the top or within the test.
-        - [ ] 100% Unit test coverage of environment variable(s).
+        - [ ] 100% Test coverage of environment variable(s).
 
 ## Check After Final Push
 
@@ -122,27 +127,32 @@ These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creatio
     - [ ] If they contain tests, then:
         - [ ] `<repoRoot>/.github/ci-workflows` is updated.
         - [ ] The workflow(s) that run them still do, or have been updated.
+- *All* renamed **or** new workflows (`<repoRoot>/.github/workflows/*.yml`, other than `ci.yml`) are:
+    - [ ] Listed in `<repoRoot>/.github/ci-workflows`.
+    - [ ] Called by `<repoRoot>/.github/workflows/ci.yml`, with a job id that matches its name in `ci-workflows`.
+    - [ ] Listed under the `all-checks` job's `needs:` in `ci.yml`.
+    - [ ] Add test workflows to the `needs:` section of the `publish-badges` action.
 - *All* code changes, *including* unit tests:
     - [ ] Adhere to the style guide:
-        - Code style guide is located in the [`README.md` at the root of the repository](https://github.com/ReedClanton/shell-functions/blob/main/README.md#shell-style-guide).
+        - Code style guide is located in the [Shell Style Guide section of the `README.md`](https://github.com/ReedClanton/shell-functions/blob/main/README.md#shell-style-guide) at the root of this repository.
         - Test style guide is located in the [`README.md` at the root of the unit testing directory](https://github.com/ReedClanton/shell-functions/blob/main/spec/unit/README.md).
     - [ ] Executes successfully locally.
     - [ ] Style checker executes successfully by the GitHub runner (pipeline).
 - Documentation:
     - [ ] `README.md` of *_all_ code touched*, *including* unit tests:
-        - [ ] Has been read to asses what additions and updates should be made.
+        - [ ] Has been read to assess what additions and updates should be made.
         - [ ] Has been updated.
     - [ ] Script/Function/Help doc of *_all_ code touched* (if you touch the file, you own all documentation updates):
-        - [ ] Has been read to asses what additions and updates should be made.
+        - [ ] Has been read to assess what additions and updates should be made.
         - [ ] Has been updated.
 - Testing:
     - New code:
-        - [ ] Has 100% Unit test coverage (other than `main.sh` files).
+        - [ ] Has 100% test coverage (other than `main.sh` files).
         - [ ] Is run by a GitHub workflow (the pipeline).
         - [ ] Runs successfully by GitHub runner (the pipeline).
         - [ ] New unit tests are being run by GitHub actions (pipeline).
     - Coverage:
-        - [ ] Unit test coverage of *_all_ code touched* has **not** dropped.
+        - [ ] Test coverage of *_all_ code touched* has **not** dropped.
         - [ ] 100% coverage exists for *_all_ added code*.
         - [ ] Checked if unit test coverage has increased, if so:
             - [ ] Update GitHub workflows `.yml` files that run the unit tests in the pipeline to increase the minimum coverage level required for pipeline success.
@@ -152,5 +162,5 @@ These should be checked <ins>*immediately*</ins> upon PR (Peer Review) **creatio
     - *If* new environment variable(s) were added:
         - [ ] Environment variables are unset by the `spec_helper_precheck()` function in `<repoRoot>/spec/spec_helper.sh`.
         - [ ] *All* unit tests of the code that uses them set or unset them at the top or within the test.
-        - [ ] 100% Unit test coverage of environment variable(s).
+        - [ ] 100% Test coverage of environment variable(s).
 - [ ] PR is *not* marked as `Draft`.
