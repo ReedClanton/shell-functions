@@ -265,9 +265,11 @@ runs:
               reason="run: last success ($base) isn't in this history"
             else
               # Changed files are listed once per starting commit and reused.
+              # # A rename is listed as both its old and new path, so workflows
+              # tied to either location are checked.
               changes="$work/changes-$base.txt"
               if [ ! -f "$changes" ]; then
-                git diff --name-only "$base" "$SHA" > "$changes"
+                git diff --name-only --no-renames "$base" "$SHA" > "$changes"
               fi
               if grep -Eq -f "$work/regexes.txt" "$changes"; then
                 reason="run: its files changed since it last succeeded ($base)"
