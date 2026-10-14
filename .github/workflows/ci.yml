@@ -176,12 +176,13 @@ jobs:
     # - Run wasn't cancelled.
     # - All tests are run successfully.
     # - The plan job selected this workflow.
-    if: >- ${{
+    if: >-
+      ${{
       !cancelled()
       && !contains(needs.*.result, 'failure')
       && !contains(needs.*.result, 'cancelled')
       && contains(fromJSON(needs.plan.outputs.workflows), 'test-logging-with-code-coverage')
-    }}
+      }}
     uses:  ./.github/workflows/test-logging-with-code-coverage.yml
   test-logging-util-constants:
     needs: plan
@@ -197,12 +198,13 @@ jobs:
     # - Run wasn't cancelled.
     # - All tests are run successfully.
     # - The plan job selected this workflow.
-    if: >- ${{
+    if: >-
+      ${{
       !cancelled()
       && !contains(needs.*.result, 'failure')
       && !contains(needs.*.result, 'cancelled')
       && contains(fromJSON(needs.plan.outputs.workflows), 'test-logging-util-constants-with-code-coverage')
-    }}
+      }}
     uses:  ./.github/workflows/test-logging-util-constants-with-code-coverage.yml
   test-output:
     needs: plan
@@ -223,12 +225,13 @@ jobs:
     # - Run wasn't cancelled.
     # - All tests are run successfully.
     # - The plan job selected this workflow.
-    if: >- ${{
+    if: >-
+      ${{
       !cancelled()
       && !contains(needs.*.result, 'failure')
       && !contains(needs.*.result, 'cancelled')
       && contains(fromJSON(needs.plan.outputs.workflows), 'test-output-with-code-coverage')
-    }}
+      }}
     uses:  ./.github/workflows/test-output-with-code-coverage.yml
   test-output-util-constants:
     needs: plan
@@ -249,12 +252,13 @@ jobs:
     # - Run wasn't cancelled.
     # - All tests are run successfully.
     # - The plan job selected this workflow.
-    if: >- ${{
+    if: >-
+      ${{
       !cancelled()
       && !contains(needs.*.result, 'failure')
       && !contains(needs.*.result, 'cancelled')
       && contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-constants-with-code-coverage')
-    }}
+      }}
     uses:  ./.github/workflows/test-output-util-constants-with-code-coverage.yml
   test-output-util-createHeaderFooter:
     needs: plan
@@ -275,12 +279,13 @@ jobs:
     # - Run wasn't cancelled.
     # - All tests are run successfully.
     # - The plan job selected this workflow.
-    if: >- ${{
+    if: >-
+      ${{
       !cancelled()
       && !contains(needs.*.result, 'failure')
       && !contains(needs.*.result, 'cancelled')
       && contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-createHeaderFooter-with-code-coverage')
-    }}
+      }}
     uses:  ./.github/workflows/test-output-util-createHeaderFooter-with-code-coverage.yml
   test-util-verifyInputProvided:
     needs: plan
@@ -301,12 +306,13 @@ jobs:
     # - Run wasn't cancelled.
     # - All tests are run successfully.
     # - The plan job selected this workflow.
-    if: >- ${{
+    if: >-
+      ${{
       !cancelled()
       && !contains(needs.*.result, 'failure')
       && !contains(needs.*.result, 'cancelled')
       && contains(fromJSON(needs.plan.outputs.workflows), 'test-verifyInputProvided-with-code-coverage')
-    }}
+      }}
     uses:  ./.github/workflows/test-util-verifyInputProvided-with-code-coverage.yml
 
   ###############################################################################
