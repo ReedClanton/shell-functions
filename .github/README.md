@@ -24,6 +24,6 @@ This directory contains the templates used when creating GitHub issues.
 
 This directory contains templates for pull request. This is what fills out the description of PRs automatically.
 
-## /workflows
+## /workflows/
 
 This directory is what contains the `.yml` files that dictate what the GitHub runners (pipeline) does. These can do just about anything you can think of, but mine mostly just run tests and style checks.

@@ -94,124 +94,219 @@ jobs:
   ##     '<job id> / <called job>'. The plan reads them in later runs, so each
   ##     job id must match the workflow's name in .github/ci-workflows.
   ###############################################################################
-  # Style guide check(s).
+  ## Style Guide Check(s) ##
   style-guide-backUp:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-backUp')
     uses:  ./.github/workflows/style-guide-backUp.yml
   style-guide-backUp-util-constants:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-backUp-util-constants')
     uses:  ./.github/workflows/style-guide-backUp-util-constants.yml
   style-guide-backUp-util-main:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-backUp-util-main')
     uses:  ./.github/workflows/style-guide-backUp-util-main.yml
   style-guide-logging:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-logging')
     uses:  ./.github/workflows/style-guide-logging.yml
   style-guide-logging-util-constants:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-logging-util-constants')
     uses:  ./.github/workflows/style-guide-logging-util-constants.yml
   style-guide-logging-util-main:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-logging-util-main')
     uses:  ./.github/workflows/style-guide-logging-util-main.yml
   style-guide-output:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-output')
     uses:  ./.github/workflows/style-guide-output.yml
   style-guide-output-util-constants:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-output-util-constants')
     uses:  ./.github/workflows/style-guide-output-util-constants.yml
   style-guide-output-util-createHeaderFooter:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-output-util-createHeaderFooter')
     uses:  ./.github/workflows/style-guide-output-util-createHeaderFooter.yml
   style-guide-output-util-main:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-output-util-main')
     uses:  ./.github/workflows/style-guide-output-util-main.yml
   style-guide-shellFunctionSetup:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-shellFunctionSetup')
     uses:  ./.github/workflows/style-guide-shellFunctionSetup.yml
   style-guide-util-shellName:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-util-shellName')
     uses:  ./.github/workflows/style-guide-util-shellName.yml
   style-guide-util-verifyInputProvided:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-util-verifyInputProvided')
     uses:  ./.github/workflows/style-guide-util-verifyInputProvided.yml
 
-  # Test(s).
+  ## Unit Test(s) ##
   test-logging:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-logging')
     uses:  ./.github/workflows/test-logging.yml
   test-logging-with-code-coverage:
-    needs: plan
-    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-logging-with-code-coverage')
+    needs:
+      - plan
+      # Don't bother running code coverage if tests are failing.
+      - test-logging
+    # Ensure:
+    # - Run wasn't cancelled.
+    # - All tests are run successfully.
+    # - The plan job selected this workflow.
+    if: >- ${{
+      !cancelled()
+      && !contains(needs.*.result, 'failure')
+      && !contains(needs.*.result, 'cancelled')
+      && contains(fromJSON(needs.plan.outputs.workflows), 'test-logging-with-code-coverage')
+    }}
     uses:  ./.github/workflows/test-logging-with-code-coverage.yml
   test-logging-util-constants:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-logging-util-constants')
     uses:  ./.github/workflows/test-logging-util-constants.yml
   test-logging-util-constants-with-code-coverage:
-    needs: plan
-    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-logging-util-constants-with-code-coverage')
+    needs:
+      - plan
+      # Don't bother running code coverage if tests are failing.
+      - test-logging-util-constants
+    # Ensure:
+    # - Run wasn't cancelled.
+    # - All tests are run successfully.
+    # - The plan job selected this workflow.
+    if: >- ${{
+      !cancelled()
+      && !contains(needs.*.result, 'failure')
+      && !contains(needs.*.result, 'cancelled')
+      && contains(fromJSON(needs.plan.outputs.workflows), 'test-logging-util-constants-with-code-coverage')
+    }}
     uses:  ./.github/workflows/test-logging-util-constants-with-code-coverage.yml
   test-output:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-output')
     uses:  ./.github/workflows/test-output.yml
   test-output-legacy:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-output-legacy')
     uses:  ./.github/workflows/test-output-legacy.yml
   test-output-with-code-coverage:
-    needs: plan
-    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-output-with-code-coverage')
+    needs:
+      - plan
+      # Don't bother running code coverage if tests are failing.
+      - test-output
+    # Ensure:
+    # - Run wasn't cancelled.
+    # - All tests are run successfully.
+    # - The plan job selected this workflow.
+    if: >- ${{
+      !cancelled()
+      && !contains(needs.*.result, 'failure')
+      && !contains(needs.*.result, 'cancelled')
+      && contains(fromJSON(needs.plan.outputs.workflows), 'test-output-with-code-coverage')
+    }}
     uses:  ./.github/workflows/test-output-with-code-coverage.yml
   test-output-util-constants:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-constants')
     uses:  ./.github/workflows/test-output-util-constants.yml
   test-output-util-constants-legacy:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-constants-legacy')
     uses:  ./.github/workflows/test-output-util-constants-legacy.yml
   test-output-util-constants-with-code-coverage:
-    needs: plan
-    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-constants-with-code-coverage')
+    needs:
+      - plan
+      # Don't bother running code coverage if tests are failing.
+      - test-output-util-constants
+    # Ensure:
+    # - Run wasn't cancelled.
+    # - All tests are run successfully.
+    # - The plan job selected this workflow.
+    if: >- ${{
+      !cancelled()
+      && !contains(needs.*.result, 'failure')
+      && !contains(needs.*.result, 'cancelled')
+      && contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-constants-with-code-coverage')
+    }}
     uses:  ./.github/workflows/test-output-util-constants-with-code-coverage.yml
   test-output-util-createHeaderFooter:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-createHeaderFooter')
     uses:  ./.github/workflows/test-output-util-createHeaderFooter.yml
   test-output-util-createHeaderFooter-legacy:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-createHeaderFooter-legacy')
     uses:  ./.github/workflows/test-output-util-createHeaderFooter-legacy.yml
   test-output-util-createHeaderFooter-with-code-coverage:
-    needs: plan
-    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-createHeaderFooter-with-code-coverage')
+    needs:
+      - plan
+      # Don't bother running code coverage if tests are failing.
+      - test-output-util-createHeaderFooter
+    # Ensure:
+    # - Run wasn't cancelled.
+    # - All tests are run successfully.
+    # - The plan job selected this workflow.
+    if: >- ${{
+      !cancelled()
+      && !contains(needs.*.result, 'failure')
+      && !contains(needs.*.result, 'cancelled')
+      && contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-createHeaderFooter-with-code-coverage')
+    }}
     uses:  ./.github/workflows/test-output-util-createHeaderFooter-with-code-coverage.yml
   test-util-verifyInputProvided:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-util-verifyInputProvided')
     uses:  ./.github/workflows/test-util-verifyInputProvided.yml
   test-util-verifyInputProvided-legacy:
     needs: plan
+    # Ensures the plan job selected this workflow.
     if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-util-verifyInputProvided-legacy')
     uses:  ./.github/workflows/test-util-verifyInputProvided-legacy.yml
   test-util-verifyInputProvided-with-code-coverage:
-    needs: plan
-    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-util-verifyInputProvided-with-code-coverage')
+    needs:
+      - plan
+      # Don't bother running code coverage if tests are failing.
+      - test-util-verifyInputProvided
+    # Ensure:
+    # - Run wasn't cancelled.
+    # - All tests are run successfully.
+    # - The plan job selected this workflow.
+    if: >- ${{
+      !cancelled()
+      && !contains(needs.*.result, 'failure')
+      && !contains(needs.*.result, 'cancelled')
+      && contains(fromJSON(needs.plan.outputs.workflows), 'test-verifyInputProvided-with-code-coverage')
+    }}
     uses:  ./.github/workflows/test-util-verifyInputProvided-with-code-coverage.yml
 
   ###############################################################################
