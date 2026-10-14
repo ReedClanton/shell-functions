@@ -171,7 +171,7 @@ jobs:
     needs:
       - plan
       # Don't bother running code coverage if tests are failing.
-      - test-logging
+      - test-logging-legacy
     # Ensure:
     # - Run wasn't cancelled.
     # - All tests are run successfully.
@@ -193,7 +193,7 @@ jobs:
     needs:
       - plan
       # Don't bother running code coverage if tests are failing.
-      - test-logging-util-constants
+      - test-logging-util-constants-legacy
     # Ensure:
     # - Run wasn't cancelled.
     # - All tests are run successfully.
@@ -220,7 +220,7 @@ jobs:
     needs:
       - plan
       # Don't bother running code coverage if tests are failing.
-      - test-output
+      - test-output-legacy
     # Ensure:
     # - Run wasn't cancelled.
     # - All tests are run successfully.
@@ -247,7 +247,7 @@ jobs:
     needs:
       - plan
       # Don't bother running code coverage if tests are failing.
-      - test-output-util-constants
+      - test-output-util-constants-legacy
     # Ensure:
     # - Run wasn't cancelled.
     # - All tests are run successfully.
@@ -274,7 +274,7 @@ jobs:
     needs:
       - plan
       # Don't bother running code coverage if tests are failing.
-      - test-output-util-createHeaderFooter
+      - test-output-util-createHeaderFooter-legacy
     # Ensure:
     # - Run wasn't cancelled.
     # - All tests are run successfully.
@@ -301,7 +301,7 @@ jobs:
     needs:
       - plan
       # Don't bother running code coverage if tests are failing.
-      - test-util-verifyInputProvided
+      - test-util-verifyInputProvided-legacy
     # Ensure:
     # - Run wasn't cancelled.
     # - All tests are run successfully.
