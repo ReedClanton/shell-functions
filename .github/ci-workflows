@@ -88,7 +88,7 @@ style-guide-util-verifyInputProvided: .github/workflows/ci.yml .github/ci-workfl
 ############
 ## Test(s) ##
 ############
-test-logging: logging/logging.sh logging/**/*.sh
+test-logging: logging/logging.sh
 test-logging: spec/unit/logging/logging_*
 test-logging: spec/spec_helper.sh .shellspec spec/support/bin/*
 test-logging: .github/workflows/test-logging*
@@ -102,14 +102,14 @@ test-logging-util-constants: .github/workflows/test-logging*
 test-logging-util-constants: .github/actions/**/*
 test-logging-util-constants: .github/workflows/ci.yml .github/ci-workflows .github/badge-dependencies
 
-test-output: output/output.sh output/**/*.sh
+test-output: output/output.sh
 test-output: spec/unit/output/output_*
 test-output: spec/spec_helper.sh .shellspec spec/support/bin/*
 test-output: .github/workflows/test-output*
 test-output: .github/actions/**/*
 test-output: .github/workflows/ci.yml .github/ci-workflows .github/badge-dependencies
 
-test-output-legacy: output/output.sh output/**/*.sh
+test-output-legacy: output/output.sh
 test-output-legacy: spec/unit/output/output_*
 test-output-legacy: spec/spec_helper.sh .shellspec spec/support/bin/*
 test-output-legacy: .github/workflows/test-output*
