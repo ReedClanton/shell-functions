@@ -171,7 +171,8 @@ jobs:
     needs:
       - plan
       # Don't bother running code coverage if tests are failing.
-      - test-logging-legacy
+      # TODO #5: Update to `test-logging-legacy` when the file exists.
+      - test-logging
     # Ensure:
     # - Run wasn't cancelled.
     # - All tests are run successfully.
@@ -193,7 +194,8 @@ jobs:
     needs:
       - plan
       # Don't bother running code coverage if tests are failing.
-      - test-logging-util-constants-legacy
+      # TODO #5: Update to `test-logging-util-constants-legacy` when the file exists.
+      - test-logging-util-constants
     # Ensure:
     # - Run wasn't cancelled.
     # - All tests are run successfully.
