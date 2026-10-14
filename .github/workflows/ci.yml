@@ -311,7 +311,7 @@ jobs:
       !cancelled()
       && !contains(needs.*.result, 'failure')
       && !contains(needs.*.result, 'cancelled')
-      && contains(fromJSON(needs.plan.outputs.workflows), 'test-verifyInputProvided-with-code-coverage')
+      && contains(fromJSON(needs.plan.outputs.workflows), 'test-util-verifyInputProvided-with-code-coverage')
       }}
     uses:  ./.github/workflows/test-util-verifyInputProvided-with-code-coverage.yml
 
