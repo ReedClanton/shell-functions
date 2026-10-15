@@ -1,0 +1,321 @@
+name: Plan CI
+description: >-
+  Decides which workflows the CI workflow should call. PRs, tags and manual
+  runs get every workflow (draft PRs get none). A branch push gets each
+  workflow whose files changed since it last succeeded on the branch, or whose
+  most recent result on the branch wasn't a success. Also fails if the config,
+  the workflow files and the CI workflow disagree about which workflows exist.
+
+inputs:
+  config:
+    description: >-
+      File listing each workflow and the files it depends on. Each line is a
+      workflow name, a colon, then glob patterns separated by spaces. A
+      workflow may span several lines. '#' starts a comment. A workflow with
+      no patterns only runs for PRs, tags and manual runs.
+    required: false
+    default: .github/ci-workflows
+  ci-workflow:
+    description: >-
+      File name of the CI workflow that calls this action (ex. 'ci.yml'). Its
+      earlier runs record where each workflow last succeeded.
+    required: false
+    default: ci.yml
+  token:
+    description: "Token used to read earlier runs. Needs 'actions: read'."
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  workflows:
+    description: JSON list of the workflows to run (ex. '["test-output"]').
+    value: ${{ steps.plan.outputs.workflows }}
+
+runs:
+  using: composite
+  steps:
+    - name:   Plan which workflows to run...
+      id:     plan
+      shell:  sh
+      env:
+        CONFIG:         ${{ inputs.config }}
+        CI_WORKFLOW:    ${{ inputs.ci-workflow }}
+        GH_TOKEN:       ${{ inputs.token }}
+        EVENT_NAME:     ${{ github.event_name }}
+        REF_TYPE:       ${{ github.ref_type }}
+        REF_NAME:       ${{ github.ref_name }}
+        DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        # 'true' for a draft PR, empty for any other event.
+        IS_DRAFT:       ${{ github.event.pull_request.draft }}
+        SHA:            ${{ github.sha }}
+        REPO:           ${{ github.repository }}
+        RUN_ID:         ${{ github.run_id }}
+      run: |
+        tab=$(printf '\t')
+        work="$RUNNER_TEMP/plan-ci"
+        rm -rf "$work"
+        mkdir -p "$work"
+        # Every workflow in the config, one per line.
+        workflows="$work/workflows.txt"
+        # Each line: workflow, tab, a regular expression for one of its patterns.
+        patterns="$work/patterns.tsv"
+        # Workflows chosen to run, one per line.
+        selected="$work/selected.txt"
+        # Each line: workflow, tab, its most recent result on the branch.
+        latest="$work/latest.tsv"
+        # Each line: workflow, tab, the commit of its most recent success.
+        baselines="$work/baselines.tsv"
+        : > "$patterns"
+        : > "$selected"
+        : > "$latest"
+        : > "$baselines"
+
+        #####################
+        ## Read the Config ##
+        #####################
+        # Converts each glob to a regular expression, matching GitHub's rules:
+        # '*' and '?' stop at '/', '**' crosses directories.
+        awk -v workflows="$workflows" -v patterns="$patterns" '
+          function globToRegex(glob,    regex, i, c) {
+            regex = ""
+            i = 1
+            while (i <= length(glob)) {
+              c = substr(glob, i, 1)
+              if (substr(glob, i, 3) == "**/") {
+                regex = regex "(.*/)?"
+                i += 3
+                continue
+              }
+              if (substr(glob, i, 2) == "**") {
+                regex = regex ".*"
+                i += 2
+                continue
+              }
+              if (c == "*") {
+                regex = regex "[^/]*"
+              } else if (c == "?") {
+                regex = regex "[^/]"
+              } else if (index(".+()|{}[]^$\\", c)) {
+                regex = regex "\\" c
+              } else {
+                regex = regex c
+              }
+              i++
+            }
+            return "^" regex "$"
+          }
+          {
+            line = $0
+            sub(/#.*/, "", line)
+            if (line !~ /:/) {
+              next
+            }
+            name = line
+            sub(/:.*/, "", name)
+            gsub(/[ \t]/, "", name)
+            sub(/^[^:]*:/, "", line)
+            if (!(name in seen)) {
+              seen[name] = 1
+              print name > workflows
+            }
+            count = split(line, globs, /[ \t]+/)
+            for (i = 1; i <= count; i++) {
+              if (globs[i] != "") {
+                printf "%s\t%s\n", name, globToRegex(globs[i]) > patterns
+              }
+            }
+          }
+        ' "$CONFIG"
+
+        #########################################
+        ## Check the Config Matches the Files ##
+        #########################################
+        # A workflow missing from either place would never run, or never
+        # block a merge, without anyone noticing.
+        problems=0
+        for file in .github/workflows/*.yml; do
+          name=${file##*/}
+          name=${name%.yml}
+          # The CI workflow calls the others, so it isn't listed itself.
+          if [ "$name.yml" = "$CI_WORKFLOW" ]; then
+            continue
+          fi
+          if ! grep -qxF "$name" "$workflows"; then
+            echo "::error::$file isn't listed in $CONFIG."
+            problems=1
+          fi
+        done
+        while read -r name; do
+          if [ ! -f ".github/workflows/$name.yml" ]; then
+            echo "::error::$CONFIG lists '$name', but .github/workflows/$name.yml doesn't exist."
+            problems=1
+          elif ! grep -q "uses: *\./\.github/workflows/$name\.yml" ".github/workflows/$CI_WORKFLOW"; then
+            echo "::error::$CONFIG lists '$name', but $CI_WORKFLOW doesn't call it."
+            problems=1
+          fi
+        done < "$workflows"
+        if [ "$problems" -ne 0 ]; then
+          exit 1
+        fi
+
+        ###########################
+        ## Find Earlier Results ##
+        ###########################
+        # Reads completed runs of the CI workflow on a branch, newest first, and
+        # records each workflow's most recent result and most recent success.
+        #   $1: branch to read runs from.
+        #   $2: 'true' to record most recent results, not just successes.
+        findEarlierResults() {
+          branch=$1
+          recordLatest=$2
+          gh api -X GET "repos/$REPO/actions/workflows/$CI_WORKFLOW/runs" \
+              -f branch="$branch" -f status=completed -F per_page=100 \
+              --jq '.workflow_runs[] | [.id, .head_sha] | @tsv' \
+            < /dev/null > "$work/runs.tsv"
+
+          while IFS="$tab" read -r runId runSha; do
+            # Workflows still without a known success.
+            awk -F '\t' '
+              FILENAME == ARGV[1] {
+                found[$1] = 1
+                next
+              }
+              !($1 in found) {
+                print $1
+              }
+            ' "$baselines" "$workflows" > "$work/remaining.txt"
+            if [ ! -s "$work/remaining.txt" ]; then
+              break
+            fi
+
+            # Job names look like '<workflow> / <job>', or just '<workflow>' if
+            # the called workflow never started.
+            gh api --paginate "repos/$REPO/actions/runs/$runId/jobs?filter=latest&per_page=100" \
+                --jq '.jobs[] | [.name, (.conclusion // "")] | @tsv' \
+              < /dev/null > "$work/jobs.tsv"
+
+            # Each line: workflow, tab, 'success' or 'failure' for this run.
+            # Workflows that were skipped, or not in it, are left out.
+            awk -F '\t' '
+              FILENAME == ARGV[1] {
+                wanted[$1] = 1
+                next
+              }
+              {
+                workflow = $1
+                sub(/ \/ .*/, "", workflow)
+                if (!(workflow in wanted)) {
+                  next
+                }
+                if ($2 == "skipped" || $2 == "") {
+                  next
+                }
+                ran[workflow] = 1
+                if ($2 != "success") {
+                  failed[workflow] = 1
+                }
+              }
+              END {
+                for (workflow in ran) {
+                  if (workflow in failed) {
+                    print workflow "\tfailure"
+                  } else {
+                    print workflow "\tsuccess"
+                  }
+                }
+              }
+            ' "$work/remaining.txt" "$work/jobs.tsv" > "$work/results.tsv"
+
+            while IFS="$tab" read -r name result; do
+              # Runs are newest first, so the first result seen is the latest.
+              if [ "$recordLatest" = true ] && ! grep -q "^$name$tab" "$latest"; then
+                printf '%s\t%s\n' "$name" "$result" >> "$latest"
+              fi
+              if [ "$result" = success ]; then
+                printf '%s\t%s\n' "$name" "$runSha" >> "$baselines"
+              fi
+            done < "$work/results.tsv"
+          done < "$work/runs.tsv"
+        }
+
+        ################################
+        ## Plan a Branch Push         ##
+        ################################
+        # Selects each workflow that failed last time, or whose files changed
+        # since it last succeeded.
+        planBranchPush() {
+          findEarlierResults "$REF_NAME" true
+          # A new branch has no history, so start from the default branch's.
+          if [ "$REF_NAME" != "$DEFAULT_BRANCH" ]; then
+            findEarlierResults "$DEFAULT_BRANCH" false
+          fi
+
+          while read -r name; do
+            awk -F '\t' -v name="$name" '$1 == name { print $2 }' "$patterns" > "$work/regexes.txt"
+            result=$(awk -F '\t' -v name="$name" '$1 == name { print $2; exit }' "$latest")
+            base=$(awk -F '\t' -v name="$name" '$1 == name { print $2; exit }' "$baselines")
+
+            if [ ! -s "$work/regexes.txt" ]; then
+              reason="skip: only runs for PRs, tags and manual runs"
+            elif [ "$result" = failure ]; then
+              reason="run: didn't succeed last time"
+            elif [ -z "$base" ]; then
+              reason="run: no earlier success found"
+            elif ! git cat-file -e "$base^{commit}" 2>/dev/null; then
+              reason="run: last success ($base) isn't in this history"
+            else
+              # Changed files are listed once per starting commit and reused.
+              # # A rename is listed as both its old and new path, so workflows
+              # tied to either location are checked.
+              changes="$work/changes-$base.txt"
+              if [ ! -f "$changes" ]; then
+                git diff --name-only --no-renames "$base" "$SHA" > "$changes"
+              fi
+              if grep -Eq -f "$work/regexes.txt" "$changes"; then
+                reason="run: its files changed since it last succeeded ($base)"
+              else
+                reason="skip: unchanged since it last succeeded ($base)"
+              fi
+            fi
+
+            echo "$name: $reason"
+            echo "| $name | $reason |" >> "$work/summary.md"
+            case $reason in
+              run:*)
+                echo "$name" >> "$selected"
+                ;;
+            esac
+          done < "$workflows"
+        }
+
+        ##################################
+        ## Choose Workflows by Event    ##
+        ##################################
+        printf '| Workflow | Decision |\n| --- | --- |\n' > "$work/summary.md"
+        case $EVENT_NAME in
+          pull_request)
+            if [ "$IS_DRAFT" = true ]; then
+              echo "Draft PR, so nothing runs until it's ready for review."
+            else
+              echo "PR, so every workflow runs."
+              cp "$workflows" "$selected"
+            fi
+            ;;
+          push)
+            if [ "$REF_TYPE" = tag ]; then
+              echo "Tag, so every workflow runs."
+              cp "$workflows" "$selected"
+            else
+              planBranchPush
+              cat "$work/summary.md" >> "$GITHUB_STEP_SUMMARY"
+            fi
+            ;;
+          *)
+            echo "$EVENT_NAME, so every workflow runs."
+            cp "$workflows" "$selected"
+            ;;
+        esac
+
+        json=$(jq -R -s -c 'split("\n") | map(select(length > 0))' < "$selected")
+        echo "Workflows to run: $json"
+        echo "workflows=$json" >> "$GITHUB_OUTPUT"

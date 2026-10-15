@@ -1,0 +1,422 @@
+#################################################################################
+## CI
+##
+## The only workflow GitHub starts on its own. Every other workflow is called
+## from here, and only when the plan job decides it needs to run.
+##
+## Input(s):
+##   - Event: a branch or tag push, a PR being opened, reopened, updated or
+##     marked ready for review, or a manual run.
+##   - .github/ci-workflows: the files each called workflow depends on.
+##   - Earlier runs of this workflow: where each called workflow last
+##     succeeded on the branch.
+##
+## Output(s):
+##   - Results of every called workflow that ran.
+##   - Badges on the 'badges' branch (branch pushes only).
+##   - The 'all-checks' job: the single required check that gates PR merges.
+#################################################################################
+name: CI
+run-name: ${{ github.actor }} triggered CI for the ${{ github.run_attempt }} time by initiating a ${{ github.event_name }}.
+on:
+  push:
+    branches: ['**']
+    tags: ['**']
+  pull_request:
+    # This determines every condition that could trigger any workflow. This doesn't mean that
+    # all workflows will be triggered for each, or even that any workflow will be triggered.
+    types:
+      # PR is created.
+      - opened
+      # PR is moved out of `draft`.
+      - ready_for_review
+      # Closed PR is re-opened.
+      - reopened
+      # One or more commit is pushed to a branch that has an open PR.
+      - synchronize
+  # Lets this workflow be run from the Actions tab on GitHub's site.
+  workflow_dispatch:
+
+# A newer run on the same ref (commit) replaces this one. Nothing is lost by cancelling, the
+# plan reruns anything changed since it last succeeded. This helps save runner time (cost).
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Define what permissions these `jobs` are provided by`GITHUB_TOKEN`.
+permissions:
+  # Allows `jobs` to interact with the repository.
+  contents: read
+  # Read earlier runs of this workflow, to find where each workflow last succeeded.
+  actions: read
+
+jobs:
+  ###############################################################################
+  ## Plan
+  ##
+  ## Decides which workflows to run based on:
+  ##  - The triggering event.
+  ##  - If it's a PR
+  ##  - Whether it's a draft.
+  ##  - .github/ci-workflows.
+  ##  - Earlier runs of this workflow on the same branch.
+  ###############################################################################
+  plan:
+    name:    Plan which workflows to run
+    runs-on: ubuntu-latest
+    outputs:
+      # JSON list of workflows to run (ex. ["test-logging"]).
+      workflows: ${{ steps.plan.outputs.workflows }}
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+        with:
+          # Full history, so each workflow can be diffed from its last success.
+          fetch-depth: 0
+      - name: Choose which workflows to run...
+        id:   plan
+        uses: ./.github/actions/plan-ci
+        with:
+          config:       .github/ci-workflows
+          ci-workflow:  ci.yml
+          token:        ${{ github.token }}
+
+  ###############################################################################
+  ## Called Workflows
+  ##
+  ## One job per workflow, each run only if the plan selected it.
+  ##
+  ## Input(s):
+  ##   - The plan job's 'workflows' output.
+  ##
+  ## Output(s):
+  ##   - The called workflow's job results, recorded in this run as
+  ##     '<job id> / <called job>'. The plan reads them in later runs, so each
+  ##     job id must match the workflow's name in .github/ci-workflows.
+  ###############################################################################
+  ## Style Guide Check(s) ##
+  style-guide-backUp:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-backUp')
+    uses:  ./.github/workflows/style-guide-backUp.yml
+  style-guide-backUp-util-constants:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-backUp-util-constants')
+    uses:  ./.github/workflows/style-guide-backUp-util-constants.yml
+  style-guide-backUp-util-main:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-backUp-util-main')
+    uses:  ./.github/workflows/style-guide-backUp-util-main.yml
+  style-guide-logging:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-logging')
+    uses:  ./.github/workflows/style-guide-logging.yml
+  style-guide-logging-util-constants:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-logging-util-constants')
+    uses:  ./.github/workflows/style-guide-logging-util-constants.yml
+  style-guide-logging-util-main:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-logging-util-main')
+    uses:  ./.github/workflows/style-guide-logging-util-main.yml
+  style-guide-output:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-output')
+    uses:  ./.github/workflows/style-guide-output.yml
+  style-guide-output-util-constants:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-output-util-constants')
+    uses:  ./.github/workflows/style-guide-output-util-constants.yml
+  style-guide-output-util-createHeaderFooter:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-output-util-createHeaderFooter')
+    uses:  ./.github/workflows/style-guide-output-util-createHeaderFooter.yml
+  style-guide-output-util-main:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-output-util-main')
+    uses:  ./.github/workflows/style-guide-output-util-main.yml
+  style-guide-shellFunctionSetup:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-shellFunctionSetup')
+    uses:  ./.github/workflows/style-guide-shellFunctionSetup.yml
+  style-guide-util-shellName:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-util-shellName')
+    uses:  ./.github/workflows/style-guide-util-shellName.yml
+  style-guide-util-verifyInputProvided:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'style-guide-util-verifyInputProvided')
+    uses:  ./.github/workflows/style-guide-util-verifyInputProvided.yml
+
+  ## Unit Test(s) ##
+  test-logging:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-logging')
+    uses:  ./.github/workflows/test-logging.yml
+  test-logging-with-code-coverage:
+    needs:
+      - plan
+      # Don't bother running code coverage if tests are failing.
+      # TODO #5: Update to `test-logging-legacy` when the file exists.
+      - test-logging
+    # Ensure:
+    # - Run wasn't cancelled.
+    # - All tests are run successfully.
+    # - The plan job selected this workflow.
+    if: >-
+      ${{
+      !cancelled()
+      && !contains(needs.*.result, 'failure')
+      && !contains(needs.*.result, 'cancelled')
+      && contains(fromJSON(needs.plan.outputs.workflows), 'test-logging-with-code-coverage')
+      }}
+    uses:  ./.github/workflows/test-logging-with-code-coverage.yml
+  test-logging-util-constants:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-logging-util-constants')
+    uses:  ./.github/workflows/test-logging-util-constants.yml
+  test-logging-util-constants-with-code-coverage:
+    needs:
+      - plan
+      # Don't bother running code coverage if tests are failing.
+      # TODO #5: Update to `test-logging-util-constants-legacy` when the file exists.
+      - test-logging-util-constants
+    # Ensure:
+    # - Run wasn't cancelled.
+    # - All tests are run successfully.
+    # - The plan job selected this workflow.
+    if: >-
+      ${{
+      !cancelled()
+      && !contains(needs.*.result, 'failure')
+      && !contains(needs.*.result, 'cancelled')
+      && contains(fromJSON(needs.plan.outputs.workflows), 'test-logging-util-constants-with-code-coverage')
+      }}
+    uses:  ./.github/workflows/test-logging-util-constants-with-code-coverage.yml
+  test-output:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-output')
+    uses:  ./.github/workflows/test-output.yml
+  test-output-legacy:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-output-legacy')
+    uses:  ./.github/workflows/test-output-legacy.yml
+  test-output-with-code-coverage:
+    needs:
+      - plan
+      # Don't bother running code coverage if tests are failing.
+      - test-output-legacy
+    # Ensure:
+    # - Run wasn't cancelled.
+    # - All tests are run successfully.
+    # - The plan job selected this workflow.
+    if: >-
+      ${{
+      !cancelled()
+      && needs.plan.result == 'success'
+      && contains(fromJSON(needs.plan.outputs.workflows), 'test-output-with-code-coverage')
+      && (needs.test-output-legacy.result == 'skipped'
+      || needs.test-output-legacy.outputs.zsh-result == 'success')
+      }}
+    uses:  ./.github/workflows/test-output-with-code-coverage.yml
+  test-output-util-constants:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-constants')
+    uses:  ./.github/workflows/test-output-util-constants.yml
+  test-output-util-constants-legacy:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-constants-legacy')
+    uses:  ./.github/workflows/test-output-util-constants-legacy.yml
+  test-output-util-constants-with-code-coverage:
+    needs:
+      - plan
+      # Don't bother running code coverage if tests are failing.
+      - test-output-util-constants-legacy
+    # Ensure:
+    # - Run wasn't cancelled.
+    # - All tests are run successfully.
+    # - The plan job selected this workflow.
+    if: >-
+      ${{
+      !cancelled()
+      && needs.plan.result == 'success'
+      && contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-constants-with-code-coverage')
+      && (needs.test-output-util-constants-legacy.result == 'skipped'
+      || needs.test-output-util-constants-legacy.outputs.zsh-result == 'success')
+      }}
+    uses:  ./.github/workflows/test-output-util-constants-with-code-coverage.yml
+  test-output-util-createHeaderFooter:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-createHeaderFooter')
+    uses:  ./.github/workflows/test-output-util-createHeaderFooter.yml
+  test-output-util-createHeaderFooter-legacy:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-createHeaderFooter-legacy')
+    uses:  ./.github/workflows/test-output-util-createHeaderFooter-legacy.yml
+  test-output-util-createHeaderFooter-with-code-coverage:
+    needs:
+      - plan
+      # Don't bother running code coverage if tests are failing.
+      - test-output-util-createHeaderFooter-legacy
+    # Ensure:
+    # - Run wasn't cancelled.
+    # - All tests are run successfully.
+    # - The plan job selected this workflow.
+    if: >-
+      ${{
+      !cancelled()
+      && needs.plan.result == 'success'
+      && contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-createHeaderFooter-with-code-coverage')
+      && (needs.test-output-util-createHeaderFooter-legacy.result == 'skipped'
+      || needs.test-output-util-createHeaderFooter-legacy.outputs.zsh-result == 'success')
+      }}
+    uses:  ./.github/workflows/test-output-util-createHeaderFooter-with-code-coverage.yml
+  test-util-verifyInputProvided:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-util-verifyInputProvided')
+    uses:  ./.github/workflows/test-util-verifyInputProvided.yml
+  test-util-verifyInputProvided-legacy:
+    needs: plan
+    # Ensures the plan job selected this workflow.
+    if:    contains(fromJSON(needs.plan.outputs.workflows), 'test-util-verifyInputProvided-legacy')
+    uses:  ./.github/workflows/test-util-verifyInputProvided-legacy.yml
+  test-util-verifyInputProvided-with-code-coverage:
+    needs:
+      - plan
+      # Don't bother running code coverage if tests are failing.
+      - test-util-verifyInputProvided-legacy
+    # Ensure:
+    # - Run wasn't cancelled.
+    # - All tests are run successfully.
+    # - The plan job selected this workflow.
+    if: >-
+      ${{
+      !cancelled()
+      && needs.plan.result == 'success'
+      && contains(fromJSON(needs.plan.outputs.workflows), 'test-util-verifyInputProvided-with-code-coverage')
+      && (needs.test-util-verifyInputProvided-legacy.result == 'skipped'
+      || needs.test-util-verifyInputProvided-legacy.outputs.zsh-result == 'success')
+      }}
+    uses:  ./.github/workflows/test-util-verifyInputProvided-with-code-coverage.yml
+
+  ###############################################################################
+  ## Publish Badges
+  ##
+  ## Turns this run's recorded test results into badges.
+  ##
+  ## Input(s):
+  ##   - Results recorded by every called workflow that ran.
+  ##
+  ## Output(s):
+  ##   - Updated badges on the 'badges' branch.
+  ###############################################################################
+  publish-badges:
+    name: Publish badges
+    needs:
+      # Workflow(s) that record badge results.
+      - test-output
+      - test-output-legacy
+      - test-output-util-constants
+      - test-output-util-constants-legacy
+      - test-output-util-createHeaderFooter
+      - test-output-util-createHeaderFooter-legacy
+      - test-util-verifyInputProvided
+      - test-util-verifyInputProvided-legacy
+    # Branch pushes only: PR runs test a merge result ('<n>/merge'), not a branch.
+    if:      ${{ !cancelled() && github.event_name == 'push' && github.ref_type == 'branch' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
+        uses: actions/checkout@v4
+      - name: Write badges out to `badges` branch so they show up in `README.md` files...
+        uses: ./.github/actions/publish-badges
+
+  ###############################################################################
+  ## All Checks
+  ##
+  ## The single required check: passes only if no job failed or was cancelled.
+  ##
+  ## Input(s):
+  ##   - The result of every job in this run.
+  ##
+  ## Output(s):
+  ##   - Success, or failure listing the first job result that wasn't.
+  ###############################################################################
+  all-checks:
+    name: All checks
+    needs:
+      - plan
+      - style-guide-backUp
+      - style-guide-backUp-util-constants
+      - style-guide-backUp-util-main
+      - style-guide-logging
+      - style-guide-logging-util-constants
+      - style-guide-logging-util-main
+      - style-guide-output
+      - style-guide-output-util-constants
+      - style-guide-output-util-createHeaderFooter
+      - style-guide-output-util-main
+      - style-guide-shellFunctionSetup
+      - style-guide-util-shellName
+      - style-guide-util-verifyInputProvided
+      - test-logging
+      - test-logging-with-code-coverage
+      - test-logging-util-constants
+      - test-logging-util-constants-with-code-coverage
+      - test-output
+      - test-output-legacy
+      - test-output-with-code-coverage
+      - test-output-util-constants
+      - test-output-util-constants-legacy
+      - test-output-util-constants-with-code-coverage
+      - test-output-util-createHeaderFooter
+      - test-output-util-createHeaderFooter-legacy
+      - test-output-util-createHeaderFooter-with-code-coverage
+      - test-util-verifyInputProvided
+      - test-util-verifyInputProvided-legacy
+      - test-util-verifyInputProvided-with-code-coverage
+      - publish-badges
+    # Run even when a needed job failed, so the failure is reported here.
+    if:      ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name:  Check every job's result...
+        shell: sh
+        env:
+          # Space-separated result of each needed job (e.g. 'success skipped').
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          for result in $RESULTS; do
+            case $result in
+              # Skipped jobs weren't needed (not selected, draft PR, or a PR run).
+              success | skipped) ;;
+              *)
+                echo "::error::At least one job didn't succeed (result: $result)."
+                exit 1
+                ;;
+            esac
+          done

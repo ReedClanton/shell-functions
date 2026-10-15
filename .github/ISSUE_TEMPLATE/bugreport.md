@@ -1,7 +1,7 @@
 ---
 name: bugReport
 about: Create a report to improve the product.
-title: "<functionName> - <BriefBugDescription"
+title: "<functionName> - <BriefBugDescription>"
 labels: bug
 assignees: ''
 

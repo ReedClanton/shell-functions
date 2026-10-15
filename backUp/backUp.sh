@@ -111,12 +111,13 @@ for fullArg in "$@"; do
 
 	# Determine what option user gave.
 	case $fullArg in
-		-h|--help)
+		-h | --help)
 			echo "$BACKUP_DOC"
 			exit 0
 			;;
-		-q|--quiet)
-			logging $warnLvl -m="-q/--quiet not implemented yet"  ;;
+		-q | --quiet)
+			logging $warnLvl -m="-q/--quiet not implemented yet"
+			;;
 		*)
 			logging $errLvl --full-title -m="Invalid given argument: '$fullArg', see doc:"
 			echo "$BACKUP_DOC"
@@ -141,17 +142,13 @@ fi
 ################
 logging $infoLvl -m="Running back up..."
 cmd="rsync $options $backUpSourcePath $backUpDestPath"
-unset stdOut errOut rtOut
-eval "$( (eval $cmd) \
-	2> >(errOut=$(cat); typeset -p errOut) \
-	 > >(stdOut=$(cat); typeset -p stdOut); rtOut=$?; typeset -p rtOut )"
+unset stdErr stdRt
+# Capture rsync's stderr; discard its stdout.
+stdErr=$(eval "$cmd" 2>&1 >/dev/null)
+stdRt=$?
 
-if [[ $rtOut -ne 0 ]]; then
-	logging $errLvl -m="rsync error output:" -m="$errOut"
-# Figure out why this is failing.
-#else
-	# TODO: Handle condidtion where rsync stdOut is empty (currently errors).
-#	logging $traceLvl -m="$stdOut"
+if [ "$stdRt" -ne 0 ]; then
+	logging $errLvl -m="rsync error output:" -m="$stdErr"
 fi
 
-exit $rtOut
+exit $stdRt

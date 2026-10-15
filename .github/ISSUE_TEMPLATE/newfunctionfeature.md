@@ -4,7 +4,6 @@ about: Suggest a feature be added to an existing function.
 title: "<functionName> - <BriefNewFeatureDescription>"
 labels: enhancement
 assignees: ''
-type: Feature
 
 ---
 
@@ -20,7 +19,7 @@ type: Feature
 
 <!-- What alternatives have you considered? -->
 
-<!-- What documentation also needs to be update. The function doc will certainly need to be updated... how? -->
+<!-- What documentation updates are needed? The function doc will certainly need to be updated... how? -->
 
 <!-- Any other context or screenshots about the feature request here. -->
 
@@ -45,9 +44,9 @@ type: Feature
 
 <!-- What should be handled by this work, and where is the line beyond which a GitHub issue should be written to handle the rest of the work. -->
 
-## [Open a PR for This Issue](https://github.com/ReedClanton/shell-functions/compare/main...feature/<issue#>-<functionName>-<briefNewFeatureDescription>?quick_pull=1&title=<issue#>+%7C+<functionName>+-+<BriefNewFeatureDescription>&labels=enhancement,<documentation?>&projects=ReedClanton/4&template=default_pull_request_template.md)
+## [Open a PR for This Issue](https://github.com/ReedClanton/shell-functions/compare/main...feature/<issue#>-<functionname>-<brief-new-feature-description>?quick_pull=1&title=<issue#>+%7C+<functionname>+-+<brief-new-feature-description>&labels=enhancement,<documentation?>&projects=ReedClanton/4&template=default_pull_request_template.md)
 
-<!-- **Make sure to update this section title link!!! Section needs to description. -->
+<!-- **Make sure to update this section title link!!! Section needs no description. -->
 
 ## Relationship(s)
 
@@ -55,14 +54,20 @@ type: Feature
 
 <!-- Is it high or low priority? Relative to what? -->
 
-### Found By (OPTIONAL)
+### Found By
 
 <!-- Was another GitHub issue being worked when it was realized this feature was needed? If so, explain and link to it. This sort of information should likely be added to the Justification section. -->
 
-### Blocked By (OPTIONAL)
+<!-- This section is optional, delete if not filled. -->
 
-<!-- Is this work blocked by something (another GitHub issue, time frame, ect)? If so, state so here and link the the issues if they exist at time of writing. -->
+### Blocked By
 
-#### Blocking (OPTIONAL)
+<!-- Is this work blocked by something (another GitHub issue, time frame, ect.)? If so, explain and link the issues if it exists at time of writing. -->
+
+<!-- This section is optional, delete if not filled. -->
+
+### Blocking
 
 <!-- What other work is this blocking? Link the issues when they exist. -->
+
+,!-- This section is optional, delete if not filled. -->
