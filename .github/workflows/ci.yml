@@ -230,9 +230,10 @@ jobs:
     if: >-
       ${{
       !cancelled()
-      && !contains(needs.*.result, 'failure')
-      && !contains(needs.*.result, 'cancelled')
+      && needs.plan.result == 'success'
       && contains(fromJSON(needs.plan.outputs.workflows), 'test-output-with-code-coverage')
+      && (needs.test-output-legacy.result == 'skipped'
+      || needs.test-output-legacy.outputs.zsh-result == 'success')
       }}
     uses:  ./.github/workflows/test-output-with-code-coverage.yml
   test-output-util-constants:
@@ -257,9 +258,10 @@ jobs:
     if: >-
       ${{
       !cancelled()
-      && !contains(needs.*.result, 'failure')
-      && !contains(needs.*.result, 'cancelled')
+      && needs.plan.result == 'success'
       && contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-constants-with-code-coverage')
+      && (needs.test-output-util-constants-legacy.result == 'skipped'
+      || needs.test-output-util-constants-legacy.outputs.zsh-result == 'success')
       }}
     uses:  ./.github/workflows/test-output-util-constants-with-code-coverage.yml
   test-output-util-createHeaderFooter:
@@ -284,9 +286,10 @@ jobs:
     if: >-
       ${{
       !cancelled()
-      && !contains(needs.*.result, 'failure')
-      && !contains(needs.*.result, 'cancelled')
+      && needs.plan.result == 'success'
       && contains(fromJSON(needs.plan.outputs.workflows), 'test-output-util-createHeaderFooter-with-code-coverage')
+      && (needs.test-output-util-createHeaderFooter-legacy.result == 'skipped'
+      || needs.test-output-util-createHeaderFooter-legacy.outputs.zsh-result == 'success')
       }}
     uses:  ./.github/workflows/test-output-util-createHeaderFooter-with-code-coverage.yml
   test-util-verifyInputProvided:
@@ -311,9 +314,10 @@ jobs:
     if: >-
       ${{
       !cancelled()
-      && !contains(needs.*.result, 'failure')
-      && !contains(needs.*.result, 'cancelled')
+      && needs.plan.result == 'success'
       && contains(fromJSON(needs.plan.outputs.workflows), 'test-util-verifyInputProvided-with-code-coverage')
+      && (needs.test-util-verifyInputProvided-legacy.result == 'skipped'
+      || needs.test-util-verifyInputProvided-legacy.outputs.zsh-result == 'success')
       }}
     uses:  ./.github/workflows/test-util-verifyInputProvided-with-code-coverage.yml
 

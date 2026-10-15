@@ -3,6 +3,11 @@ run-name: ${{ github.actor }} triggered testing of output()'s constants.sh on le
 on:
   # Run by ci.yml, which decides when this is needed.
   workflow_call:
+    outputs:
+      # Code coverage and functional tests are gated by successful zsh unit tests.
+      zsh-result:
+        description: Result of the zsh test job ('success', 'failure' or 'cancelled').
+        value: ${{ jobs.test-output-util-constants-zsh-legacy-ubuntu.outputs.result }}
   # Lets this workflow still be run on its own from the Actions tab.
   workflow_dispatch:
 jobs:
@@ -60,6 +65,9 @@ jobs:
           skipped:  ${{ steps.tests.outputs.skipped }}
   test-output-util-constants-zsh-legacy-ubuntu:
     runs-on: ubuntu-latest
+    # Test result.
+    outputs:
+      result: ${{ steps.result.outputs.result }}
     steps:
       - name: Check out ${{ github.ref_type }} ${{ github.ref_name }} from ${{ github.repository_owner }}'s ${{ github.repository }} repo on ${{ runner.os }} because ${{ github.actor }} initiated a ${{ github.event_name }}...
         uses: actions/checkout@v4
@@ -84,3 +92,10 @@ jobs:
           label:    "zsh ${{ steps.shell.outputs.version }}"
           status:   ${{ job.status }}
           skipped:  ${{ steps.tests.outputs.skipped }}
+      - name:   Record result for workflow(s) gated by unit test success...
+        id:     result
+        if:     ${{ !cancelled() }}
+        shell:  sh
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: echo "result=$JOB_STATUS" >> "$GITHUB_OUTPUT"
