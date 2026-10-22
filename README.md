@@ -45,7 +45,7 @@ done
 
 ### [`output`](output/README.md)
 
-Used to add pre-fix, post-fix, headers, and/or footers to message text. Used by log()'s title
+Used to add pre-fix, post-fix, headers, and/or footers to message text. Used by logging()'s title
 options.
 
 ### `shellName`
