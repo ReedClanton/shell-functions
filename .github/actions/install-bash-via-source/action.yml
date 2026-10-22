@@ -92,8 +92,8 @@ runs:
       id:   cache
       uses: actions/cache/restore@v4
       with:
-        path: ~/.cache/install-bash-from-source/${{ steps.resolve.outputs.version }}
-        key:  install-bash-from-source-v2-${{ runner.os }}-${{ runner.arch }}-${{ steps.resolve.outputs.version }}
+        path: ~/.cache/install-bash-via-source/${{ steps.resolve.outputs.version }}
+        key:  install-bash-via-source-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.resolve.outputs.version }}
 
     # Everything from here until the cache is saved only runs on a cache miss.
     - name:  Building bash ${{ steps.resolve.outputs.version }}...
@@ -103,7 +103,7 @@ runs:
         VERSION: ${{ steps.resolve.outputs.version }}
         MIRROR:  ${{ inputs.mirror }}
       run: |
-        install_dir="$HOME/.cache/install-bash-from-source/$VERSION"
+        install_dir="$HOME/.cache/install-bash-via-source/$VERSION"
 
         # Split '4.4.23' into the release ('4.4') and patch level ('23').
         case $VERSION in
@@ -210,8 +210,8 @@ runs:
       if:   steps.cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v4
       with:
-        path: ~/.cache/install-bash-from-source/${{ steps.resolve.outputs.version }}
-        key:  install-bash-from-source-v2-${{ runner.os }}-${{ runner.arch }}-${{ steps.resolve.outputs.version }}
+        path: ~/.cache/install-bash-via-source/${{ steps.resolve.outputs.version }}
+        key:  install-bash-via-source-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.resolve.outputs.version }}
 
     - name:  Verifying bash ${{ steps.resolve.outputs.version }}...
       id:    finish
