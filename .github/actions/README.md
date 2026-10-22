@@ -6,5 +6,6 @@ Actions are called by workflows. For more information about GitHub workflows, se
 
 ## `plan-ci`
 
-This decides what workflow get run depending on what the trigger was. Once this list of workflows to run is created, it's given to [`ci.yml`](../workflows/ci.yml) so they can be run. For a full description of what gets run when, see the [What Runs When](../workflows/README.md#what-runs-when) section of the workflows README.
+This decides what workflows get run depending on what the trigger was. Once this list of workflows to run is created, it's given to [`ci.yml`](../workflows/ci.yml) so they can be run. For a full description of what gets run when, see the [What Runs When](../workflows/README.md#what-runs-when) section of the workflows README.
 
+## TODO: Other Actions
