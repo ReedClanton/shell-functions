@@ -1,0 +1,55 @@
+name: Install a Shell via Homebrew
+description: >-
+  Uses the shell already on PATH (MacOS ships bash, zsh and dash) or
+  installs it with Homebrew, then verifies it runs and reports its
+  absolute path.
+
+inputs:
+  shell:
+    description: Command name of the shell (e.g. 'zsh', 'dash', 'bash').
+    required: true
+  formula:
+    description: Homebrew formula that provides the shell. Defaults to the shell's name.
+    required: false
+    default: ''
+  homebrew:
+    description: >-
+      Set to 'true' to install from Homebrew even when a copy is already on
+      PATH (e.g. to test a current bash instead of MacOS's bash 3.2).
+    required: false
+    default: 'false'
+
+outputs:
+  path:
+    description: Absolute path to the shell, for passing to `shellspec --shell`.
+    value: ${{ steps.install.outputs.path }}
+
+runs:
+  using: composite
+  steps:
+    - name:  Installing ${{ inputs.shell }}...
+      id:    install
+      shell: sh
+      env:
+        SHELL_NAME:   ${{ inputs.shell }}
+        FORMULA:      ${{ inputs.formula || inputs.shell }}
+        USE_HOMEBREW: ${{ inputs.homebrew }}
+        # Skip Homebrew's self-update and cleanup; they're slow and not
+        # needed on a throwaway runner.
+        HOMEBREW_NO_AUTO_UPDATE:     '1'
+        HOMEBREW_NO_INSTALL_CLEANUP: '1'
+        HOMEBREW_NO_ENV_HINTS:       '1'
+      run: |
+        if [ "$USE_HOMEBREW" != true ] && path=$(command -v "$SHELL_NAME"); then
+          echo "Using existing $SHELL_NAME at $path."
+        else
+          brew install "$FORMULA"
+          path="$(brew --prefix "$FORMULA")/bin/$SHELL_NAME"
+        fi
+
+        if ! "$path" -c :; then
+          echo "::error::$path is installed but failed to run."
+          exit 1
+        fi
+
+        echo "path=$path" >> "$GITHUB_OUTPUT"

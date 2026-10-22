@@ -2,8 +2,8 @@
 ## Initialization ##
 ###################
 if [ ! -d "$BACK_UP_SHELL_FUNCTION_HOME" ]; then
-    echo "ERROR backUp/util/main.sh: BACK_UP_SHELL_FUNCTION_HOME must be set to the directory containing the backUp() function." >&2
-    exit 200
+	echo "ERROR backUp/util/main.sh: BACK_UP_SHELL_FUNCTION_HOME must be set to the directory containing the backUp() function." >&2
+	exit 200
 fi
 
 ##########

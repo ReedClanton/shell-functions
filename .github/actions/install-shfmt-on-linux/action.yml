@@ -1,0 +1,96 @@
+name: Install shfmt on Linux
+description: >-
+  Downloads a pinned shfmt release binary on a Linux runner and puts
+  `shfmt` on PATH. The binary is cached per version and CPU architecture,
+  so later runs restore it instead of downloading it from GitHub.
+
+inputs:
+  version:
+    description: shfmt release tag to install (e.g. 'v3.12.0').
+    required: false
+    default: 'v3.12.0'
+  sha256:
+    description: >-
+      Optional SHA-256 checksum of the release binary for this runner's
+      architecture. When set, a freshly downloaded binary is rejected if
+      it doesn't match.
+    required: false
+    default: ''
+
+outputs:
+  path:
+    description: Absolute path to the installed `shfmt` executable.
+    value: ${{ steps.path.outputs.path }}
+
+runs:
+  using: composite
+  steps:
+    - name:  Checking platform...
+      id:    meta
+      shell: sh
+      run: |
+        if [ "$RUNNER_OS" != Linux ]; then
+          echo "::error::Install shfmt only supports Linux runners."
+          exit 1
+        fi
+
+        # Map the kernel's architecture name to the one shfmt's release
+        # assets use.
+        case $(uname -m) in
+          x86_64)        arch=amd64 ;;
+          aarch64|arm64) arch=arm64 ;;
+          *)
+            echo "::error::No shfmt release binary for architecture $(uname -m)."
+            exit 1
+            ;;
+        esac
+        echo "arch=$arch" >> "$GITHUB_OUTPUT"
+
+    - name: Restoring cached shfmt...
+      id:   cache
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ runner.tool_cache }}/shfmt/${{ inputs.version }}
+        key:  shfmt-${{ inputs.version }}-linux-${{ steps.meta.outputs.arch }}
+
+    - name:  Downloading shfmt ${{ inputs.version }}...
+      if:    steps.cache.outputs.cache-hit != 'true'
+      shell: sh
+      env:
+        VERSION:     ${{ inputs.version }}
+        ARCH:        ${{ steps.meta.outputs.arch }}
+        SHA256:      ${{ inputs.sha256 }}
+        INSTALL_DIR: ${{ runner.tool_cache }}/shfmt/${{ inputs.version }}
+      run: |
+        mkdir -p "$INSTALL_DIR"
+        curl -fsSL --retry 3 \
+            --output "$INSTALL_DIR/shfmt" \
+            "https://github.com/mvdan/sh/releases/download/$VERSION/shfmt_${VERSION}_linux_$ARCH"
+
+        if [ -n "$SHA256" ]; then
+          if ! printf '%s  %s\n' "$SHA256" "$INSTALL_DIR/shfmt" | sha256sum -c -; then
+            rm -f "$INSTALL_DIR/shfmt"
+            echo "::error::Checksum mismatch for shfmt $VERSION ($ARCH)."
+            exit 1
+          fi
+        fi
+
+        chmod +x "$INSTALL_DIR/shfmt"
+
+    - name: Caching shfmt...
+      if:   steps.cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ runner.tool_cache }}/shfmt/${{ inputs.version }}
+        key:  ${{ steps.cache.outputs.cache-primary-key }}
+
+    - name:  Adding shfmt to PATH...
+      id:    path
+      shell: sh
+      env:
+        INSTALL_DIR: ${{ runner.tool_cache }}/shfmt/${{ inputs.version }}
+      run: |
+        # PATH changes only apply to later steps, so verify by full path.
+        "$INSTALL_DIR/shfmt" --version
+        echo "$INSTALL_DIR" >> "$GITHUB_PATH"
+        echo "path=$INSTALL_DIR/shfmt" >> "$GITHUB_OUTPUT"

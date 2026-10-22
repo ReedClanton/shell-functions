@@ -1,5 +1,17 @@
 # Shell Functions
 
+[![bash legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Ffeature%2F4-github-status-badge-pathfinding%2Fproject-bash_legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
+[![ash](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Ffeature%2F4-github-status-badge-pathfinding%2Fproject-ash.json)](https://github.com/ReedClanton/shell-functions/actions)
+[![dash legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Ffeature%2F4-github-status-badge-pathfinding%2Fproject-dash_legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
+[![zsh legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Ffeature%2F4-github-status-badge-pathfinding%2Fproject-zsh_legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
+
+TODO: Replace the above badges with the ones from below prior to merging to `main`.
+
+[![bash legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Fmain%2Fproject-bash_legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
+[![ash](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Fmain%2Fproject-ash.json)](https://github.com/ReedClanton/shell-functions/actions)
+[![dash legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Fmain%2Fproject-dash_legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
+[![zsh legacy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FReedClanton%2Fshell-functions%2Fbadges%2Fmain%2Fproject-zsh_legacy.json)](https://github.com/ReedClanton/shell-functions/actions)
+
 This repository contains a number of shell functions that add functionality to your shell environment. Checkout the [Functions](#functions) section for more details! To use them, see the [Setup](#setup) section.
 
 ## Functions
@@ -33,7 +45,7 @@ done
 
 ### [`output`](output/README.md)
 
-Used to add pre-fix, post-fix, headers, and/or footers to message text. Used by log()'s title
+Used to add pre-fix, post-fix, headers, and/or footers to message text. Used by logging()'s title
 options.
 
 ### `shellName`
@@ -143,8 +155,7 @@ Alternatively, enter `<funcationName> --help` for a document that describes how 
 |	|	|										multiple workflows.
 |	|	|
 |	|	├─ description-of-what-action-does/		Directory title identifies what the action does,
-|	|	|	|									contain no spaces or capital letters, and use `-`
-|	|	|	|									to separate words.
+|	|	|	|									contain no spaces, and use `-` to separate words.
 |	|	|	|
 |	|	|	├─ action.yml						Tells GitHub runner what should be done.
 |	|	|	|
@@ -159,8 +170,7 @@ Alternatively, enter `<funcationName> --help` for a document that describes how 
 |	|	|										re-use of actions across workflows.
 |	|	|
 |	|	├─ description-of-what-workflow-does.yml	Title identifies what the action does,
-|	|	|										contains no spaces or capital letters, and use `-`
-|	|	:										to separate words.
+|	|	|										contains no spaces, and use `-` to separate words.
 |	|
 ├─ docs/										Contains resources, like photos, used by the
 │	:											`README.md` file in this directory.

@@ -1,0 +1,93 @@
+name: Install Kcov on Linux via Source
+description: >-
+  Builds Kcov from source on an Ubuntu runner and puts `kcov` on PATH.
+  The build is cached per Kcov version and Ubuntu release, so later runs
+  restore the binary instead of compiling it again.
+
+inputs:
+  version:
+    description: Kcov release tag to build.
+    required: false
+    default: 'v43'
+
+outputs:
+  path:
+    description: Absolute path to the installed `kcov` executable.
+    value: ${{ steps.path.outputs.path }}
+
+runs:
+  using: composite
+  steps:
+    - name:  Checking platform...
+      id:    meta
+      shell: sh
+      run: |
+        if [ "$RUNNER_OS" != Linux ]; then
+          echo "::error::Install Kcov only supports Ubuntu runners."
+          exit 1
+        fi
+
+        # Key the cache on the Ubuntu release and CPU architecture, because
+        # the binary links against that release's shared libraries.
+        . /etc/os-release
+        echo "platform=$ID-$VERSION_ID-$(uname -m)" >> "$GITHUB_OUTPUT"
+    - name: Restoring cached Kcov build...
+      id:   cache
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ runner.tool_cache }}/kcov/${{ inputs.version }}
+        key:  kcov-${{ inputs.version }}-${{ steps.meta.outputs.platform }}
+    - name:  Installing Kcov's dependencies...
+      shell: sh
+      env:
+        CACHE_HIT: ${{ steps.cache.outputs.cache-hit }}
+        KCOV:      ${{ runner.tool_cache }}/kcov/${{ inputs.version }}/bin/kcov
+      run: |
+        # A cached binary only needs its shared libraries. If they're all
+        # present, there's nothing to install.
+        if [ "$CACHE_HIT" = true ] && ! ldd "$KCOV" | grep -q 'not found'; then
+          echo "All of Kcov's shared libraries are already present."
+          exit 0
+        fi
+        # Otherwise install the -dev packages. They're needed to build, and
+        # they also pull in the runtime libraries, whose package names
+        # change between Ubuntu releases (e.g. libdw1 vs libdw1t64).
+        sudo apt-get update -qq
+        sudo DEBIAN_FRONTEND=noninteractive \
+          apt-get install -y --no-install-recommends \
+            binutils-dev build-essential cmake libcurl4-openssl-dev \
+            libdw-dev libelf-dev libiberty-dev libssl-dev zlib1g-dev
+    - name:  Building Kcov ${{ inputs.version }}...
+      if:    steps.cache.outputs.cache-hit != 'true'
+      shell: sh
+      env:
+        KCOV_VERSION: ${{ inputs.version }}
+        PREFIX:       ${{ runner.tool_cache }}/kcov/${{ inputs.version }}
+      run: |
+        src="$RUNNER_TEMP/kcov-src"
+        mkdir -p "$src"
+        curl -fsSL --retry 3 \
+            "https://github.com/SimonKagstrom/kcov/archive/refs/tags/$KCOV_VERSION.tar.gz" \
+          | tar -xz --strip-components=1 -C "$src"
+
+        cmake -S "$src" -B "$src/build" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX="$PREFIX"
+        cmake --build "$src/build" --parallel "$(nproc)"
+        cmake --install "$src/build"
+    - name: Caching Kcov build...
+      if:   steps.cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ runner.tool_cache }}/kcov/${{ inputs.version }}
+        key:  ${{ steps.cache.outputs.cache-primary-key }}
+    - name:  Adding Kcov to PATH...
+      id:    path
+      shell: sh
+      env:
+        BIN_DIR: ${{ runner.tool_cache }}/kcov/${{ inputs.version }}/bin
+      run: |
+        # PATH changes only apply to later steps, so verify by full path.
+        "$BIN_DIR/kcov" --version
+        echo "$BIN_DIR" >> "$GITHUB_PATH"
+        echo "path=$BIN_DIR/kcov" >> "$GITHUB_OUTPUT"

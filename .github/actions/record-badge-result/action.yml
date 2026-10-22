@@ -1,0 +1,60 @@
+name: Record Badge Result
+description: >-
+  Records one test job's result for a badge by uploading it as a small
+  artifact. Run it as the last step of a test job. A later
+  `publish-badges` job combines every recorded result into the badges.
+
+inputs:
+  badge:
+    description: >-
+      Path of the badge's JSON file on the badge branch, relative to the
+      tested branch's directory (e.g. '<funcName>/util/<utilCode>-<shell>.json').
+      Jobs that pass the same path are combined into one badge.
+    required: true
+  label:
+    description: "Text on the left side of the badge (e.g. '<funcName>.sh: <shell>')."
+    required: true
+  status:
+    description: The job's status so far.
+    required: true
+  skipped:
+    description: The `skipped` output of the run-shellspec action.
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name:   Recording result for ${{ inputs.badge }}...
+      id:     record
+      if:     ${{ !cancelled() }}
+      shell:  sh
+      env:
+        BADGE:    ${{ inputs.badge }}
+        LABEL:    ${{ inputs.label }}
+        STATUS:   ${{ inputs.status }}
+        SKIPPED:  ${{ inputs.skipped }}
+      run: |
+        # Artifact names can't contain '/', and must be unique within a run.
+        # The badge path, job ID and OS together are unique per test job,
+        # including jobs created by a matrix.
+        badge_id=$(printf '%s' "$BADGE" | tr '/.' '__')
+        name="badge-result-$badge_id-$GITHUB_JOB-$RUNNER_OS"
+
+        dir="$RUNNER_TEMP/badge-result"
+        mkdir -p "$dir"
+        printf '%s\t%s\t%s\t%s\n' "$BADGE" "$LABEL" "$STATUS" "$SKIPPED" \
+          > "$dir/$name.tsv"
+
+        echo "name=$name" >> "$GITHUB_OUTPUT"
+        echo "file=$dir/$name.tsv" >> "$GITHUB_OUTPUT"
+
+    - name: Uploading result...
+      if:   ${{ !cancelled() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name:           ${{ steps.record.outputs.name }}
+        path:           ${{ steps.record.outputs.file }}
+        retention-days: 1
+        # Lets "Re-run failed jobs" replace the earlier attempt's result.
+        overwrite:      true
