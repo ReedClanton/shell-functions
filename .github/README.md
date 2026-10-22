@@ -4,7 +4,7 @@ This directory contains files that are used by this project's GitHub repository.
 
 ## /actions/
 
-Actions are run used by [workflows](#workflows). Each represents an action that is done multiple times. In short, they are like functions. Rather than hard coding the same action over and over, they serve as a means of re-using code. They are not run directly by GitHub's runners, rather [workflows(#workflows) call them and this is what triggers them to be run by the runner.
+Actions are used by [workflows](#workflows). Each represents an action that is done multiple times. In short, they are like functions. Rather than hard coding the same action over and over, they serve as a means of re-using code. They are not run directly by GitHub's runners, rather [workflows](#workflows) call them and this is what triggers them to be run by the runner.
 
 ## /badge-dependencies
 
@@ -14,7 +14,7 @@ For example, if there is one bit of code that doesn't run on `zsh`, then the `zs
 
 ## /ci-workflows
 
-This file is read in by the [`plan-ci` action](./actions/plan-ci/action.yml) (for more about this file, see the [`plan-ci` section](./actions/README.md#plan-ci) of the actions `README.md` file). [`ci-workflows`](./ci-workflows) lists, for each workflow, the files that matter to it. The `plan-ci` action then uses this information to tell which workflows are affected by the changes since each one last succeeded. This prevents workflows from being re-run when not needed, and ensure workflows continue to be run until they succeed.
+This file is read in by the [`plan-ci` action](./actions/plan-ci/action.yml) (for more about this file, see the [`plan-ci` section](./actions/README.md#plan-ci) of the actions `README.md` file). [`ci-workflows`](./ci-workflows) lists, for each workflow, the files that matter to it. The `plan-ci` action then uses this information to tell which workflows are affected by the changes since each one last succeeded. This prevents workflows from being re-run when not needed and ensures workflows continue to be run until they succeed.
 
 ## /ISSUE_TEMPLATE/
 
