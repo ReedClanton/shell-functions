@@ -40,8 +40,6 @@ EOF
 ## Process Option(s) ##
 ######################
 for fullArg in "$@"; do
-	# Tracks value of current option.
-	arg=${fullArg#*=}
 
 	# Determine what option user gave.
 	case $fullArg in
@@ -58,19 +56,7 @@ for fullArg in "$@"; do
 done
 
 # Determine name of current shell.
-shellName=${SHELL#/*/*/*/*/}
-if [ "$SHELL" = "$shellName" ]; then
-	shellName=${SHELL#/*/*/*/}
-	if [ "$SHELL" = "$shellName" ]; then
-		shellName=${SHELL#/*/*/}
-		if [ "$SHELL" = "$shellName" ]; then
-			shellName=${SHELL#/*/}
-			if [ "$SHELL" = "$shellName" ]; then
-				shellName=${SHELL#/}
-			fi
-		fi
-	fi
-fi
+shellName=${SHELL##*/}
 
 # Ensure shell name was found.
 if [ "$SHELL" != "$shellName" ] && [ "$shellName" != "" ]; then
